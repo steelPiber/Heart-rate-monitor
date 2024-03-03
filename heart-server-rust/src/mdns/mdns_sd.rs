@@ -1,15 +1,17 @@
+//서버 local_ip를 감지하여 mDNS 서비스를 공지하는 비동기 함수
 use crate::mdns::{MdnsService, SERVICE};
 use mdns_sd::{ServiceDaemon, ServiceInfo};
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 use thiserror::Error;
 
+//derive 매크로를 사용하여 Error 트레이트를 구현한 MdnsError 열거형을 정의
 #[derive(Error, Debug)]
 pub enum MdnsError {
-	#[error("mDNS service error: {0}")]
+	#[error("mDNS 서비스 에러: {0}")]
 	MdnsDaemon(#[from] mdns_sd::Error),
-	#[error("Detected IP ({0}) is IPv6, which is unsupported for mDNS advertisement")]
+	#[error("감지된 IP ({0}) IPv6 이다., mDNS 공고가 지원되지 않음.")]
 	Ipv6Detected(Ipv6Addr),
-	#[error("Unable to detect local IP: {0}")]
+	#[error("로컬 IP를 감지할 수 없음: {0}")]
 	DetectionUnknown(#[from] local_ip_address::Error),
 }
 
