@@ -14,29 +14,32 @@ pub enum MdnsError {
 	#[error("로컬 IP를 감지할 수 없음: {0}")]
 	DetectionUnknown(#[from] local_ip_address::Error),
 }
-
+//mDNS 서비스를 공고하는 비동기 함수
 pub async fn advertise(port: u16, local_ip: Option<Ipv4Addr>) -> Result<(), MdnsError> {
-	// Get the local IP if it wasn't provided
+	//추적용 로그
+	tracing::info!("mdns_sd 사용");
+	//제공되지 않았다면 로컬 IP를 가져옴
 	let ip = match local_ip {
 		Some(ip) => Ok(ip),
 		None => get_local_ip(),
 	}?;
 
-	// Create a daemon
-	tracing::info!("Creating mDNS service daemon");
+	//mDNS 서비스 데몬을 생성
+	tracing::info!("mDNS 서비스 데몬을 생성");
 	let mdns = ServiceDaemon::new()?;
 
-	// Create service info
+	// 서비스 정보 생성
 	let MdnsService {
 		service_type,
 		instance_name,
 	} = SERVICE;
 	let hostname = format!("{}.local.", ip);
+	//service_info 생성
 	let service = ServiceInfo::new(service_type, instance_name, &hostname, ip, port, None)?;
 
-	// Register the service
+	// 생성된 서비스를 mDNS 데몬에 등록
 	tracing::info!(
-		"Registering service with daemon: {}: address {:?} port {}",
+		"생성된 서비스를 mDNS 데몬에 등록: {}: 주소 {:?} 포트 {}",
 		service.get_fullname(),
 		service.get_addresses(),
 		service.get_port()
