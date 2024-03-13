@@ -29,7 +29,7 @@ function sendVerificationEmail(userEmail) {
     // 메일 옵션 설정
     let mailOptions = {
         from: `"Heart-rate-monitor" <${mail.env.NODEMAILER_USER}>`, // 환경 변수에서 가져오도록 수정
-        to: userData.useremail,
+        to: userEmail,
         subject: "[회원가입 인증] 이메일 인증을 완료해주세요.",
         html: `<h1>회원가입을 위한 이메일 인증</h1>
             <p>회원가입을 완료하려면 아래의 인증 코드를 입력해주세요:</p>
