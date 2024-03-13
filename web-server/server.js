@@ -6,7 +6,6 @@ const WebSocket = require('ws');
 const http = require('http');
 const express = require('express');
 const expressWs = require('express-ws');
-const bodyParser = require('body-parser'); //바꾼곳
 
 app.use(express.urlencoded({ extended: true })); // 바꾼곳
 app.use(express.json()); // 바꾼곳
