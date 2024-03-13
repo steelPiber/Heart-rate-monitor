@@ -45,6 +45,29 @@ async function insertBPMData(bpmValue) {
   }
 }
 
+// USER데이터를 Oracle DB에 삽입
+async function insertUser(userData) {
+    const connection = await connectToOracleDB();
+
+    try {
+        const insertSQL = `INSERT INTO USERS(USER_ID, NAME, EMAIL, USERNAME, MAC_ADDRESS, PASSWORD, EMAIL_AUTH) VALUES (:userId, :userRealname, :userEmail, :username, :userMac, :userPassword, 0)`;
+        await connection.execute(insertSQL, {
+            userId: userData.userid,
+            userRealname: userData.userRealname,
+            userEmail: userData.useremail,
+            username: userData.username,
+            userMac: userData.usermac,
+            userPassword: userData.userpasswd
+        });
+
+        console.log('User inserted successfully');
+    } catch (error) {
+        console.error('Error inserting user:', error);
+    } finally {
+        await connection.close();
+    }
+}
+
 // 이 SQL 쿼리는 bpmdata 테이블에서 최근 1분 동안의 데이터를 기반으로 1분 단위로 묶어 평균 심박수를 계산하는 것을 목적으로 합니다.
 
 /*    SELECT: 조회할 열들을 지정합니다.
