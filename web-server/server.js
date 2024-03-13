@@ -6,9 +6,14 @@ const WebSocket = require('ws');
 const http = require('http');
 const express = require('express');
 const expressWs = require('express-ws');
+const bodyParser = require('body-parser'); //바꾼곳
+
+app.use(bodyParser.urlencoded({ extended: true })); //바꾼곳
 
 //  oracledb.js의 함수들 삽입 
 const oracleDB = require('./oracledb.js'); // oracledb.js 파일 경로에 따라 수정
+// mail_auth.js의 함수들 삽입          //바꾼곳
+const nomailer = require('./mail_auth.js'); // mail_auth.js 파일 경로에 따라 수정  //바꾼곳
 
 const app = express();
 
@@ -72,7 +77,7 @@ app.get('/hourly', (req, res) => {
 
 //////////////////////////////////////
 /// 핸들러 등록 : realtime-bpm' 경로에 대한 GET 요청을 처리 
-app.get('/realtime-bpm', async (req, res) => {
+app.get('/realtime-bpm', async (req, res) => {   //바꾼곳
   try {
     // Oracle 데이터베이스에 연결
     const connection = await oracleDB.connectToOracleDB();
@@ -169,6 +174,25 @@ app.get('/hourly-chart', async (req, res) => {
     res.status(500).send('데이터 검색 중 오류 발생');
     console.error('Error retrieving data:', err);
   }
+});
+
+app.post('/signup', async (req, res) => {
+    // POST 요청의 바디로부터 사용자 데이터 추출
+    const userData = req.body;
+
+    try {
+        // 사용자 데이터를 데이터베이스에 삽입
+        await oracleDB.insertUser(userData);
+
+        // 회원가입 인증 이메일 보내기
+        nomailer.sendVerificationEmail(userData.email);
+
+        // 성공 응답 보내기
+        res.send("회원가입이 성공적으로 완료되었습니다.");
+    } catch (error) {
+        console.error('회원가입 오류:', error);
+        res.status(500).send("회원가입 중 오류가 발생했습니다.");
+    }
 });
 
 // Create a WebSocket server at port 13389
