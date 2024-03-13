@@ -8,7 +8,8 @@ const express = require('express');
 const expressWs = require('express-ws');
 const bodyParser = require('body-parser'); //바꾼곳
 
-app.use(bodyParser.urlencoded({ extended: true })); //바꾼곳
+app.use(express.urlencoded({ extended: true })); // 바꾼곳
+app.use(express.json()); // 바꾼곳
 
 //  oracledb.js의 함수들 삽입 
 const oracleDB = require('./oracledb.js'); // oracledb.js 파일 경로에 따라 수정
