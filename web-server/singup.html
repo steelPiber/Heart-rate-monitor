@@ -40,17 +40,17 @@
             <button type="submit">가입</button>
         </form>
     </div>
-
     <script>
         document.getElementById("signupForm").addEventListener("submit", function(event) {
             event.preventDefault(); // 기본 제출 동작 방지
-
             // 비밀번호 확인
-            var password = document.getElementById("password").value;
+            var password = document.getElementById("userpasswd").value;
             var confirmPassword = document.getElementById("confirm_password").value;
             if (password !== confirmPassword) {
                 alert("비밀번호가 일치하지 않습니다.");
                 return;
+            }else{
+                window.location.href = 'http://202.31.243.45';
             }
         });
     </script>
