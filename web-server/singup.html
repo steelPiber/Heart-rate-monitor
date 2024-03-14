@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+</head>
+<body>
+    <div class="container">
+        <h2>회원가입</h2>
+        <form id="signupForm" method="post" action="/signup">
+            <div class="form-group">
+                <label for="id">아이디:</label>
+                <input type="text" id="id" name="id" required>
+            </div>
+            <div class="form-group">
+                <label for="id">이름:</label>
+                <input type="text" id="userRealname" name="userRealname" required>
+            </div>
+            <div class="form-group">
+                <label for="id">닉네임:</label>
+                <input type="text" id="username" name="username" required>
+            </div>            
+            <div class="form-group">
+                <label for="password">비밀번호:</label>
+                <input type="password" id="userpasswd" name="userpasswd" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">비밀번호 확인:</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+            <div class="form-group">
+                <label for="email">이메일:</label>
+                <input type="email" id="useremail" name="useremail" required>
+            </div>
+            <div class="form-group">
+                <label for="mac_address">MAC 주소:</label>
+                <input type="text" id="userMac" name="userMac" required>
+            </div>
+            <button type="submit">가입</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("signupForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // 기본 제출 동작 방지
+
+            // 비밀번호 확인
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirm_password").value;
+            if (password !== confirmPassword) {
+                alert("비밀번호가 일치하지 않습니다.");
+                return;
+            }
+        });
+    </script>
+</body>
+</html>
