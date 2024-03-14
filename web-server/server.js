@@ -70,6 +70,9 @@ app.get('/min1', (req, res) => {
 app.get('/hourly', (req, res) => {
     res.sendFile(__dirname + '/hourlychart.html');
 });
+app.get('/signup', (req, res) => {
+  res.sendFile(__dirname + 'heart-dashboard/signup.html');
+});
 
 
 //////////////////////////////////////
@@ -173,7 +176,7 @@ app.get('/hourly-chart', async (req, res) => {
   }
 });
 
-app.post('/signup', async (req, res) => {   // 바꾼곳
+app.post('/mail', async (req, res) => {   // 바꾼곳
     // POST 요청의 바디로부터 사용자 데이터 추출
     const userData = req.body;
 
