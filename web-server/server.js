@@ -185,7 +185,7 @@ app.post('/mail', async (req, res) => {   // 바꾼곳
         await oracleDB.insertUser(userData);
 
         // 회원가입 인증 이메일 보내기
-        nomailer.sendVerificationEmail(userData.email);
+        nodemailer.sendVerificationEmail(userData.email);
 
         // 성공 응답 보내기
         res.send("회원가입이 성공적으로 완료되었습니다.");
