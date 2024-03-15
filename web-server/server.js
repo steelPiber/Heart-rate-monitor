@@ -11,7 +11,7 @@ const app = express();
 //  oracledb.js의 함수들 삽입 
 const oracleDB = require('./oracledb.js'); // oracledb.js 파일 경로에 따라 수정
 // mail_auth.js의 함수들 삽입          //바꾼곳
-const nomailer = require('./mail_auth.js'); // mail_auth.js 파일 경로에 따라 수정  //바꾼곳
+const nodemailer = require('./mail_auth.js'); // mail_auth.js 파일 경로에 따라 수정  //바꾼곳
 
 const server = http.createServer(app);
 const PORT_HTTP = 8081;
