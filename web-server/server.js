@@ -6,12 +6,13 @@ const WebSocket = require('ws');
 const http = require('http');
 const express = require('express');
 const expressWs = require('express-ws');
-const app = express();
 
 //  oracledb.js의 함수들 삽입 
 const oracleDB = require('./oracledb.js'); // oracledb.js 파일 경로에 따라 수정
 // mail_auth.js의 함수들 삽입          //바꾼곳
 const nodemailer = require('./mail_auth.js'); // mail_auth.js 파일 경로에 따라 수정  //바꾼곳
+
+const app = express();
 
 const server = http.createServer(app);
 const PORT_HTTP = 8081;
@@ -20,15 +21,8 @@ const PORT_WS = 13389;
 
 const webSocket = new WebSocket('ws://127.0.0.1:13389');
 
-// Add WebSocket support to Express
-expressWs(app, server);
-
-app.use(express.urlencoded({ extended: true })); // 바꾼곳
-app.use(express.json()); // 바꾼곳
-
 //정적 파일 제공
 app.use (express.static('heart-dashboard'));
-
 
 // Oracle DB 연결 확인
 oracleDB.connectToOracleDB()
@@ -41,7 +35,6 @@ oracleDB.connectToOracleDB()
     // 연결 실패 시 동작
     console.error('Oracle DB 연결 실패:', error);
   });
-
 
 // WebSocket 메시지 수신 시 실행
 webSocket.addEventListener('message', event =>{
@@ -59,6 +52,10 @@ webSocket.addEventListener('message', event =>{
 
     }
 });
+expressWs(app, server);
+
+app.use(express.urlencoded({ extended: true })); // 바꾼곳
+app.use(express.json()); // 바꾼곳
 
 // Serve HTML page at port 8081
 app.get('/', (req, res) => {
