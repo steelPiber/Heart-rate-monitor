@@ -1,5 +1,5 @@
+require('dotenv').config();
 const nodemailer = require('nodemailer');
-const senderinfo = require('senderinfo.json');
 
 function generateRandomCode(n) {
     let str = '';
@@ -18,13 +18,13 @@ function sendVerificationEmail(userEmail) {
         secure: false,
         requireTLS: true,
         auth: {
-            user: senderinfo.user, // 환경 변수에서 가져오도록 수정
-            pass: senderinfo.pass  // 환경 변수에서 가져오도록 수정
+            user: process.env.EMAIL_USER,  // 환경 변수 사용
+            pass: process.env.EMAIL_PASS   // 환경 변수 사용
         }
     });
 
     let mailOptions = {
-        from: `"Heart-rate-monitor" <${senderinfo.user}>`, // 환경 변수에서 가져오도록 수정
+        from: `"Heart-rate-monitor" <${process.env.EMAIL_USER}>`, // 환경 변수 사용
         to: userEmail,
         subject: "[회원가입 인증] 이메일 인증을 완료해주세요.",
         html: `<h1>회원가입을 위한 이메일 인증</h1>
