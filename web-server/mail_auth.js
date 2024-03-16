@@ -1,3 +1,5 @@
+console.log(`VERSION_ORACLEDB_0.1_12.01`);
+console.log(`0.1 : mail_auth.js 모듈 분리`);
 require('dotenv').config();
 const nodemailer = require('nodemailer');
 
