@@ -41,18 +41,32 @@
         </form>
     </div>
     <script>
-        document.getElementById("signupForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // 기본 제출 동작 방지
-            // 비밀번호 확인
-            var password = document.getElementById("userpasswd").value;
-            var confirmPassword = document.getElementById("confirm_password").value;
-            if (password !== confirmPassword) {
-                alert("비밀번호가 일치하지 않습니다.");
-                return;
-            }else{
-                window.location.href = 'http://202.31.243.45';
+    document.getElementById("signupForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // 기본 제출 동작 방지
+
+        // 폼 데이터 가져오기
+        const formData = new FormData(document.getElementById("signupForm"));
+
+        // 서버로 데이터 전송
+        fetch('/signup', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('서버 응답 실패');
             }
+            return response.text(); // 서버 응답 내용을 텍스트로 변환
+        })
+        .then(data => {
+            console.log(data); // 서버 응답 출력
+            alert(data); // 경고창 표시 또는 다른 동작 수행
+        })
+        .catch(error => {
+            console.error('오류:', error);
+            alert('회원가입 중 오류가 발생했습니다.');
         });
-    </script>
+    });
+</script>
 </body>
 </html>
