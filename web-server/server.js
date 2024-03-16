@@ -169,9 +169,9 @@ app.get('/hourly-chart', async (req, res) => {
   }
 });
 
-app.post('/signup', async (req, res) => {   // 바꾼곳
-    // POST 요청의 바디로부터 사용자 데이터 추출
-    const userData = req.body;
+app.get('/signup', async (req, res) => {   // 바꾼곳
+    // GET 요청의 쿼리 파라미터로부터 사용자 데이터 추출
+    const userData = req.query;
 
     try {
         // 사용자 데이터를 데이터베이스에 삽입
