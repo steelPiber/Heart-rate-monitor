@@ -67,10 +67,6 @@ app.get('/min1', (req, res) => {
 app.get('/hourly', (req, res) => {
     res.sendFile(__dirname + '/hourlychart.html');
 });
-app.get('/signup', (req, res) => {
-  res.sendFile(__dirname + 'heart-dashboard/signup.html');
-});
-
 
 //////////////////////////////////////
 /// 핸들러 등록 : realtime-bpm' 경로에 대한 GET 요청을 처리 
