@@ -8,36 +8,33 @@
 <body>
     <div class="container">
         <h2>회원가입</h2>
-        <form id="signupForm" method="get" action="/signup">
+        <form method="post" action="/signup">
             <div class="form-group">
                 <label for="id">아이디:</label>
-                <input type="text" id="id" name="id" required>
+                <input type="text" name="id" required>
             </div>
             <div class="form-group">
                 <label for="id">이름:</label>
-                <input type="text" id="userRealname" name="userRealname" required>
+                <input type="text" name="userRealname" required>
             </div>
             <div class="form-group">
                 <label for="id">닉네임:</label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" name="username" required>
             </div>            
             <div class="form-group">
                 <label for="password">비밀번호:</label>
-                <input type="password" id="userpasswd" name="userpasswd" required>
+                <input type="password" name="userpasswd" required>
             </div>
-            <div class="form-group">
-                <label for="confirm_password">비밀번호 확인:</label>
-                <input type="password" id="confirm_password" name="confirm_password" required>
-            </div>
+
             <div class="form-group">
                 <label for="email">이메일:</label>
-                <input type="email" id="useremail" name="useremail" required>
+                <input type="email" name="useremail" required>
             </div>
             <div class="form-group">
                 <label for="mac_address">MAC 주소:</label>
-                <input type="text" id="userMac" name="userMac" required>
+                <input type="text" name="userMac" required>
             </div>
-            <button type="submit">가입</button>
+            <input type="submit" value="회원가입"> 
         </form>
     </div>
 </body>
