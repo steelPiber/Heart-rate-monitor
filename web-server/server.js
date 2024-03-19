@@ -174,14 +174,17 @@ app.post('/signup', async (req, res)=> {
     const paramPw = req.body.userpasswd;
     const paramEmail = req.body.useremail;
     const paramMac = req.body.userMac;
-    console.log('id: ', paramId);
-    console.log('name: ', paramname);
-  console.log('nick: ', paramNickname);
-  console.log('pw: ', paramPw);
-  console.log('email: ', paramEmail);
-  console.log('Mac: ', paramMac);
-
-})
+    try {
+      // Oracle 데이터베이스에 연결
+      const connection = await oracleDB.connectToOracleDB();
+      // 데이터베이스 연결을 통해 min1_query를 실행하여 1분 전의 평균 BPM 값을 가져옴
+      const result = await connection.execute(oracleDB.insertUser);
+      await connection.close();
+    } catch (err) {
+      res.status(500).send('회원가입 오류');
+      console.error('회원가입 오류', err);
+    } 
+});
 
 // Create a WebSocket server at port 13389
 const wss = new WebSocket.Server({ noServer: true });
