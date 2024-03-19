@@ -174,7 +174,12 @@ app.post('/signup', async (req, res)=> {
     const paramPw = req.body.userpasswd;
     const paramEmail = req.body.userEmail;
     const paramMac = req.body.userMac;
-
+    console.log('id: ', paramId);
+    console.log('name: ', paramname);
+  console.log('nick: ', paramNickname);
+  console.log('pw: ', paramPw);
+  console.log('email: ', paramEmail);
+  console.log('Mac: ', paramMac);
 
 })
 
