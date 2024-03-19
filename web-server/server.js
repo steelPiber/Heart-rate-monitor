@@ -5,6 +5,8 @@ console.log('0.2.1 :1시간 BPM 평균값 오류 반환');
 const WebSocket = require('ws');
 const http = require('http');
 const express = require('express');
+const path = require('path');
+const static = require('serve-static');
 const expressWs = require('express-ws');
 
 //  oracledb.js와 mail_auth.js의 함수들 불러오기
@@ -12,6 +14,10 @@ const oracleDB = require('./oracledb.js');
 const nodemailer = require('./mail_auth.js');
 
 const app = express();
+app.use(express.urlencoded({extended:true})); //바꾼곳
+app.use(express.json());
+app.use('/public', static(path.join(__dirname, 'public')));
+
 const server = http.createServer(app);
 const PORT_HTTP = 8081;
 const PORT_WS = 13389;
@@ -160,17 +166,17 @@ app.get('/hourly-chart', async (req, res) => {
   }
 });
 // 회원가입 처리
-app.get('/signup', async (req, res) => {
-    const userData = req.query;
-    try {
-        await oracleDB.insertUser(userData);
-        nodemailer.sendVerificationEmail(userData.useremail);
-        res.send("회원가입이 성공적으로 완료되었습니다.");
-    } catch (error) {
-        console.error('회원가입 오류:', error);
-        res.status(500).send("회원가입 중 오류가 발생했습니다.");
-    }
-});
+app.post('/signup', async (req, res)=> {
+    console.log('/signup 호출됨 ' + req);
+    const paramId = req.body.id;
+    const paramname = req.body.username;
+    const paramNickname = req.body.userNickname;
+    const paramPw = req.body.userpasswd;
+    const paramEmail = req.body.userEmail;
+    const paramMac = req.body.userMac;
+
+
+})
 
 // Create a WebSocket server at port 13389
 const wss = new WebSocket.Server({ noServer: true });
