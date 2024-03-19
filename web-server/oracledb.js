@@ -52,11 +52,11 @@ async function insertUser(userData) {
     try {
         const insertSQL = `INSERT INTO USERS(USER_ID, NAME, EMAIL, USERNAME, MAC_ADDRESS, PASSWORD, EMAIL_AUTH) VALUES (:userId, :userRealname, :userEmail, :username, :userMac, :userPassword, 0)`;
         await connection.execute(insertSQL, {
-            userId: userData.userid,
-            userRealname: userData.userRealname,
-            userEmail: userData.useremail,
-            username: userData.username,
-            userMac: userData.usermac,
+            userId: paramId,
+            userRealname: paramname,
+            userEmail: parameEmail,
+            username: paramNickname,
+            userMac: paramMac,
             userPassword: userData.userpasswd
         });
 
@@ -141,4 +141,3 @@ module.exports = {
   hourly_query,
   day_query,
 };
-
