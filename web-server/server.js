@@ -170,7 +170,7 @@ app.post('/signup', async (req, res)=> {
     console.log('/signup 호출됨 ' + req);
     const paramId = req.body.id;
     const paramname = req.body.username;
-    const paramNickname = req.body.userNickname;
+    const paramNickname = req.body.userNick;
     const paramPw = req.body.userpasswd;
     const paramEmail = req.body.useremail;
     const paramMac = req.body.userMac;
