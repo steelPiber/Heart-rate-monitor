@@ -167,23 +167,20 @@ app.get('/hourly-chart', async (req, res) => {
 });
 // 회원가입 처리
 app.post('/signup', async (req, res)=> {
-    console.log('/signup 호출됨 ' + req);
     const paramId = req.body.id;
     const paramname = req.body.username;
-    const paramNickname = req.body.userNick;
-    const paramPw = req.body.userpasswd;
-    const paramEmail = req.body.useremail;
+    const paramEmail = req.body.userEmail;
+    const paramNickname = req.body.userNickname;
     const paramMac = req.body.userMac;
+    const paramPw = req.body.userpasswd;
+    
     try {
-      // Oracle 데이터베이스에 연결
-      const connection = await oracleDB.connectToOracleDB();
-      // 데이터베이스 연결을 통해 min1_query를 실행하여 1분 전의 평균 BPM 값을 가져옴
-      const result = await connection.execute(oracleDB.insertUser);
-      await connection.close();
+      await oracleDB.insertUser(paramId, paramname, paramEmail, paramNickname, paramMac, paramPw);
+      res.status(200).send('회원가입 성공');
     } catch (err) {
       res.status(500).send('회원가입 오류');
-      console.error('회원가입 오류', err);
-    } 
+      console.error('회원가입 오류:', err);
+    }
 });
 
 // Create a WebSocket server at port 13389
