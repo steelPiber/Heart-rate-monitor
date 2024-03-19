@@ -57,7 +57,7 @@ async function insertUser(userData) {
             userEmail: parameEmail,
             username: paramNickname,
             userMac: paramMac,
-            userPassword: userData.userpasswd
+            userPassword: paramPw
         });
 
         console.log('User inserted successfully');
