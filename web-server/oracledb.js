@@ -50,9 +50,10 @@ async function insertUser(paramId, paramname, paramEmail, paramNickname, paramMa
     const connection = await connectToOracleDB();
 
     try {
-        const insertSQL = `INSERT INTO USERS(NAME, EMAIL, USERNAME, MAC_ADDRESS, PASSWORD, EMAIL_AUTH) VALUES (:userRealname, :userEmail, :username, :userMac, :userPassword, 0)`;
+        const insertSQL = `INSERT INTO USER_TABLE(USER_ID, NAME, EMAIL, USERNAME, MAC_ADDRESS, PASSWORD, EMAIL_AUTH) VALUES (:userId, :userRealname, :userEmail, :username, :userMac, :userPassword, 0)`;
         await connection.execute(insertSQL, {
-            userRealname: paramname,
+            userId: paramId,
+	    userRealname: paramname,
             userEmail: paramEmail,
             username: paramNickname,
             userMac: paramMac,
