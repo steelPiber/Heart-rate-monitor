@@ -165,6 +165,21 @@ app.get('/hourly-chart', async (req, res) => {
     console.error('Error retrieving data:', err);
   }
 });
+//아이디 중복 검사
+app.get('/checkDuplicate', async (req, res) => {
+    const userId = req.body.id; // 클라이언트로부터 전송된 아이디
+    
+    try {
+        const connection = await oracleDB.connectToOracleDB();
+        const result = await connection.execute(oracleDB.checkUserExists(userId);
+        await connection.close();
+        // 중복 여부를 클라이언트에 응답합니다.
+        res.json({ isDuplicate });
+    } catch (error) {
+        console.error('중복 확인 오류:', error);
+    }
+});
+
 // 회원가입 처리
 app.post('/signup', async (req, res)=> {
     const paramId = req.body.id;
