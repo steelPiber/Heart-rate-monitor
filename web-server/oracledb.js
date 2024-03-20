@@ -48,9 +48,7 @@ async function insertBPMData(bpmValue) {
 // USER데이터를 Oracle DB에 삽입
 async function insertUser(paramId, paramname, paramEmail, paramNickname, paramMac, paramPw) {
     const connection = await connectToOracleDB();
-
     try{
-
         const insertSQL = `INSERT INTO USER_TABLE(USER_ID, NAME, EMAIL, USERNAME, MAC_ADDRESS, PASSWORD, EMAIL_AUTH) VALUES (:userId, :userRealname, :userEmail, :username, :userMac, :userPassword, :userEmailAuth)`;
         const data = {
             userId: paramId,
