@@ -49,9 +49,7 @@ async function insertBPMData(bpmValue) {
 async function insertUser(paramId, paramname, paramEmail, paramNickname, paramMac, paramPw) {
     const connection = await connectToOracleDB();
 
-    try {
-        // 비밀번호 암호화
-        const hashedPassword = await bcrypt.hash(paramPw, 10);
+    try{
 
         const insertSQL = `INSERT INTO USER_TABLE(USER_ID, NAME, EMAIL, USERNAME, MAC_ADDRESS, PASSWORD, EMAIL_AUTH) VALUES (:userId, :userRealname, :userEmail, :username, :userMac, :userPassword, :userEmailAuth)`;
         const data = {
