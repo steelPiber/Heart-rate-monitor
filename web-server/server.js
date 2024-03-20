@@ -171,7 +171,7 @@ app.get('/checkDuplicate', async (req, res) => {
     console.log(userId);
     try {
         const connection = await oracleDB.connectToOracleDB();
-        const isDuplicate = await connection.execute(oracleDB.checkUserExists(userId);
+        const isDuplicate = await connection.execute(oracleDB.checkUserExists(userId));
         await connection.close();
         // 중복 여부를 클라이언트에 응답합니다.
         res.json({ isDuplicate });
