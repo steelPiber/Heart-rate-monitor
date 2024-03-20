@@ -51,7 +51,7 @@ async function insertUser(paramId, paramname, paramEmail, paramNickname, paramMa
 
     try {
         const insertSQL = `INSERT INTO USER_TABLE(USER_ID, NAME, EMAIL, USERNAME, MAC_ADDRESS, PASSWORD, EMAIL_AUTH) VALUES (:userId, :userRealname, :userEmail, :username, :userMac, :userPassword, 0)`;
-        await connection.execute(insertSQL, {
+        const data = {
             userId: paramId,
 	    userRealname: paramname,
             userEmail: paramEmail,
