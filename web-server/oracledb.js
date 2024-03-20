@@ -50,23 +50,30 @@ async function insertUser(paramId, paramname, paramEmail, paramNickname, paramMa
     const connection = await connectToOracleDB();
 
     try {
+        // 비밀번호 암호화
+        const hashedPassword = await bcrypt.hash(paramPw, 10);
+
         const insertSQL = `INSERT INTO USER_TABLE(USER_ID, NAME, EMAIL, USERNAME, MAC_ADDRESS, PASSWORD, EMAIL_AUTH) VALUES (:userId, :userRealname, :userEmail, :username, :userMac, :userPassword, :userEmailAuth)`;
         const data = {
             userId: paramId,
-	    userRealname: paramname,
+            userRealname: paramname,
             userEmail: paramEmail,
             username: paramNickname,
             userMac: paramMac,
             userPassword: paramPw,
-	    userEmailAuth: 0
+            userEmailAuth: 0
         };
-	const result = await connection.execute(insertSQL, data);
+        const result = await connection.execute(insertSQL, data, { autoCommit: true }); // 자동 커밋 활성화
 
         console.log('User inserted successfully');
     } catch (error) {
         console.error('Error inserting user:', error);
     } finally {
-        await connection.close();
+        try {
+            await connection.close();
+        } catch (closeError) {
+            console.error('Error closing the connection:', closeError);
+        }
     }
 }
 
