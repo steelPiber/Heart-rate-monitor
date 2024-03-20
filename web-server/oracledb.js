@@ -59,6 +59,7 @@ async function insertUser(paramId, paramname, paramEmail, paramNickname, paramMa
             userMac: paramMac,
             userPassword: paramPw
         };
+	await connection.execute(insertSQL, data);
 
         console.log('User inserted successfully');
     } catch (error) {
