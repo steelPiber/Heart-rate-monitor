@@ -175,7 +175,7 @@ app.post('/signup', async (req, res)=> {
     const paramPw = req.body.userpasswd;
     
     try {
-      await oracleDB.insertUser(paramname, paramEmail, paramNickname, paramMac, paramPw);
+      await oracleDB.insertUser(paramId, paramname, paramEmail, paramNickname, paramMac, paramPw);
       res.status(200).send('회원가입 성공');
     } catch (err) {
       res.status(500).send('회원가입 오류');
