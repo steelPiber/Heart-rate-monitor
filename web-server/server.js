@@ -167,11 +167,11 @@ app.get('/hourly-chart', async (req, res) => {
 });
 //아이디 중복 검사
 app.get('/checkDuplicate', async (req, res) => {
-    const userId = req.body.id; // 클라이언트로부터 전송된 아이디
-    
+    const userId = req.query.id; // 클라이언트로부터 전송된 아이디
+    console.log(userId);
     try {
         const connection = await oracleDB.connectToOracleDB();
-        const result = await connection.execute(oracleDB.checkUserExists(userId);
+        const isDuplicate = await connection.execute(oracleDB.checkUserExists(userId);
         await connection.close();
         // 중복 여부를 클라이언트에 응답합니다.
         res.json({ isDuplicate });
