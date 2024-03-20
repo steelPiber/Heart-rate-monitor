@@ -53,7 +53,6 @@ async function checkUserExists(userId) {
         return result.rows[0].COUNT > 0;
     } catch (error) {
         console.error('Error checking user exists:', error);
-        throw error; // 에러를 다시 던져서 상위 호출자에게 알립니다.
     } finally {
         await connection.close();
     }
