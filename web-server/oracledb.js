@@ -44,6 +44,20 @@ async function insertBPMData(bpmValue) {
     await connection.close();
   }
 }
+//ID중복 검사
+async function checkUserExists(userId) {
+    const connection = await connectToOracleDB();
+    try {
+        const query = 'SELECT COUNT(*) AS count FROM USER_TABLE WHERE USER_ID = :userId';
+        const result = await connection.execute(query, [userId], { outFormat: oracleDB.OBJECT });
+        return result.rows[0].COUNT > 0;
+    } catch (error) {
+        console.error('Error checking user exists:', error);
+        throw error; // 에러를 다시 던져서 상위 호출자에게 알립니다.
+    } finally {
+        await connection.close();
+    }
+}
 
 // USER데이터를 Oracle DB에 삽입
 async function insertUser(paramId, paramname, paramEmail, paramNickname, paramMac, paramPw) {
