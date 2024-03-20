@@ -58,7 +58,7 @@ async function insertUser(paramId, paramname, paramEmail, paramNickname, paramMa
             username: paramNickname,
             userMac: paramMac,
             userPassword: paramPw
-        });
+        };
 
         console.log('User inserted successfully');
     } catch (error) {
