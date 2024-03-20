@@ -153,6 +153,7 @@ WHERE TIME >= TRUNC(SYSDATE, 'DD')
 module.exports = {
   connectToOracleDB,
   insertBPMData,
+  checkUserExists,
   insertUser,
   realtime_query,
   min1_query,
