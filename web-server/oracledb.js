@@ -49,7 +49,10 @@ async function checkUserExists(userId) {
     const connection = await connectToOracleDB();
     try {
         const query = 'SELECT COUNT(*) AS count FROM USER_TABLE WHERE USER_ID = :userId';
-        const result = await connection.execute(query, [userId], { outFormat: oracleDB.OBJECT });
+	const data = {
+	     userId: userId
+	}
+        const result = await connection.execute(query, data, { outFormat: oracleDB.OBJECT });
         return result.rows[0].COUNT > 0;
     } catch (error) {
         console.error('Error checking user exists:', error);
