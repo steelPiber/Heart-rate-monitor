@@ -183,15 +183,14 @@ app.get('/checkDuplicate', async (req, res) => {
 
 // 회원가입 처리
 app.post('/signup', async (req, res)=> {
-    const paramId = req.body.id;
-    const paramname = req.body.username;
     const paramEmail = req.body.userEmail;
+    const paramname = req.body.username;
     const paramNickname = req.body.userNickname;
     const paramMac = req.body.userMac;
     const paramPw = req.body.userpasswd;
     
     try {
-      await oracleDB.insertUser(paramId, paramname, paramEmail, paramNickname, paramMac, paramPw);
+      await oracleDB.insertUser(paramEmail, paramname, paramNickname, paramMac, paramPw);
       res.status(200).send('회원가입 성공');
     } catch (err) {
       res.status(500).send('회원가입 오류');
