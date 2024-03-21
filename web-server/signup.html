@@ -30,13 +30,22 @@
                 <label for="mac_address">MAC 주소:</label>
                 <input type="text" name="userMac" required>
             </div>
-            <input type="submit" value="회원가입"> 
+            <input type="submit" value="회원가입" id="submitBtn"> 
         </form>
     </div>
 
     <script>
-        // 아이디 중복 확인 버튼에 대한 클릭 이벤트 핸들러
-        document.getElementById('checkDuplicateBtn').addEventListener('click', async () => {
+        // 회원가입 폼
+        const signupForm = document.getElementById('signupForm');
+
+        // 아이디 중복 확인 버튼
+        const checkDuplicateBtn = document.getElementById('checkDuplicateBtn');
+
+        // 회원가입 제출 버튼
+        const submitBtn = document.getElementById('submitBtn');
+
+        // 중복 확인 버튼 클릭 이벤트 핸들러
+        checkDuplicateBtn.addEventListener('click', async () => {
             const email = document.getElementById('email').value;
 
             // 중복 확인을 위한 비동기 요청
@@ -47,13 +56,23 @@
                 if (data.isDuplicate) {
                     alert('이미 사용 중인 아이디입니다.');
                 } else {
-                    // 중복이 아니라면 폼을 제출
-                    document.getElementById('signupForm').submit();
+                    // 중복이 아니라면 회원가입 제출 버튼 활성화
+                    submitBtn.disabled = false;
                 }
             } catch (error) {
                 console.error('중복 확인 오류:', error);
                 alert('중복 확인 중 오류가 발생했습니다.');
             }
+        });
+
+        // 회원가입 폼 제출 이벤트 핸들러
+        signupForm.addEventListener('submit', (event) => {
+            // 중복 확인 버튼을 누르지 않은 경우에는 제출을 막음
+            if (!submitBtn.disabled) {
+                return;
+            }
+            event.preventDefault(); // 폼 제출 막기
+            alert('이메일 중복을 확인해주세요.');
         });
     </script>
 </body>
