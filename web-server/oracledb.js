@@ -52,7 +52,7 @@ async function checkUserExists(userEmail) {
 	const data = {
 	     Email: userEmail
 	}
-        const result = await connection.execute(query, data, { outFormat: oracleDB.OBJECT });
+        const result = await connection.execute(query, data, { outFormat: oracledb.OBJECT });
         return result.rows[0].COUNT > 0;
     } catch (error) {
         console.error('Error checking user exists:', error);
