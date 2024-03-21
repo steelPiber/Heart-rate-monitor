@@ -45,12 +45,12 @@ async function insertBPMData(bpmValue) {
   }
 }
 //ID중복 검사
-async function checkUserExists(userId) {
+async function checkUserExists(userEmail) {
     const connection = await connectToOracleDB();
     try {
-        const query = 'SELECT COUNT(*) AS count FROM USER_TABLE WHERE USER_ID = :userId';
+        const query = 'SELECT COUNT(*) AS count FROM USER_TABLE WHERE USER_ID = :Email';
 	const data = {
-	     userId: userId
+	     Email: userEmail
 	}
         const result = await connection.execute(query, data, { outFormat: oracleDB.OBJECT });
         return result.rows[0].COUNT > 0;
