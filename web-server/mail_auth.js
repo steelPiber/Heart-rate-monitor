@@ -1,7 +1,7 @@
 console.log(`VERSION_ORACLEDB_0.1_12.01`);
 console.log(`0.1 : mail_auth.js 모듈 분리`);
 require('dotenv').config();
-const nodemailer = require('nodemailer');
+const node_mailer = require('nodemailer');
 
 function generateRandomCode(n) {
     let str = '';
@@ -13,7 +13,7 @@ function generateRandomCode(n) {
 
 function sendVerificationEmail(userEmail) {
     let code = generateRandomCode(6);
-    let transporter = nodemailer.createTransport({
+    let transporter = node_mailer.createTransport({
         service: 'gmail',
         port: 587,
         host: 'smtp.gmail.com',
