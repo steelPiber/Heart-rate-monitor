@@ -34,8 +34,11 @@
             <input type="submit" value="회원가입" id="submitBtn" disabled> <!-- 제출 버튼을 비활성화 -->
         </form>
     </div>
-
+    
     <script>
+        window.onload = function() {
+            document.getElementById('alertMessage').style.display = 'block'; // 알림 메시지 표시
+        };
         // 아이디 중복 확인 버튼에 대한 클릭 이벤트 핸들러
         document.getElementById('checkDuplicateBtn').addEventListener('click', async () => {
             const email = document.getElementById('email').value;
