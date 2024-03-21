@@ -48,7 +48,7 @@ async function insertBPMData(bpmValue) {
 async function checkUserExists(userEmail) {
     const connection = await connectToOracleDB();
     try {
-        const query = 'SELECT COUNT(*) AS count FROM USER_TABLE WHERE USER_ID = :Email';
+        const query = 'SELECT COUNT(*) AS count FROM USER_TABLE WHERE EMAIL = :Email';
 	const data = {
 	     Email: userEmail
 	}
