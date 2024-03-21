@@ -167,16 +167,15 @@ app.get('/hourly-chart', async (req, res) => {
 });
 //아이디 중복 검사
 app.get('/checkDuplicate', async (req, res) => {
-    const userId = req.query.email; // 클라이언트로부터 전송된 아이디
-    console.log(userId);
-    try {
-        await oracleDB.checkUserExists(userId);
-        console.log({isDuplicate});
-        // 중복 여부를 클라이언트에 응답합니다.
-        res.json({ isDuplicate });
-    } catch (error) {
-        console.error('중복 확인 오류:', error);
-    }
+  const userEmail = req.query.email; // 요청에서 사용자 이메일을 추출
+
+  try {
+    const isDuplicate = await oracleDB.checkUserExists(userEmail); // 사용자 이메일을 전달
+    res.json({ isDuplicate });
+  } catch (error) {
+    console.error('중복 확인 오류:', error);
+    res.status(500).send('중복 확인 중 오류가 발생했습니다.');
+  }
 });
 
 // 회원가입 처리
