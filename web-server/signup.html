@@ -47,7 +47,8 @@
                 if (data.isDuplicate) {
                     alert('이미 사용 중인 아이디입니다.');
                 } else {
-                    alert('사용 가능한 아이디입니다.');
+                    // 중복이 아니라면 폼을 제출
+                    document.getElementById('signupForm').submit();
                 }
             } catch (error) {
                 console.error('중복 확인 오류:', error);
