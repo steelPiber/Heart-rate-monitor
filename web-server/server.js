@@ -183,7 +183,7 @@ app.get('/checkDuplicate', async (req, res) => {
 
 // 회원가입 처리
 app.post('/signup', async (req, res)=> {
-    const paramEmail = req.body.userEmail;
+    const paramEmail = req.body.email;
     const paramname = req.body.username;
     const paramNickname = req.body.userNickname;
     const paramMac = req.body.userMac;
