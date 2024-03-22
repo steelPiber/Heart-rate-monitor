@@ -60,13 +60,30 @@ async function checkUserExists(userEmail) {
         await connection.close();
     }
 }
+async function checkUserNickExists(userNick) {
+    const connection = await connectToOracleDB();
+    try {
+        const query = 'SELECT COUNT(*) AS count FROM USER_TABLE WHERE NAME = :Nick';
+	const data = {
+	     Nick: userNick
+	}
+        const result = await connection.execute(query, data, { outFormat: oracledb.OBJECT });
+        return result.rows[0].COUNT > 0;
+    } catch (error) {
+        console.error('Error checking user exists:', error);
+    } finally {
+        await connection.close();
+    }
+}
 
 // USER데이터를 Oracle DB에 삽입
 async function insertUser(paramEmail, paramname, paramNickname, paramMac, paramPw) {
+    const currentDate = new Date().toISOString();
     const connection = await connectToOracleDB();
     try{
         const insertSQL = `INSERT INTO USER_TABLE(EMAIL, NAME, USERNAME, MAC_ADDRESS, PASSWORD, EMAIL_AUTH) VALUES (:userEmail, :userRealname, :username, :userMac, :userPassword, :userEmailAuth)`;
-        const data = {
+        const insertlogtSQL = `INSERT INTO sign_up_log (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_seq.nextval, TO_TIMESTAMP('${currentDate}', 'YYYY-MM-DD"T"HH24:MI:SS.FF3"Z"'), :userEmail, :username);
+	const data = {
 	    userEmail: paramEmail,
             userRealname: paramname,
             username: paramNickname,
