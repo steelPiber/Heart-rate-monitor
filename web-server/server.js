@@ -146,8 +146,6 @@ app.get('/day-bpm', async (req, res) => {
   }
 });
 
-
-
 // 하루 1시간 평균 그래프 JSON 데이터 전송 
 app.get('/hourly-chart', async (req, res) => {
   try {
