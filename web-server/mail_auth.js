@@ -11,7 +11,7 @@ function generateRandomCode(n) {
     return str;
 }
 
-function sendVerificationEmail(userEmail) {
+async function sendVerificationEmail(userEmail) {
     let code = generateRandomCode(6);
     let transporter = node_mailer.createTransport({
         service: 'gmail',
@@ -43,3 +43,6 @@ function sendVerificationEmail(userEmail) {
         }
     });
 }
+module.exports = {
+    sendVerificationEmail,
+};
