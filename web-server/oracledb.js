@@ -44,7 +44,7 @@ async function insertBPMData(bpmValue) {
     await connection.close();
   }
 }
-//ID중복 검사
+//회원가입시 ID중복 검사
 async function checkUserExists(userEmail) {
     const connection = await connectToOracleDB();
     try {
@@ -60,6 +60,7 @@ async function checkUserExists(userEmail) {
         await connection.close();
     }
 }
+//회원가입시 user의 닉네임 중복검사
 async function checkUserNickExists(userNick) {
     const connection = await connectToOracleDB();
     try {
