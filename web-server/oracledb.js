@@ -211,6 +211,7 @@ module.exports = {
   insertBPMData,
   checkUserExists,
   insertUser,
+  insertUserlog,
   selectUser,
   realtime_query,
   min1_query,
