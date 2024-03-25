@@ -83,25 +83,25 @@ async function checkUserNickExists(userNick) {
 async function insertUser(paramEmail, paramname, paramNickname, paramMac, paramPw) {
     const currentDate = new Date().toISOString();
     const connection = await connectToOracleDB();
-    try{
+    try {
         const insertSQL = `INSERT INTO USER_TABLE(EMAIL, NAME, USERNAME, MAC_ADDRESS, PASSWORD, EMAIL_AUTH) VALUES (:userEmail, :userRealname, :username, :userMac, :userPassword, :userEmailAuth)`;
-        const insertlogSQL = `INSERT INTO sign_up_log (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_seq.nextval, TO_TIMESTAMP('${currentDate}', 'YYYY-MM-DD"T"HH24:MI:SS.FF3"Z"'), :userEmail, :username, :userMac)`;
-	const data = {
-	    userEmail: paramEmail,
+        const insertlogSQL = `INSERT INTO sign_up_log (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
+        const data = {
+            userEmail: paramEmail,
             userRealname: paramname,
             username: paramNickname,
             userMac: paramMac,
             userPassword: paramPw,
             userEmailAuth: 0
         };
-        const result = await connection.execute(insertSQL, data, { autoCommit: true }); // 자동 커밋 활성화
-	const result_log = await connection.execute(insertlogSQL, data, { autoCommit: true });
+        const result = await connection.execute(insertSQL, data, { autoCommit: true }); // 사용자 정보 삽입
+        const result_log = await connection.execute(insertlogSQL, data, { autoCommit: true }); // 회원가입 로그 삽입
         console.log('User inserted successfully');
     } catch (error) {
         console.error('Error inserting user:', error);
     } finally {
         try {
-            await connection.close();
+            await connection.close(); // 연결 닫기
         } catch (closeError) {
             console.error('Error closing the connection:', closeError);
         }
