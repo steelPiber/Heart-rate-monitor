@@ -194,6 +194,20 @@ app.post('/signup', async (req, res)=> {
     }
 });
 
+// 로그인 처리
+app.post('/signin', async (req, res)=> {
+    const paramEmail = req.body.email;
+    const paramPw = req.body.userpasswd;
+
+    try {
+        await oracleDB.selectUser(paramEmail, paramPw);
+        res.status(200).send('로그인 성공');
+    } catch (err) {
+        res.status(500).send('로그인 오류');
+        console.error('로그인 오류:' , err);
+    }
+});
+
 // Create a WebSocket server at port 13389
 const wss = new WebSocket.Server({ noServer: true });
 
