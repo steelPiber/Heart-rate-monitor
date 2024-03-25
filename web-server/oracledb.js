@@ -78,24 +78,42 @@ async function checkUserNickExists(userNick) {
         await connection.close();
     }
 }
-
-// USER데이터를 Oracle DB에 삽입
-async function insertUser(paramEmail, paramname, paramNickname, paramMac, paramPw) {
+async function insertUserlog(paramEmail, paramNickname, paramMac) {
     const currentDate = new Date().toISOString();
     const connection = await connectToOracleDB();
     try {
-        const insertSQL = `INSERT INTO USER_TABLE(EMAIL, NAME, USERNAME, MAC_ADDRESS, PASSWORD, EMAIL_AUTH) VALUES (:userEmail, :userRealname, :username, :userMac, :userPassword, :userEmailAuth)`;
-        const insertlogSQL = `INSERT INTO sign_up_log (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
-        const data = {
+    	const insertlogSQL = `INSERT INTO sign_up_log (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
+    	const data = {
             userEmail: paramEmail,
 	    username: paramNickname,
+            userMac: paramMac,
+        };
+	const result_log = await connection.execute(insertlogSQL, data, { autoCommit: true }); // 회원가입 로그 삽입
+        console.log('User_log inserted successfully');
+    } catch (error) {
+        console.error('Error inserting user_log:', error);
+    } finally {
+        try {
+            await connection.close(); // 연결 닫기
+        } catch (closeError) {
+            console.error('Error closing the connection:', closeError);
+        }
+    }
+}
+// USER데이터를 Oracle DB에 삽입
+async function insertUser(paramEmail, paramname, paramNickname, paramMac, paramPw) {
+    const connection = await connectToOracleDB();
+    try {
+        const insertSQL = `INSERT INTO USER_TABLE(EMAIL, NAME, USERNAME, MAC_ADDRESS, PASSWORD, EMAIL_AUTH) VALUES (:userEmail, :userRealname, :username, :userMac, :userPassword, :userEmailAuth)`;
+        const data = {
+            userEmail: paramEmail,
             userRealname: paramname,
+	    username: paramNickname,
             userMac: paramMac,
             userPassword: paramPw,
             userEmailAuth: 0
         };
         const result = await connection.execute(insertSQL, data, { autoCommit: true }); // 사용자 정보 삽입
-        const result_log = await connection.execute(insertlogSQL, data, { autoCommit: true }); // 회원가입 로그 삽입
         console.log('User inserted successfully');
     } catch (error) {
         console.error('Error inserting user:', error);
