@@ -95,7 +95,7 @@ async function insertUser(paramEmail, paramname, paramNickname, paramMac, paramP
             userEmailAuth: 0
         };
         const result = await connection.execute(insertSQL, data, { autoCommit: true }); // 자동 커밋 활성화
-
+	const result_log = await connection.execute(insertlogSQL, data, { autoCommit: true });
         console.log('User inserted successfully');
     } catch (error) {
         console.error('Error inserting user:', error);
