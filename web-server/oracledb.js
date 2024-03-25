@@ -44,6 +44,7 @@ async function insertBPMData(bpmValue) {
     await connection.close();
   }
 }
+
 //회원가입시 ID중복 검사
 async function checkUserExists(userEmail) {
     const connection = await connectToOracleDB();
@@ -60,6 +61,7 @@ async function checkUserExists(userEmail) {
         await connection.close();
     }
 }
+
 //회원가입시 user의 닉네임 중복검사
 async function checkUserNickExists(userNick) {
     const connection = await connectToOracleDB();
@@ -83,7 +85,7 @@ async function insertUser(paramEmail, paramname, paramNickname, paramMac, paramP
     const connection = await connectToOracleDB();
     try{
         const insertSQL = `INSERT INTO USER_TABLE(EMAIL, NAME, USERNAME, MAC_ADDRESS, PASSWORD, EMAIL_AUTH) VALUES (:userEmail, :userRealname, :username, :userMac, :userPassword, :userEmailAuth)`;
-        const insertlogtSQL = `INSERT INTO sign_up_log (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_seq.nextval, TO_TIMESTAMP('${currentDate}', 'YYYY-MM-DD"T"HH24:MI:SS.FF3"Z"'), :userEmail, :username);
+        const insertlogtSQL = `INSERT INTO sign_up_log (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_seq.nextval, TO_TIMESTAMP('${currentDate}', 'YYYY-MM-DD"T"HH24:MI:SS.FF3"Z"'), :userEmail, :username);`
 	const data = {
 	    userEmail: paramEmail,
             userRealname: paramname,
@@ -103,6 +105,27 @@ async function insertUser(paramEmail, paramname, paramNickname, paramMac, paramP
         } catch (closeError) {
             console.error('Error closing the connection:', closeError);
         }
+    }
+}
+
+async function selectUser(paramEmail, paramPw){
+    const connection = await connectToOracleDB();
+    try{
+    	const selectSQL = 'SELECT COUNT(*) AS count FROM USER_TABLE WHERE EMAIL = :userEmail AND PASSWORD = :userPassword';
+    	const data = {
+	    userEmail: paramEmail,
+            userRealname: paramname,
+            username: paramNickname,
+            userMac: paramMac,
+            userPassword: paramPw,
+            userEmailAuth: 0
+    	};
+	const result = await connection.execute(selectSQL, data, { outFormat: oracledb.OBJECT });
+        return result.rows[0].COUNT > 0;
+    }catch (error) {
+        console.error('Error login failed:', error);
+    } finally {
+        await connection.close();
     }
 }
 
@@ -174,6 +197,7 @@ module.exports = {
   insertBPMData,
   checkUserExists,
   insertUser,
+  selectUser,
   realtime_query,
   min1_query,
   hour_query,
