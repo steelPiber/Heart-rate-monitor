@@ -85,7 +85,7 @@ async function insertUser(paramEmail, paramname, paramNickname, paramMac, paramP
     const connection = await connectToOracleDB();
     try{
         const insertSQL = `INSERT INTO USER_TABLE(EMAIL, NAME, USERNAME, MAC_ADDRESS, PASSWORD, EMAIL_AUTH) VALUES (:userEmail, :userRealname, :username, :userMac, :userPassword, :userEmailAuth)`;
-        const insertlogSQL = `INSERT INTO sign_up_log (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_seq.nextval, TO_TIMESTAMP('${currentDate}', 'YYYY-MM-DD"T"HH24:MI:SS.FF3"Z"'), :userEmail, :username);`
+        const insertlogSQL = `INSERT INTO sign_up_log (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_seq.nextval, TO_TIMESTAMP('${currentDate}', 'YYYY-MM-DD"T"HH24:MI:SS.FF3"Z"'), :userEmail, :username, :userMac);`
 	const data = {
 	    userEmail: paramEmail,
             userRealname: paramname,
