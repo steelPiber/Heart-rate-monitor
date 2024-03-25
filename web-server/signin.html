@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+</head>
+<body>
+    <div class="container">
+        <h2>로그인</h2>
+        <form id="signinForm" method="post" action="/signin">
+            <div class="form-group">
+                <label for="email">이메일:</label>
+                <input type="email" id="email" name="email" required>
+            </div>         
+            <div class="form-group">
+                <label for="password">비밀번호:</label>
+                <input type="password" name="userpasswd" required>
+            </div>
+            <input type="submit" value="회원가입" id="submitBtn" disabled> <!-- 제출 버튼을 비활성화 -->
+        </form>
+    </div>
+</body>
+</html>
