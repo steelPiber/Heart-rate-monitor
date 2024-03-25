@@ -114,11 +114,7 @@ async function selectUser(paramEmail, paramPw){
     	const selectSQL = 'SELECT COUNT(*) AS count FROM USER_TABLE WHERE EMAIL = :userEmail AND PASSWORD = :userPassword';
     	const data = {
 	    userEmail: paramEmail,
-            userRealname: paramname,
-            username: paramNickname,
-            userMac: paramMac,
             userPassword: paramPw,
-            userEmailAuth: 0
     	};
 	const result = await connection.execute(selectSQL, data, { outFormat: oracledb.OBJECT });
         return result.rows[0].COUNT > 0;
