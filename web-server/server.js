@@ -186,7 +186,7 @@ app.post('/signup', async (req, res)=> {
     try {
       await nodemailer.sendVerificationEmail(paramEmail);
       await oracleDB.insertUser(paramEmail, paramname, paramNickname, paramMac, paramPw);
-      await oracleDB.insertUserAccess_log(paramEmail, paramNickname, paramMac);
+      await oracleDB.insertUserlog(paramEmail, paramNickname, paramMac);
       res.status(200).send('회원가입 성공');
     } catch (err) {
       await oracleDB.insertUserError_log(paramEmail, paramNickname, paramMac);
