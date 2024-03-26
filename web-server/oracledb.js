@@ -82,7 +82,7 @@ async function insertUserAccess_log(paramEmail, paramNickname, paramMac) {
     const currentDate = new Date().toISOString();
     const connection = await connectToOracleDB();
     try {
-    	const insertlogSQL = `INSERT INTO sign_up_log_access (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_log_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
+    	const insertlogSQL = `INSERT INTO sign_up_log_access (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_log_access_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
     	const data = {
             userEmail: paramEmail,
 	    username: paramNickname,
@@ -104,7 +104,7 @@ async function insertUserError_log(paramEmail, paramNickname, paramMac) {
     const currentDate = new Date().toISOString();
     const connection = await connectToOracleDB();
     try {
-    	const insertlogSQL = `INSERT INTO sign_up_log_error (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_log_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
+    	const insertlogSQL = `INSERT INTO sign_up_log_error (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_log_error_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
     	const data = {
             userEmail: paramEmail,
 	    username: paramNickname,
