@@ -183,7 +183,11 @@ app.post('/signup', async (req, res)=> {
     const paramNickname = req.body.userNickname;
     const paramMac = req.body.userMac;
     const paramPw = req.body.userpasswd;
-    
+    console.log('paramEmail: ', paramEmail);
+    console.log('paramname: ', paramname);
+    console.log('paramNickname: ', paramNickname);
+    console.log('paramMac: ', paramMac);
+    console.log('paramPw: ', paramPw);
     try {
       await nodemailer.sendVerificationEmail(paramEmail);
       await oracleDB.insertUser(paramEmail, paramname, paramNickname, paramMac, paramPw);
