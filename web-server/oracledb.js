@@ -81,6 +81,9 @@ async function checkUserNickExists(userNick) {
 async function insertUserlog(paramEmail, paramNickname, paramMac) {
     const currentDate = new Date().toISOString();
     const connection = await connectToOracleDB();
+    console.log('paramEmail2: ', paramEmail);
+    console.log('paramNickname2: ', paramNickname);
+    console.log('paramMac2: ', paramMac);
     try {
     	const insertlogSQL = `INSERT INTO sign_up_log (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_log_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
     	const data = {
