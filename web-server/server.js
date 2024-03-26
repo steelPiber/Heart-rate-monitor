@@ -183,17 +183,13 @@ app.post('/signup', async (req, res)=> {
     const paramNickname = req.body.userNick;
     const paramMac = req.body.userMac;
     const paramPw = req.body.userpasswd;
-    console.log('paramEmail: ', paramEmail);
-    console.log('paramname: ', paramname);
-    console.log('paramNickname: ', paramNickname);
-    console.log('paramMac: ', paramMac);
-    console.log('paramPw: ', paramPw);
     try {
       await nodemailer.sendVerificationEmail(paramEmail);
       await oracleDB.insertUser(paramEmail, paramname, paramNickname, paramMac, paramPw);
-      await oracleDB.insertUserlog(paramEmail, paramNickname, paramMac);
+      await oracleDB.insertUserAccess_log(paramEmail, paramNickname, paramMac);
       res.status(200).send('회원가입 성공');
     } catch (err) {
+      await oracleDB.insertUserError_log(paramEmail, paramNickname, paramMac);
       res.status(500).send('회원가입 오류');
       console.error('회원가입 오류:', err);
     }
