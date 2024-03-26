@@ -88,7 +88,7 @@ async function insertUserlog(paramEmail, paramNickname, paramMac) {
             username: paramNickname,
             userMac: paramMac,
         };
-        const result_log = await connection.execute(insertlogSQL, data, { autoCommit: true }); // 회원가입 로그 삽입
+	const result_log = await connection.execute(insertlogSQL, data, { autoCommit: true }); // 회원가입 로그 삽입
         console.log('User_log inserted successfully');
     } catch (error) {
         console.error('Error inserting user_log:', error);
@@ -98,12 +98,8 @@ async function insertUserlog(paramEmail, paramNickname, paramMac) {
             username: paramNickname,
             userMac: paramMac,
         };
-        try {
-            const result_log = await connection.execute(insertlogerrSQL, data, { autoCommit: true });
-            console.log('Error log inserted successfully');
-        } catch (err) {
-            console.error('Error inserting error_log:', err);
-        }
+        const result_log = await connection.execute(insertlogerrSQL, data, { autoCommit: true });
+        console.log('Error log inserted successfully');
     } finally {
         try {
             await connection.close(); // 연결 닫기
