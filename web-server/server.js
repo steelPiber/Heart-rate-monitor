@@ -180,7 +180,7 @@ app.get('/checkDuplicate', async (req, res) => {
 app.post('/signup', async (req, res)=> {
     const paramEmail = req.body.email;
     const paramname = req.body.username;
-    const paramNickname = req.body.userNickname;
+    const paramNickname = req.body.userNick;
     const paramMac = req.body.userMac;
     const paramPw = req.body.userpasswd;
     console.log('paramEmail: ', paramEmail);
