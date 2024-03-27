@@ -90,8 +90,7 @@ async function insertUserlog(paramEmail, paramNickname, paramMac) {
         };
 
         // 이미 중복된 값이 존재하는지 확인
-        const checkDuplicateSQL = `SELECT COUNT(*) AS count FROM sign_up_log_access WHERE user_email_id = :userEmail`;
-        const checkDuplicateData = { userEmail: paramEmail };
+        const checkDuplicateSQL = `SELECT COUNT(*) AS count FROMuser_table WHERE email = :userEmail`;
         const duplicateResult = await connection.execute(checkDuplicateSQL, checkDuplicateData, { outFormat: oracledb.OBJECT });
         const isDuplicate = duplicateResult.rows[0].COUNT > 0;
 
@@ -99,12 +98,7 @@ async function insertUserlog(paramEmail, paramNickname, paramMac) {
             const result_log = await connection.execute(insertlogSQL, data, { autoCommit: true }); // 회원가입 로그 삽입
             console.log('User_log inserted successfully');
         } else {
-            console.log('Duplicate entry found. Skipping insertion.');
-        }
-    } catch (error) {
-        console.error('Error inserting user_log:', error);
-        try {
-            const insertlogerrSQL = `INSERT INTO sign_up_log_error (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_log_error_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
+	    const insertlogerrSQL = `INSERT INTO sign_up_log_error (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_log_error_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
             const data = {
                 userEmail: paramEmail,
                 username: paramNickname,
@@ -112,9 +106,10 @@ async function insertUserlog(paramEmail, paramNickname, paramMac) {
             };
             const result_log = await connection.execute(insertlogerrSQL, data, { autoCommit: true });
             console.log('Error log inserted successfully');
-        } catch (err) {
-            console.error('Error inserting error_log:', err);
+            console.log('Duplicate entry found. Skipping insertion.');
         }
+    } catch (error) {
+        console.error('Error inserting user_log:', error);
     } finally {
         try {
             await connection.close(); // 연결 닫기
