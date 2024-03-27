@@ -90,7 +90,10 @@ async function insertUserlog(paramEmail, paramNickname, paramMac) {
         };
 
         // 이미 중복된 값이 존재하는지 확인
-        const checkDuplicateSQL = `SELECT COUNT(*) AS count FROMuser_table WHERE email = :userEmail`;
+        const checkDuplicateSQL = `SELECT COUNT(*) AS count FROMuser_table WHERE email = :Email`;
+	const checkdata = {
+	     Email: paramEmail.
+	};
         const duplicateResult = await connection.execute(checkDuplicateSQL, data, { outFormat: oracledb.OBJECT });
         const isDuplicate = duplicateResult.rows[0].COUNT > 0;
 	const insertlogerrSQL = `INSERT INTO sign_up_log_error (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_log_error_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
