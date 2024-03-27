@@ -4,6 +4,7 @@ console.log(`0.1 : oracledb.js 모듈 분리`);
 
 // oracledb에 모듈 추가
 const oracledb = require('oracledb');
+const nodemailer = require('./mail_auth.js');
 
 // Oracle DB 연결 구성
 const dbConfig = {
@@ -129,6 +130,7 @@ async function insertUser(paramEmail, paramname, paramNickname, paramMac, paramP
             userPassword: paramPw,
             userEmailAuth: 0
         };
+	await nodemailer.sendVerificationEmail(paramEmail);
         const result = await connection.execute(insertSQL, data, { autoCommit: true }); // 사용자 정보 삽입
         console.log('User inserted successfully');
     } catch (error) {
