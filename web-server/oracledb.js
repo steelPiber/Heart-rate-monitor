@@ -93,17 +93,11 @@ async function insertUserlog(paramEmail, paramNickname, paramMac) {
         const checkDuplicateSQL = `SELECT COUNT(*) AS count FROMuser_table WHERE email = :userEmail`;
         const duplicateResult = await connection.execute(checkDuplicateSQL, checkDuplicateData, { outFormat: oracledb.OBJECT });
         const isDuplicate = duplicateResult.rows[0].COUNT > 0;
-
+	const insertlogerrSQL = `INSERT INTO sign_up_log_error (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_log_error_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
         if (!isDuplicate) {
             const result_log = await connection.execute(insertlogSQL, data, { autoCommit: true }); // 회원가입 로그 삽입
             console.log('User_log inserted successfully');
         } else {
-	    const insertlogerrSQL = `INSERT INTO sign_up_log_error (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_log_error_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
-            const data = {
-                userEmail: paramEmail,
-                username: paramNickname,
-                userMac: paramMac,
-            };
             const result_log = await connection.execute(insertlogerrSQL, data, { autoCommit: true });
             console.log('Error log inserted successfully');
             console.log('Duplicate entry found. Skipping insertion.');
