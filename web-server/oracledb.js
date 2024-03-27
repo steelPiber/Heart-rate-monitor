@@ -86,13 +86,13 @@ async function insertUserlog(paramEmail, paramNickname, paramMac) {
         const data = {
             userEmail: paramEmail,
             username: paramNickname,
-            userMac: paramMac,
+            userMac: paramMac
         };
 
         // 이미 중복된 값이 존재하는지 확인
         const checkDuplicateSQL = `SELECT COUNT(*) AS count FROMuser_table WHERE email = :Email`;
 	const checkdata = {
-	     Email: paramEmail.
+	     Email: paramEmail
 	};
         const duplicateResult = await connection.execute(checkDuplicateSQL, data, { outFormat: oracledb.OBJECT });
         const isDuplicate = duplicateResult.rows[0].COUNT > 0;
