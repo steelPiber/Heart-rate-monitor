@@ -91,7 +91,7 @@ async function insertUserlog(paramEmail, paramNickname, paramMac) {
         };
 
         // 이미 중복된 값이 존재하는지 확인
-        const checkDuplicateSQL = `SELECT COUNT(*) AS COUNT FROMUSER_TABLE WHERE EMAIL = :Email`;
+        const checkDuplicateSQL = `SELECT COUNT(*) AS COUNT FROM USER_TABLE WHERE EMAIL = :Email`;
 	const checkdata = {
 	     Email: paramEmail
 	};
