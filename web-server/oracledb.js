@@ -83,20 +83,20 @@ async function insertUserlog(paramEmail, paramNickname, paramMac) {
     const connection = await connectToOracleDB();
     try {
         const insertlogSQL = `INSERT INTO sign_up_log_access (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_log_access_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
-        const data = {
+        const insertlogerrSQL = `INSERT INTO sign_up_log_error (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_log_error_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
+	const data = {
             userEmail: paramEmail,
             username: paramNickname,
             userMac: paramMac
         };
 
         // 이미 중복된 값이 존재하는지 확인
-        const checkDuplicateSQL = `SELECT COUNT(*) AS count FROMuser_table WHERE email = :Email`;
+        const checkDuplicateSQL = `SELECT COUNT(*) AS COUNT FROMUSER_TABLE WHERE EMAIL = :Email`;
 	const checkdata = {
 	     Email: paramEmail
 	};
         const duplicateResult = await connection.execute(checkDuplicateSQL, checkdata, { outFormat: oracledb.OBJECT });
         const isDuplicate = duplicateResult.rows[0].COUNT > 0;
-	const insertlogerrSQL = `INSERT INTO sign_up_log_error (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_log_error_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
         if (!isDuplicate) {
             const result_log = await connection.execute(insertlogSQL, data, { autoCommit: true }); // 회원가입 로그 삽입
             console.log('User_log inserted successfully');
