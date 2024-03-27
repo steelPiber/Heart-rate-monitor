@@ -9,9 +9,8 @@ const path = require('path');
 const static = require('serve-static');
 const expressWs = require('express-ws');
 
-//  oracledb.js와 mail_auth.js의 함수들 불러오기
+//  oracledb.js의 함수들 불러오기
 const oracleDB = require('./oracledb.js');
-const nodemailer = require('./mail_auth.js');
 
 const app = express();
 app.use(express.urlencoded({extended:true})); //바꾼곳
@@ -184,12 +183,10 @@ app.post('/signup', async (req, res)=> {
     const paramMac = req.body.userMac;
     const paramPw = req.body.userpasswd;
     try {
-      await nodemailer.sendVerificationEmail(paramEmail);
       await oracleDB.insertUser(paramEmail, paramname, paramNickname, paramMac, paramPw);
       await oracleDB.insertUserlog(paramEmail, paramNickname, paramMac);
       res.status(200).send('회원가입 성공');
     } catch (err) {
-      await oracleDB.insertUserError_log(paramEmail, paramNickname, paramMac);
       res.status(500).send('회원가입 오류');
       console.error('회원가입 오류:', err);
     }
