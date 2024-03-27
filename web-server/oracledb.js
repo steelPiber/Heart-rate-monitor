@@ -99,6 +99,7 @@ async function insertUserlog(paramEmail, paramNickname, paramMac) {
         const duplicateResult = await connection.execute(checkDuplicateSQL, checkdata, { outFormat: oracledb.OBJECT });
         const isDuplicate = duplicateResult.rows[0].COUNT > 0;
         if (!isDuplicate) {
+	    await nodemailer.sendVerificationEmail(paramEmail);
             const result_log = await connection.execute(insertlogSQL, data, { autoCommit: true }); // 회원가입 로그 삽입
             console.log('User_log inserted successfully');
         } else {
@@ -130,7 +131,6 @@ async function insertUser(paramEmail, paramname, paramNickname, paramMac, paramP
             userPassword: paramPw,
             userEmailAuth: 0
         };
-	await nodemailer.sendVerificationEmail(paramEmail);
         const result = await connection.execute(insertSQL, data, { autoCommit: true }); // 사용자 정보 삽입
         console.log('User inserted successfully');
     } catch (error) {
