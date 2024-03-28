@@ -163,9 +163,8 @@ app.get('/hourly-chart', async (req, res) => {
   }
 });
 //아이디 중복 검사
-app.get('/checkDuplicate', async (req, res) => {
+app.get('/checkEmailDuplicate', async (req, res) => {
   const userEmail = req.query.email; // 요청에서 사용자 이메일을 추출
-
   try {
     const isDuplicate = await oracleDB.checkUserExists(userEmail); // 사용자 이메일을 전달
     res.json({ isDuplicate });
@@ -174,6 +173,18 @@ app.get('/checkDuplicate', async (req, res) => {
     res.status(500).send('중복 확인 중 오류가 발생했습니다.');
   }
 });
+//닉네임 중복 검사
+app.get('/checkNickDuplicate', async (req, res) => {
+  const userNick = req.query.nickname; // 요청에서 사용자 이메일을 추출
+  try {
+    const isDuplicate = await oracleDB.checkUserExists(userNick); // 사용자 이메일을 전달
+    res.json({ isDuplicate });
+  } catch (error) {
+    console.error('중복 확인 오류:', error);
+    res.status(500).send('중복 확인 중 오류가 발생했습니다.');
+  }
+});
+
 
 // 회원가입 처리
 app.post('/signup', async (req, res)=> {
