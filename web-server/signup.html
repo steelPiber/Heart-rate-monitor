@@ -9,21 +9,22 @@
     <div class="container">
         <h2>회원가입</h2>
         <script>
-            alert('ID 중복확인을 해주세요!');
+            alert('ID 및 닉네임 중복확인을 해주세요!');
         </script>
         <form id="signupForm" method="post" action="/signup">
             <div class="form-group">
                 <label for="email">이메일:</label>
                 <input type="email" id="email" name="email" required>
-                <button type="button" id="checkDuplicateBtn">중복 확인</button>
+                <button type="button" id="checkEmailDuplicateBtn">이메일 중복 확인</button>
             </div>
             <div class="form-group">
                 <label for="username">이름:</label>
                 <input type="text" name="username" required>
             </div>
             <div class="form-group">
-                <label for="username">닉네임:</label>
+                <label for="userNick">닉네임:</label>
                 <input type="text" name="userNick" required>
+                <button type="button" id="checkNickDuplicateBtn">닉네임 중복 확인</button>
             </div>            
             <div class="form-group">
                 <label for="password">비밀번호:</label>
@@ -38,8 +39,8 @@
     </div>
     
     <script>
-        // 아이디 중복 확인 버튼에 대한 클릭 이벤트 핸들러
-        document.getElementById('checkDuplicateBtn').addEventListener('click', async () => {
+        // 이메일 중복 확인 버튼에 대한 클릭 이벤트 핸들러
+        document.getElementById('checkEmailDuplicateBtn').addEventListener('click', async () => {
             const email = document.getElementById('email').value;
 
             // 중복 확인을 위한 비동기 요청
@@ -48,17 +49,51 @@
                 const data = await response.json();
 
                 if (data.isDuplicate) {
-                    alert('이미 사용 중인 아이디입니다.');
+                    alert('이미 사용 중인 이메일입니다.');
                 } else {
                     // 중복이 아니라면 회원가입 제출 버튼 활성화
-                    alert('사용 가능한 아이디입니다.');
-                    document.getElementById('submitBtn').disabled = false;
+                    alert('사용 가능한 이메일입니다.');
+                    checkFormValid(); // 폼 유효성 검사 실행
                 }
             } catch (error) {
-                console.error('중복 확인 오류:', error);
-                alert('중복 확인 중 오류가 발생했습니다.');
+                console.error('이메일 중복 확인 오류:', error);
+                alert('이메일 중복 확인 중 오류가 발생했습니다.');
             }
         });
+
+        // 닉네임 중복 확인 버튼에 대한 클릭 이벤트 핸들러
+        document.getElementById('checkNickDuplicateBtn').addEventListener('click', async () => {
+            const nickname = document.getElementById('userNick').value;
+
+            // 중복 확인을 위한 비동기 요청
+            try {
+                const response = await fetch(`/checkDuplicate?nickname=${nickname}`);
+                const data = await response.json();
+
+                if (data.isDuplicate) {
+                    alert('이미 사용 중인 닉네임입니다.');
+                } else {
+                    // 중복이 아니라면 회원가입 제출 버튼 활성화
+                    alert('사용 가능한 닉네임입니다.');
+                    checkFormValid(); // 폼 유효성 검사 실행
+                }
+            } catch (error) {
+                console.error('닉네임 중복 확인 오류:', error);
+                alert('닉네임 중복 확인 중 오류가 발생했습니다.');
+            }
+        });
+
+        // 폼 유효성 검사 함수
+        function checkFormValid() {
+            const email = document.getElementById('email').value;
+            const nickname = document.getElementById('userNick').value;
+
+            // 이메일과 닉네임 모두 중복 확인되었을 때만 submit 버튼 활성화
+            if (email && nickname) {
+                document.getElementById('submitBtn').disabled = false;
+            }
+        }
     </script>
 </body>
 </html>
+
