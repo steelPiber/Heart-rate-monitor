@@ -45,7 +45,7 @@
 
             // 중복 확인을 위한 비동기 요청
             try {
-                const response = await fetch(`/checkDuplicate?email=${email}`);
+                const response = await fetch(`/checkEmailDuplicate?email=${email}`);
                 const data = await response.json();
 
                 if (data.isDuplicate) {
@@ -67,7 +67,7 @@
 
             // 중복 확인을 위한 비동기 요청
             try {
-                const response = await fetch(`/checkDuplicate?nickname=${nickname}`);
+                const response = await fetch(`/checkNickDuplicate?nickname=${nickname}`);
                 const data = await response.json();
 
                 if (data.isDuplicate) {
