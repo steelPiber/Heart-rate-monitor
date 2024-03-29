@@ -166,7 +166,7 @@ app.get('/hourly-chart', async (req, res) => {
 app.get('/checkEmailDuplicate', async (req, res) => {
   const userEmail = req.query.email; // 요청에서 사용자 이메일을 추출
   try {
-    const isDuplicate = await oracleDB.checkUserExists(userEmail); // 사용자 이메일을 전달
+    const isDuplicate = await oracleDB.checkUserEmailExists(userEmail); // 사용자 이메일을 전달
     res.json({ isDuplicate });
   } catch (error) {
     console.error('중복 확인 오류:', error);
@@ -177,7 +177,7 @@ app.get('/checkEmailDuplicate', async (req, res) => {
 app.get('/checkNickDuplicate', async (req, res) => {
   const userNick = req.query.nickname; // 요청에서 사용자 이메일을 추출
   try {
-    const isDuplicate = await oracleDB.checkUserExists(userNick); // 사용자 이메일을 전달
+    const isDuplicate = await oracleDB.checkUserNickExists(userNick); // 사용자 이메일을 전달
     res.json({ isDuplicate });
   } catch (error) {
     console.error('중복 확인 오류:', error);
