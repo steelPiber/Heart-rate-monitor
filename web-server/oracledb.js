@@ -47,7 +47,7 @@ async function insertBPMData(bpmValue) {
 }
 
 //회원가입시 ID중복 검사
-async function checkUserExists(userEmail) {
+async function checkUserEmailExists(userEmail) {
     const connection = await connectToOracleDB();
     try {
         const query = 'SELECT COUNT(*) AS count FROM USER_TABLE WHERE EMAIL = :Email';
@@ -227,7 +227,8 @@ WHERE TIME >= TRUNC(SYSDATE, 'DD')
 module.exports = {
   connectToOracleDB,
   insertBPMData,
-  checkUserExists,
+  checkUserEmailExists,
+  checkUserNickExists,	
   insertUser,
   insertUserlog,
   selectUser,
