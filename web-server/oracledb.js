@@ -84,31 +84,38 @@ async function insertUserlog(paramEmail, paramNickname, paramMac) {
     const connection = await connectToOracleDB();
     try {
         const insertlogSQL = `INSERT INTO sign_up_log_access (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_log_access_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
+	const data = {
+            userEmail: paramEmail,
+            username: paramNickname,
+            userMac: paramMac
+        };
+        const result_log = await connection.execute(insertlogSQL, data, { autoCommit: true }); // 회원가입 로그 삽입
+        console.log('User_log inserted successfully');
+    } catch (error) {
+        console.error('Error inserting user_log:', error);
+    } finally {
+        try {
+            await connection.close(); // 연결 닫기
+        } catch (closeError) {
+            console.error('Error closing the connection:', closeError);
+        }
+    }
+}
+async function insertUserErrlog(paramEmail, paramNickname, paramMac){
+	const currentDate = new Date().toISOString();
+	const connection = await connectToOracleDB();
+
+	try {
         const insertlogerrSQL = `INSERT INTO sign_up_log_error (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_log_error_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
 	const data = {
             userEmail: paramEmail,
             username: paramNickname,
             userMac: paramMac
         };
-
-        // 이미 중복된 값이 존재하는지 확인
-        const checkDuplicateSQL = `SELECT COUNT(*) AS COUNT FROM SIGN_UP_LOG_ACCESS WHERE USER_EMAIL_ID = :Email`;
-	const checkdata = {
-	     Email: paramEmail
-	};
-        const duplicateResult = await connection.execute(checkDuplicateSQL, checkdata, { outFormat: oracledb.OBJECT });
-        const isDuplicate = duplicateResult.rows[0].COUNT > 0;
-        if (!isDuplicate) {
-	    await nodemailer.sendVerificationEmail(paramEmail);
-            const result_log = await connection.execute(insertlogSQL, data, { autoCommit: true }); // 회원가입 로그 삽입
-            console.log('User_log inserted successfully');
-        } else {
-            const result_log = await connection.execute(insertlogerrSQL, data, { autoCommit: true });
-            console.log('Error log inserted successfully');
-            console.log('Duplicate entry found. Skipping insertion.');
-        }
+        const result_log = await connection.execute(insertlogerrSQL, data, { autoCommit: true });
+        console.log('Error log inserted successfully');
     } catch (error) {
-        console.error('Error inserting user_log:', error);
+        console.error('Error inserting user_error_log:', error);
     } finally {
         try {
             await connection.close(); // 연결 닫기
@@ -131,6 +138,7 @@ async function insertUser(paramEmail, paramname, paramNickname, paramMac, paramP
             userPassword: paramPw,
             userEmailAuth: 0
         };
+	await nodemailer.sendVerificationEmail(paramEmail);
         const result = await connection.execute(insertSQL, data, { autoCommit: true }); // 사용자 정보 삽입
         console.log('User inserted successfully');
     } catch (error) {
@@ -231,6 +239,7 @@ module.exports = {
   checkUserNickExists,	
   insertUser,
   insertUserlog,
+  insertUserErrlog,
   selectUser,
   realtime_query,
   min1_query,
