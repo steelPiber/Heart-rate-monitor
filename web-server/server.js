@@ -198,6 +198,7 @@ app.post('/signup', async (req, res)=> {
       await oracleDB.insertUserlog(paramEmail, paramNickname, paramMac);
       res.status(200).send('회원가입 성공');
     } catch (err) {
+      await oracleDB.insertUserErrlog(paramEmail, paramNickname, paramMac);
       res.status(500).send('회원가입 오류');
       console.error('회원가입 오류:', err);
     }
@@ -211,8 +212,10 @@ app.post('/signin', async (req, res)=> {
     try {
         const isLoginSuccess = await oracleDB.selectUser(paramEmail, paramPw);
         if (isLoginSuccess) {
+            await oracleDB.selectUserlog(paramEmail);
             res.status(200).send('로그인 성공');
         } else {
+            await oracleDB.selectUserErrlog(paramEmail);
             res.status(401).send('이메일 또는 비밀번호가 잘못되었습니다.');
         }
     } catch (err) {
@@ -223,7 +226,6 @@ app.post('/signin', async (req, res)=> {
 
 // Create a WebSocket server at port 13389
 const wss = new WebSocket.Server({ noServer: true });
-
 
 // WebSocket server logic
 wss.on('connection', ws => {
