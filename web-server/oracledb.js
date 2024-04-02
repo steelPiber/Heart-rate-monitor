@@ -151,7 +151,7 @@ async function insertUser(paramEmail, paramname, paramNickname, paramMac, paramP
         }
     }
 }
-
+// 로그인 처리 함수
 async function selectUser(paramEmail, paramPw){
     const connection = await connectToOracleDB();
     try{
@@ -167,6 +167,38 @@ async function selectUser(paramEmail, paramPw){
     } finally {
         await connection.close();
     }
+}
+async function selectUserlog(paramEmail){
+     const currentDate = new Date().toISOString();
+     const connection = await connectToOracleDB();
+     try {
+     	const query = 'INSERT INTO SIGN_IN_LOG_ACCESS(IDX, SIGN_IN_DATE, USER_EMAIL_ID) VALUES (sign_in_idx_log_access_seq.nextval, SYSTIMESTAMP, :Email)';
+	const data = {
+		Email: paramEmail
+	};
+	const result = await connection.execute(query, data, { autoCommit: true });
+	console.log('insert sign in log successfully');
+     }catch (error){
+     	console.error('Error inserting sign in log');
+     } finally {
+     	await connection.close();
+     }
+}
+async function selectUserErrlog(paramEmail){
+     const currentDate = new Date().toISOString();
+     const connection = await connectToOracleDB();
+     try {
+     	const query = 'INSERT INTO SIGN_IN_LOG_ERROR(IDX, SIGN_IN_DATE, USER_EMAIL_ID) VALUES (sign_in_idx_log_error_seq.nextval, SYSTIMESTAMP, :Email)';
+	const data = {
+		Email: paramEmail
+	};
+	const result = await connection.execute(query, data, { autoCommit: true });
+	console.log('insert sign in error log successfully');
+     }catch (error){
+     	console.error('Error inserting sign in error log');
+     } finally {
+     	await connection.close();
+     }
 }
 
 // 이 SQL 쿼리는 bpmdata 테이블에서 최근 1분 동안의 데이터를 기반으로 1분 단위로 묶어 평균 심박수를 계산하는 것을 목적으로 합니다.
@@ -241,6 +273,8 @@ module.exports = {
   insertUserlog,
   insertUserErrlog,
   selectUser,
+  selectUserlog,
+  selectUserErrlog,
   realtime_query,
   min1_query,
   hour_query,
