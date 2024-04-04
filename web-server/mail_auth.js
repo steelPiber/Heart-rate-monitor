@@ -32,7 +32,6 @@ async function sendVerificationEmail(userEmail) {
         html: `<h1>회원가입을 위한 이메일 인증</h1>
         <p>회원가입을 완료하려면 아래의 인증 코드를 입력해주세요:</p>
         <h2>${code}</h2>
-        <p><a href='www.example.com/verify'>인증 코드 확인하기</a></p>`
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
