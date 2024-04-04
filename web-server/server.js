@@ -193,6 +193,11 @@ app.post('/signup', async (req, res)=> {
     const paramNickname = req.body.userNick;
     const paramMac = req.body.userMac;
     const paramPw = req.body.userpasswd;
+    console.log("paramEmail: ", paramEmail);
+  console.log("paramname: ", paramname);
+  console.log("paramNickname: ", paramNickname);
+  console.log("paramMac: ", paramMac);
+  console.log("paramPw: ", paramPw);
     try {
       await oracleDB.insertUser(paramEmail, paramname, paramNickname, paramMac, paramPw);
       await oracleDB.insertUserlog(paramEmail, paramNickname, paramMac);
