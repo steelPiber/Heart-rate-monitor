@@ -31,8 +31,9 @@
                 <input type="password" name="userpasswd" required>
             </div>
             <div class="form-group">
-                <label for="mac_address">MAC 주소:</label>
-                <input type="text" name="userMac" required>
+                <label for="mac_address">인증 코드:</label>
+                <input type="text" name="userCode" required>
+                <button type="button" id="checkCodeDuplicateBtn">인증 코드 확인</button>
             </div>
             <input type="submit" value="회원가입" id="submitBtn" disabled> <!-- 제출 버튼을 비활성화 -->
         </form>
