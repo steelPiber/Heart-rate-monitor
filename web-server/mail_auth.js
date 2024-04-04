@@ -31,7 +31,7 @@ async function sendVerificationEmail(userEmail) {
         subject: "[회원가입 인증] 이메일 인증을 완료해주세요.",
         html: `<h1>회원가입을 위한 이메일 인증</h1>
         <p>회원가입을 완료하려면 아래의 인증 코드를 입력해주세요:</p>
-        <h2>${code}</h2>
+        <h2>${code}</h2>`
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -41,6 +41,7 @@ async function sendVerificationEmail(userEmail) {
             console.log('Email sent:', info.response);
         }
     });
+    return code;
 }
 module.exports = {
     sendVerificationEmail,
