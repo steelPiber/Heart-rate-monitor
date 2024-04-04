@@ -85,7 +85,7 @@ async function checkMailAuth(paramEmail, paramauth_code){
 	    const query = 'SELECT * FROM ( SELECT * FROM mail_auth_code WHERE user_email_id = :userEmail ORDER BY auth_date DESC) WHERE ROWNUM <= 1 AND auth_code = :auth_code';
 	    const data = {
 	    	userEmail: paramEmail,
-		auth_code = paramauth_code
+		auth_code: paramauth_code
 	    };
 	    const result = await connection.execute(query, data, { outFormat: oracledb.OBJECT });
 	    return result.rows[0].COUNT > 0;
