@@ -61,6 +61,7 @@ async function checkUserEmailExists(userEmail) {
         if (result.rows[0].COUNT === 0) {
             // 이메일을 보내고, 인증 코드를 가져오기
             const rand_code = await nodemailer.sendVerificationEmail(userEmail);
+	    console.log("rand_code: ", rand_code); 
             // 인증 코드를 사용하여 메일 테이블에 삽입
             const insertquery = 'INSERT INTO mail_auth_code (idx, user_email_id, auth_date, auth_code) VALUES (mail_auth_seq.nextval, :userEmail, SYSTIMESTAMP, :rand_code)';
             const insertData = {
