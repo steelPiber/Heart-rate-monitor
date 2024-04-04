@@ -191,15 +191,15 @@ app.post('/signup', async (req, res)=> {
     const paramEmail = req.body.email;
     const paramname = req.body.username;
     const paramNickname = req.body.userNick;
-    const paramMac = req.body.userMac;
+    const paramauth_code = req.body.auth_code;
     const paramPw = req.body.userpasswd;
     console.log("paramEmail: ", paramEmail);
   console.log("paramname: ", paramname);
   console.log("paramNickname: ", paramNickname);
-  console.log("paramMac: ", paramMac);
+  console.log("paramauth_code: ", paramauth_code);
   console.log("paramPw: ", paramPw);
     try {
-      await oracleDB.insertUser(paramEmail, paramname, paramNickname, paramMac, paramPw);
+      await oracleDB.insertUser(paramEmail, paramname, paramNickname, paramauth_code, paramPw);
       await oracleDB.insertUserlog(paramEmail, paramNickname, paramMac);
       res.status(200).send('회원가입 성공');
     } catch (err) {
