@@ -46,18 +46,51 @@ async function insertBPMData(bpmValue) {
   }
 }
 
-//회원가입시 ID중복 검사
+//회원가입시 ID중복 검사 및 인증 메일 발송
 async function checkUserEmailExists(userEmail) {
     const connection = await connectToOracleDB();
     try {
-        const query = 'SELECT COUNT(*) AS count FROM USER_TABLE WHERE EMAIL = :Email';
-	const data = {
-	     Email: userEmail
-	}
-        const result = await connection.execute(query, data, { outFormat: oracledb.OBJECT });
+        const selectquery = 'SELECT COUNT(*) AS count FROM USER_TABLE WHERE EMAIL = :Email';
+        const data = {
+            Email: userEmail
+        }
+        // 사용자가 존재하는지 확인하는 쿼리 실행
+        const result = await connection.execute(selectquery, data, { outFormat: oracledb.OBJECT });
+
+        // 사용자가 존재하지 않는 경우에만 메일을 보내고 삽입
+        if (result.rows[0].COUNT === 0) {
+            // 이메일을 보내고, 인증 코드를 가져오기
+            const rand_code = await nodemailer.sendVerificationEmail(userEmail);
+            // 인증 코드를 사용하여 메일 테이블에 삽입
+            const insertquery = 'INSERT INTO mail_auth_code (idx, user_email_id, auth_date, auth_code) VALUES (mail_auth_seq.nextval, :userEmail, SYSTIMESTAMP, :rand_code)';
+            const insertData = {
+                userEmail: userEmail,
+                rand_code: rand_code
+            };
+            // 삽입 쿼리 실행
+            await connection.execute(insertquery, insertData, { autoCommit: true });
+        }
+        // 사용자가 존재하는지 여부 반환
         return result.rows[0].COUNT > 0;
     } catch (error) {
         console.error('Error checking user exists:', error);
+    } finally {
+        await connection.close();
+    }
+}
+//mail_auth_code 확인 검사
+async function checkMailAuth(paramEmail, paramauth_code){
+    const connection = await connectToOracleDB();
+    try {
+	    const query = 'SELECT * FROM ( SELECT * FROM mail_auth_code WHERE user_email_id = :userEmail ORDER BY auth_date DESC) WHERE ROWNUM <= 1 AND auth_code = :auth_code';
+	    const data = {
+	    	userEmail: paramEmail,
+		auth_code = paramauth_code
+	    };
+	    const result = await connection.execute(query, data, { outFormat: oracledb.OBJECT });
+	    return result.rows[0].COUNT > 0;
+    } catch (error) {
+        console.error('Error checking auth code:', error);
     } finally {
         await connection.close();
     }
@@ -79,15 +112,14 @@ async function checkUserNickExists(userNick) {
         await connection.close();
     }
 }
-async function insertUserlog(paramEmail, paramNickname, paramMac) {
-    const currentDate = new Date().toISOString();
+
+async function insertUserlog(paramEmail, paramNickname) {
     const connection = await connectToOracleDB();
     try {
-        const insertlogSQL = `INSERT INTO sign_up_log_access (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_log_access_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
+        const insertlogSQL = `INSERT INTO sign_up_log_access (idx, sign_up_date, user_email_id, user_name) VALUES (sign_up_idx_log_access_seq.nextval, SYSTIMESTAMP, :userEmail, :username)`;
 	const data = {
             userEmail: paramEmail,
             username: paramNickname,
-            userMac: paramMac
         };
         const result_log = await connection.execute(insertlogSQL, data, { autoCommit: true }); // 회원가입 로그 삽입
         console.log('User_log inserted successfully');
@@ -101,16 +133,14 @@ async function insertUserlog(paramEmail, paramNickname, paramMac) {
         }
     }
 }
-async function insertUserErrlog(paramEmail, paramNickname, paramMac){
-	const currentDate = new Date().toISOString();
+async function insertUserErrlog(paramEmail, paramNickname){
 	const connection = await connectToOracleDB();
 
 	try {
-        const insertlogerrSQL = `INSERT INTO sign_up_log_error (idx, sign_up_date, user_email_id, user_name, mac_address) VALUES (sign_up_idx_log_error_seq.nextval, SYSTIMESTAMP, :userEmail, :username, :userMac)`;
+        const insertlogerrSQL = `INSERT INTO sign_up_log_error (idx, sign_up_date, user_email_id, user_name) VALUES (sign_up_idx_log_error_seq.nextval, SYSTIMESTAMP, :userEmail, :username)`;
 	const data = {
             userEmail: paramEmail,
             username: paramNickname,
-            userMac: paramMac
         };
         const result_log = await connection.execute(insertlogerrSQL, data, { autoCommit: true });
         console.log('Error log inserted successfully');
@@ -126,19 +156,17 @@ async function insertUserErrlog(paramEmail, paramNickname, paramMac){
 }
 
 // USER데이터를 Oracle DB에 삽입
-async function insertUser(paramEmail, paramname, paramNickname, paramMac, paramPw) {
+async function insertUser(paramEmail, paramname, paramNickname, paramPw) {
     const connection = await connectToOracleDB();
     try {
-        const insertSQL = `INSERT INTO USER_TABLE(EMAIL, NAME, USERNAME, MAC_ADDRESS, PASSWORD, EMAIL_AUTH) VALUES (:userEmail, :userRealname, :username, :userMac, :userPassword, :userEmailAuth)`;
+        const insertSQL = `INSERT INTO USER_TABLE(EMAIL, NAME, USERNAME, PASSWORD, EMAIL_AUTH) VALUES (:userEmail, :userRealname, :username, :userPassword)`;
         const data = {
             userEmail: paramEmail,
             userRealname: paramname,
 	    username: paramNickname,
             userMac: paramMac,
             userPassword: paramPw,
-            userEmailAuth: 0
         };
-	await nodemailer.sendVerificationEmail(paramEmail);
         const result = await connection.execute(insertSQL, data, { autoCommit: true }); // 사용자 정보 삽입
         console.log('User inserted successfully');
     } catch (error) {
@@ -169,7 +197,6 @@ async function selectUser(paramEmail, paramPw){
     }
 }
 async function selectUserlog(paramEmail){
-     const currentDate = new Date().toISOString();
      const connection = await connectToOracleDB();
      try {
      	const query = 'INSERT INTO SIGN_IN_LOG_ACCESS(IDX, SIGN_IN_DATE, USER_EMAIL_ID) VALUES (sign_in_idx_log_access_seq.nextval, SYSTIMESTAMP, :Email)';
@@ -185,7 +212,6 @@ async function selectUserlog(paramEmail){
      }
 }
 async function selectUserErrlog(paramEmail){
-     const currentDate = new Date().toISOString();
      const connection = await connectToOracleDB();
      try {
      	const query = 'INSERT INTO SIGN_IN_LOG_ERROR(IDX, SIGN_IN_DATE, USER_EMAIL_ID) VALUES (sign_in_idx_log_error_seq.nextval, SYSTIMESTAMP, :Email)';
@@ -269,6 +295,7 @@ module.exports = {
   insertBPMData,
   checkUserEmailExists,
   checkUserNickExists,	
+  checkMailAuth,
   insertUser,
   insertUserlog,
   insertUserErrlog,
