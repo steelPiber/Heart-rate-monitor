@@ -97,6 +97,44 @@
                 document.getElementById('submitBtn').disabled = false;
             }
         }
+    document.getElementById('signupForm').addEventListener('submit', async (event) => {
+    event.preventDefault(); // 기본 제출 동작 방지
+
+    // 이메일, 이름, 닉네임, 비밀번호, 인증 코드 값 가져오기
+    const email = document.getElementById('email').value;
+    const name = document.getElementsByName('username')[0].value;
+    const nickname = document.getElementById('userNick').value;
+    const password = document.getElementsByName('userpasswd')[0].value;
+    const mac = document.getElementsByName('userMac')[0].value;
+
+    try {
+        // 회원가입 요청
+        const response = await fetch('/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                username: name,
+                userNick: nickname,
+                userpasswd: password,
+                userMac: mac
+            })
+        });
+        const data = await response.text();
+
+        // 응답 처리
+        if (response.ok) {
+            alert(data); // 회원가입 성공 알림
+        } else {
+            alert('회원가입 실패: ' + data); // 회원가입 실패 알림
+        }
+    } catch (error) {
+        console.error('회원가입 오류:', error);
+        alert('회원가입 중 오류가 발생했습니다.');
+    }
+});
     </script>
 </body>
 </html>
