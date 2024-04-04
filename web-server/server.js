@@ -184,7 +184,17 @@ app.get('/checkNickDuplicate', async (req, res) => {
     res.status(500).send('중복 확인 중 오류가 발생했습니다.');
   }
 });
-
+app.get('/checkEmailDuplicate', async (req, res) => {
+  const userEmail = req.query.email;
+  const auth_code = req.query.auth_code;
+  try {
+    const isDuplicate = await oracleDB.checkMailAuth(userEmail, auth_code);
+    res.json({ isDuplicate });
+  } catch (error) {
+    console.error('인증 코드 확인 오류:', error);
+    res.status(500).send('인증 코드 확인중 오류가 발생했습니다.');
+  }
+});
 
 // 회원가입 처리
 app.post('/signup', async (req, res)=> {
