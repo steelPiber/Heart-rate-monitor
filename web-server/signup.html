@@ -97,7 +97,7 @@
             
             // 중복 확인을 위한 비동기 요청
             try {
-                const response = await fetch(`/checkEmailDuplicate?email=${email}&auth_code=${userCode}`);
+                const response = await fetch(`/checkCodeDuplicate?email=${email}&auth_code=${userCode}`);
                 const data = await response.json();
 
                 if (data.Code_isDuplicate) {
