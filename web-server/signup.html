@@ -92,11 +92,12 @@
         });
                 // 인증 코드 확인 버튼에 대한 클릭 이벤트 핸들러
         document.getElementById('checkCodeDuplicateBtn').addEventListener('click', async () => {
-            const userCode = document.getElementById('userCode').value;
-
+            const email = document.getElementById('email').value;
+            const userCode = document.getElementById('auth_code').value;
+            
             // 중복 확인을 위한 비동기 요청
             try {
-                const response = await fetch(`/checkEmailDuplicate?email=${email}&auth_code=${auth_code}`);
+                const response = await fetch(`/checkEmailDuplicate?email=${email}&auth_code=${userCode}`);
                 const data = await response.json();
 
                 if (data.isDuplicate) {
