@@ -83,7 +83,7 @@ async function checkUserEmailExists(userEmail) {
 async function checkMailAuth(paramEmail, paramauth_code){
     const connection = await connectToOracleDB();
     try {
-        const query = 'SELECT * FROM ( SELECT auth_code FROM mail_auth_code WHERE user_email_id = :userEmail ORDER BY auth_date DESC ) WHERE ROWNUM <= 1 AND auth_code = :auth_code';
+        const query = 'SELECT * FROM ( SELECT IDX, USER_EMAIL_ID, AUTH_DATE, AUTH_CODE, RANK() OVER (PARTITION BY USER_EMAIL_ID ORDER BY IDX DESC) AS RNK FROM MAIL_AUTH_CODE WHERE USER_EMAIL_ID = :userEmail ) WHERE RNK = 1 AND AUTH_CODE = :auth_code';
         const data = {
             userEmail: paramEmail,
             auth_code: paramauth_code
