@@ -179,6 +179,7 @@ app.get('/checkNickDuplicate', async (req, res) => {
   try {
     const isDuplicate = await oracleDB.checkUserNickExists(userNick); // 사용자 이메일을 전달
     res.json({ isDuplicate });
+    console.log('닉네임 isDuplicate', isDuplicate);
   } catch (error) {
     console.error('중복 확인 오류:', error);
     res.status(500).send('중복 확인 중 오류가 발생했습니다.');
@@ -190,6 +191,7 @@ app.get('/checkEmailDuplicate', async (req, res) => {
   try {
     const isDuplicate = await oracleDB.checkMailAuth(userEmail, auth_code);
     res.json({ isDuplicate });
+    console.log('메일 isDuplicate', isDuplicate);
   } catch (error) {
     console.error('인증 코드 확인 오류:', error);
     res.status(500).send('인증 코드 확인중 오류가 발생했습니다.');
