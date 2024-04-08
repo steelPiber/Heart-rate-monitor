@@ -83,14 +83,16 @@ async function checkUserEmailExists(userEmail) {
 async function checkMailAuth(paramEmail, paramauth_code){
     const connection = await connectToOracleDB();
     try {
-	    const query = 'SELECT * FROM ( SELECT * FROM mail_auth_code WHERE user_email_id = :userEmail ORDER BY auth_date DESC) WHERE ROWNUM <= 1 AND auth_code = :auth_code';
-	    const data = {
-	    	userEmail: paramEmail,
-		auth_code: paramauth_code
-	    };
-	    const result = await connection.execute(query, data, { outFormat: oracledb.OBJECT });
-	    console.log('checking auth code successfuly');
-	    return result.rows[0].COUNT > 0;
+        const query = 'SELECT * FROM ( SELECT * FROM mail_auth_code WHERE user_email_id = :userEmail ORDER BY auth_date DESC) WHERE ROWNUM <= 1 AND auth_code = :auth_code';
+        const data = {
+            userEmail: paramEmail,
+            auth_code: paramauth_code
+        };
+        const result = await connection.execute(query, data, { outFormat: oracledb.OBJECT });
+        console.log('checking auth code successfully');
+        
+        const count = result.rows.length;
+        return count > 0;
     } catch (error) {
         console.error('Error checking auth code:', error);
     } finally {
