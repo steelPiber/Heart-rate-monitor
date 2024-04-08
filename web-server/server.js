@@ -184,7 +184,7 @@ app.get('/checkNickDuplicate', async (req, res) => {
     res.status(500).send('중복 확인 중 오류가 발생했습니다.');
   }
 });
-app.get('/checkEmailDuplicate', async (req, res) => {
+app.get('/checkCodeDuplicate', async (req, res) => {
   const userEmail = req.query.email;
   const auth_code = req.query.auth_code;
   try {
