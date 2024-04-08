@@ -166,8 +166,8 @@ app.get('/hourly-chart', async (req, res) => {
 app.get('/checkEmailDuplicate', async (req, res) => {
   const userEmail = req.query.email; // 요청에서 사용자 이메일을 추출
   try {
-    const isDuplicate = await oracleDB.checkUserEmailExists(userEmail); // 사용자 이메일을 전달
-    res.json({ isDuplicate });
+    const Email_isDuplicate = await oracleDB.checkUserEmailExists(userEmail); // 사용자 이메일을 전달
+    res.json({ Email_isDuplicate });
   } catch (error) {
     console.error('중복 확인 오류:', error);
     res.status(500).send('중복 확인 중 오류가 발생했습니다.');
@@ -177,9 +177,8 @@ app.get('/checkEmailDuplicate', async (req, res) => {
 app.get('/checkNickDuplicate', async (req, res) => {
   const userNick = req.query.nickname; // 요청에서 사용자 이메일을 추출
   try {
-    const isDuplicate = await oracleDB.checkUserNickExists(userNick); // 사용자 이메일을 전달
-    res.json({ isDuplicate });
-    console.log('닉네임 isDuplicate', isDuplicate);
+    const Nick_isDuplicate = await oracleDB.checkUserNickExists(userNick); // 사용자 이메일을 전달
+    res.json({ Nick_isDuplicate });
   } catch (error) {
     console.error('중복 확인 오류:', error);
     res.status(500).send('중복 확인 중 오류가 발생했습니다.');
@@ -189,9 +188,8 @@ app.get('/checkEmailDuplicate', async (req, res) => {
   const userEmail = req.query.email;
   const auth_code = req.query.auth_code;
   try {
-    const isDuplicate = await oracleDB.checkMailAuth(userEmail, auth_code);
-    res.json({ isDuplicate });
-    console.log('메일 isDuplicate', isDuplicate);
+    const Code_isDuplicate = await oracleDB.checkMailAuth(userEmail, auth_code);
+    res.json({ Code_isDuplicate });
   } catch (error) {
     console.error('인증 코드 확인 오류:', error);
     res.status(500).send('인증 코드 확인중 오류가 발생했습니다.');
