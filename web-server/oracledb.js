@@ -91,15 +91,13 @@ async function checkMailAuth(paramEmail, paramauth_code){
         const result = await connection.execute(query, data, { outFormat: oracledb.OBJECT });
         console.log('checking auth code successfully');
         
-        const count = result.rows.length;
-        return count > 0;
+        return result.rows.length > 0;
     } catch (error) {
         console.error('Error checking auth code:', error);
     } finally {
         await connection.close();
     }
 }
-
 //회원가입시 user의 닉네임 중복검사
 async function checkUserNickExists(userNick) {
     const connection = await connectToOracleDB();
