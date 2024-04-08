@@ -89,6 +89,7 @@ async function checkMailAuth(paramEmail, paramauth_code){
 		auth_code: paramauth_code
 	    };
 	    const result = await connection.execute(query, data, { outFormat: oracledb.OBJECT });
+	    console.log('checking auth code successfuly');
 	    return result.rows[0].COUNT > 0;
     } catch (error) {
         console.error('Error checking auth code:', error);
