@@ -52,7 +52,7 @@
                 const response = await fetch(`/checkEmailDuplicate?email=${email}`);
                 const data = await response.json();
 
-                if (data.isDuplicate) {
+                if (data.Email_isDuplicate) {
                     alert('이미 사용 중인 이메일입니다.');
                 } else {
                     // 중복이 아니라면 회원가입 제출 버튼 활성화
@@ -76,7 +76,7 @@
                 const response = await fetch(`/checkNickDuplicate?nickname=${nickname}`);
                 const data = await response.json();
 
-                if (data.isDuplicate) {
+                if (data.Nick_isDuplicate) {
                     alert('이미 사용 중인 닉네임입니다.');
                 } else {
                     // 중복이 아니라면 회원가입 제출 버튼 활성화
@@ -100,7 +100,7 @@
                 const response = await fetch(`/checkEmailDuplicate?email=${email}&auth_code=${userCode}`);
                 const data = await response.json();
 
-                if (data.isDuplicate) {
+                if (data.Code_isDuplicate) {
                     alert('인증 코드를 다시 확인해 주세요.');
                 } else {
                     // 중복이 아니라면 회원가입 제출 버튼 활성화
