@@ -40,25 +40,6 @@ router.get('/checkCodeDuplicate', async (req, res) => {
     }
 });
 
-router.post('/signin', async (req, res)=> {
-    const paramEmail = req.body.email;
-    const paramPw = req.body.userpasswd;
-
-    try {
-        const isLoginSuccess = await oracleDB.selectUser(paramEmail, paramPw);
-        if (isLoginSuccess) {
-            await oracleDB.selectUserlog(paramEmail);
-            res.status(200).send('로그인 성공');
-        } else {
-            await oracleDB.selectUserErrlog(paramEmail);
-            res.status(401).send('이메일 또는 비밀번호가 잘못되었습니다.');
-        }
-    } catch (err) {
-        res.status(500).send('로그인 오류');
-        console.error('로그인 오류:' , err);
-    }
-});
-
 router.post('/signup', async (req, res)=> {
     const paramEmail = req.body.email;
     const paramname = req.body.username;
