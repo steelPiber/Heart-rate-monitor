@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const static = require('serve-static');
 const path = require('path');
 const oracleDB = require('./oracledb.js');
 router.use(express.urlencoded({extended:true}));
