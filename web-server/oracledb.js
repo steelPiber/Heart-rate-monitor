@@ -166,7 +166,6 @@ async function insertUser(paramEmail, paramname, paramNickname, paramPw) {
             userEmail: paramEmail,
             userRealname: paramname,
 	    username: paramNickname,
-            userMac: paramMac,
             userPassword: paramPw,
         };
         const result = await connection.execute(insertSQL, data, { autoCommit: true }); // 사용자 정보 삽입
