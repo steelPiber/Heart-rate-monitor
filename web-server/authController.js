@@ -45,19 +45,17 @@ router.post('/signup', async (req, res)=> {
     const paramEmail = req.body.email;
     const paramname = req.body.username;
     const paramNickname = req.body.userNick;
-    const paramauth_code = req.body.auth_code;
     const paramPw = req.body.userpasswd;
     console.log("paramEmail: ", paramEmail);
     console.log("paramname: ", paramname);
     console.log("paramNickname: ", paramNickname);
-    console.log("paramauth_code: ", paramauth_code);
     console.log("paramPw: ", paramPw);
     try {
-      await oracleDB.insertUser(paramEmail, paramname, paramNickname, paramauth_code, paramPw);
+      await oracleDB.insertUser(paramEmail, paramname, paramNickname, paramPw);
       await oracleDB.insertUserlog(paramEmail, paramNickname);
       res.status(200).send('회원가입 성공');
     } catch (err) {
-      await oracleDB.insertUserErrlog(paramEmail, paramNickname, paramMac);
+      await oracleDB.insertUserErrlog(paramEmail, paramNickname);
       res.status(500).send('회원가입 오류');
       console.error('회원가입 오류:', err);
     }
