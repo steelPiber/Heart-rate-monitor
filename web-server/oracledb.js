@@ -161,7 +161,7 @@ async function insertUserErrlog(paramEmail, paramNickname){
 async function insertUser(paramEmail, paramname, paramNickname, paramPw) {
     const connection = await connectToOracleDB();
     try {
-        const insertSQL = `INSERT INTO USER_TABLE(EMAIL, NAME, USERNAME, PASSWORD, EMAIL_AUTH) VALUES (:userEmail, :userRealname, :username, :userPassword)`;
+        const insertSQL = `INSERT INTO USER_TABLE(EMAIL, NAME, USERNAME, PASSWORD) VALUES (:userEmail, :userRealname, :username, :userPassword)`;
         const data = {
             userEmail: paramEmail,
             userRealname: paramname,
