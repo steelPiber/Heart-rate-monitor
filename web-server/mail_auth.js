@@ -1,16 +1,3 @@
-console.log(`VERSION_ORACLEDB_0.1_12.01`);
-console.log(`0.1 : mail_auth.js 모듈 분리`);
-require('dotenv').config();
-const node_mailer = require('nodemailer');
-
-function generateRandomCode(n) {
-    let str = '';
-    for (let i = 0; i < n; i++) {
-        str += Math.floor(Math.random() * 10);
-    }
-    return str;
-}
-
 async function sendVerificationEmail(userEmail) {
     let code = generateRandomCode(6);
     let transporter = node_mailer.createTransport({
@@ -24,6 +11,12 @@ async function sendVerificationEmail(userEmail) {
             pass: process.env.EMAIL_PASS   // 환경 변수 사용
         }
     });
+
+    // 이메일 주소가 유효한지 확인
+    if (!validateEmail(userEmail)) {
+        console.log("Invalid email address:", userEmail);
+        return null; // 유효하지 않은 이메일 주소인 경우 null 반환
+    }
 
     let mailOptions = {
         from: `"Heart-rate-monitor" <${process.env.EMAIL_USER}>`, // 환경 변수 사용
@@ -43,6 +36,13 @@ async function sendVerificationEmail(userEmail) {
     });
     return code;
 }
+
+// 이메일 주소 유효성 검사 함수
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+}
+
 module.exports = {
     sendVerificationEmail,
 };
