@@ -42,6 +42,12 @@ webSocket.addEventListener('message', event =>{
 
     // 주어진 정규 표현식에 맞게 데이터를 파싱
     const match = message.match(/^(\d+):\s*bpm:\s*(\d+)\s*user\(email=(.+)\)$/);
+    
+    const batteryMatch = message.match(/battery:\s*(\d+)/);
+    
+   // 정규 표현식 사용하여 MAC 주소만 추출
+    const macMatch = message.match(/mac:\s*([0-9A-Fa-f]{2}(?::[0-9A-Fa-f]{2}){5})/);
+
 
     // match 배열의 길이가 4인 경우에만 파싱이 성공한 것으로 간주
     if (match && match.length === 4) {
@@ -57,7 +63,7 @@ webSocket.addEventListener('message', event =>{
         	const bpmValue = parseInt(bpmMatch[1]);
         	// MAC 주소는 문자열로 처리
         	const macValue = macMatch[2]; // Use the whole matched MAC address as a string
-        	oracleDB.insertBPMData(bpmValue, macValue);
+        	await oracleDB.insertBPMData(bpmValue, macValue, email);
     	} else {
         	console.error('Message does not contain valid BPM and/or MAC address');
     	}
