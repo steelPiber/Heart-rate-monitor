@@ -38,23 +38,31 @@ oracleDB.connectToOracleDB()
 // WebSocket 메시지 수신 시 실행
 webSocket.addEventListener('message', event =>{
     const message = event.data;
-console.log(`Received raw message: ${message}`);
-    //정규 표현식 사용하여 bpm값만 추출
-    const bpmMatch = message.match(/bpm:\s*(\d+)/);
-//정규 표현식 사용하여 battery값만 추출
-    const batteryMatch = message.match(/battery:\s*(\d+)/);
-    
-   // 정규 표현식 사용하여 MAC 주소만 추출
-    const macMatch = message.match(/mac:\s*([0-9A-Fa-f]{2}(?::[0-9A-Fa-f]{2}){5})/);
+    console.log(`Received raw message: ${message}`);
 
+    // 주어진 정규 표현식에 맞게 데이터를 파싱
+    const match = message.match(/^(\d+):\s*bpm:\s*(\d+)\s*user\(email=(.+)\)$/);
+
+    // match 배열의 길이가 4인 경우에만 파싱이 성공한 것으로 간주
+    if (match && match.length === 4) {
+    	const userId = match[1];
+    	const bpm = match[2];
+    	const email = match[3];
+
+    	console.log(`User ID: ${userId}`);    // 사용자 ID 출력
+    	console.log(`BPM: ${bpm}`);           // BPM 값 출력
+    	console.log(`Email: ${email}`);       // 이메일 주소 출력
 	if (bpmMatch && macMatch) {
-        // 추출한 BPM 값을 정수로 변환
-        const bpmValue = parseInt(bpmMatch[1]);
-        // MAC 주소는 문자열로 처리
-        const macValue = macMatch[2]; // Use the whole matched MAC address as a string
-        oracleDB.insertBPMData(bpmValue, macValue);
+        	// 추출한 BPM 값을 정수로 변환
+        	const bpmValue = parseInt(bpmMatch[1]);
+        	// MAC 주소는 문자열로 처리
+        	const macValue = macMatch[2]; // Use the whole matched MAC address as a string
+        	oracleDB.insertBPMData(bpmValue, macValue);
+    	} else {
+        	console.error('Message does not contain valid BPM and/or MAC address');
+    	}
     } else {
-        console.error('Message does not contain valid BPM and/or MAC address');
+    	console.error('Failed to parse the message');
     }
 });
 
