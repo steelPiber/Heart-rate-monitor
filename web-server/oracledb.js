@@ -25,13 +25,15 @@ async function connectToOracleDB() {
 }
 
 // BPM데이터를 Oracle DB에 삽입
-async function insertBPMData(bpmValue) {
+async function insertBPMData(bpmValue, mac_address, email) {
   const connection = await connectToOracleDB();
 
   try {
-    const insertSQL = 'INSERT INTO bpmdata(ID, BPM, TIME) VALUES (BPM_SEQ.NEXTVAL, :bpm, CURRENT_TIMESTAMP)';
+    const insertSQL = 'INSERT INTO bpmdata(ID, BPM, TIME, MAC_ADDRESS, EMAIL) VALUES (BPM_SEQ.NEXTVAL, :bpm, CURRENT_TIMESTAMP, :mac, :email)';
     const bindParams = {
       bpm: bpmValue,
+      mac: mac_address,
+      email: email,
     };
     const options = {
       autoCommit: true, //자동 커밋 활성화 
