@@ -6,12 +6,15 @@ const WebSocket = require('ws');
 const http = require('http');
 const express = require('express');
 const expressWs = require('express-ws');
+const static = require('serve-static');
 const firebase = require("firebase");
 
 //  oracledb.js의 함수들 삽입 
 const oracleDB = require('./oracledb.js'); // oracledb.js 파일 경로에 따라 수정
 
 const app = express();
+app.use(express.json());
+app.use(google_authController);
 
 const server = http.createServer(app);
 const PORT_HTTP = 8081;
