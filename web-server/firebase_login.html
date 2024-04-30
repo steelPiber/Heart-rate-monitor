@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Login Demo</title>
+    <!-- Firebase 설정 -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+    <script>
+      // TODO: Firebase 프로젝트 설정을 여기에 추가
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+      };
+
+      // Firebase 초기화
+      const app = firebase.initializeApp(firebaseConfig);
+
+      // Google 로그인
+      function googleLogin() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then((result) => {
+          // Google ID 토큰을 백엔드로 전송
+          const idToken = result.user.za;
+          fetch('/verify-token', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idToken: idToken }),
+          })
+          .then(response => response.json())
+          .then(data => console.log(data))
+          .catch((error) => console.error('Error:', error));
+        }).catch((error) => {
+          console.error(error);
+        });
+      }
+    </script>
+</head>
+<body>
+    <button onclick="googleLogin()">Sign in with Google</button>
+</body>
+</html>
