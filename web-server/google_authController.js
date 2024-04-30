@@ -24,10 +24,16 @@ const OAUTH_URL = `${AUTHORIZE_URI}?client_id=${CLIENT_ID}&response_type=${RESPO
 const getToken = async (code) => {
   try {
     const tokenApi = await axios.post(
-      `https://oauth2.googleapis.com/token?code=${code}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&redirect_uri=${REDIRECT_URL}&grant_type=authorization_code`
+      `https://oauth2.googleapis.com/token`,
+      {
+        code: code,
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        redirect_uri: REDIRECT_URL,
+        grant_type: "authorization_code"
+      }
     );
     const accessToken = tokenApi.data.access_token;
-
     return accessToken;
   } catch (err) {
     return err;
@@ -44,7 +50,7 @@ const getUserInfo = async (accessToken) => {
         },
       }
     );
-    return userInfoApi;
+    return userInfoApi.data; // axios 응답 객체의 데이터 반환
   } catch (err) {
     return err;
   }
@@ -52,7 +58,7 @@ const getUserInfo = async (accessToken) => {
 
 const oauth2Api = async (code) => {
   const accessToken = await getToken(code);
-  // NOTE 사용자 정보를 콘솔로 확인
+  // 사용자 정보를 콘솔로 확인
   console.log(await getUserInfo(accessToken));
 };
 
@@ -62,10 +68,12 @@ router.get("/auth/google", (req, res) => {
 });
 
 // NOTE 설정한 리다이렉트 페이지로 이동시 처리할 로직
-router.get("/oauth2/redirect", (req, res) => {
-  const query = url.parse(req.url, true).query;
-  if (query && query.code) {
-    oauth2Api(query.code);
+router.post("/oauth2/redirect", async (req, res) => {
+  const code = req.body.code;
+  if (code) {
+    oauth2Api(code);
   }
   res.send("");
 });
+
+module.exports = router;
