@@ -14,7 +14,7 @@ const oracleDB = require('./oracledb.js'); // oracledb.js 파일 경로에 따�
 
 const app = express();
 app.use(express.json());
-app.use("/login", router);
+app.use(google_authController);
 const server = http.createServer(app);
 const PORT_HTTP = 8081;
 const PORT_WS = 13389;
