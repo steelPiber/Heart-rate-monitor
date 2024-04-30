@@ -1,15 +1,15 @@
 const { default: axios } = require("axios");
 const express = require("express");
-const url = require("url");
 const router = express.Router();
+const url = require("url");
 const static = require('serve-static');
 const path = require('path');
-
-require("dotenv").config();
-
 router.use(express.urlencoded({extended:true}));
 router.use(express.json());
 router.use('/public', static(path.join(__dirname, 'public')));
+
+
+require("dotenv").config();
 
 // NOTE process.env는 dotenv라이브러리 사용
 const CLIENT_ID = process.env.CLIENT_ID;
@@ -69,3 +69,5 @@ router.get("/oauth2/redirect", (req, res) => {
   }
   res.send("");
 });
+
+module.exports = router;
