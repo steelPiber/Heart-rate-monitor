@@ -7,8 +7,8 @@ const http = require('http');
 const express = require('express');
 const expressWs = require('express-ws');
 const static = require('serve-static');
-const firebase = require('firebase/app');
-require('firebase/auth');
+const firebase = require('firebase/compat/app');
+require('firebase/compat/auth');
 
 const firebaseConfig = {
   apiKey: "AIzaSyBaSJo9dxz-4LuvfJ2dAx1ElZzgnvRnQQ4",
