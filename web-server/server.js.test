@@ -7,18 +7,6 @@ const http = require('http');
 const express = require('express');
 const expressWs = require('express-ws');
 const static = require('serve-static');
-const firebase = require('firebase/compat/app');
-require('firebase/compat/auth');
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBaSJo9dxz-4LuvfJ2dAx1ElZzgnvRnQQ4",
-  authDomain: "hearth-rate.firebaseapp.com",
-  projectId: "hearth-rate",
-  storageBucket: "hearth-rate.appspot.com",
-  messagingSenderId: "41236699522",
-  appId: "1:41236699522:web:29c4845a33554351c3d79b"
-};
-firebase.initializeApp(firebaseConfig);
 
 //  oracledb.js의 함수들 삽입 
 const oracleDB = require('./oracledb.js'); // oracledb.js 파일 경로에 따라 수정
