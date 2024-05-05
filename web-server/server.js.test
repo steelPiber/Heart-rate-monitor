@@ -7,14 +7,24 @@ const http = require('http');
 const express = require('express');
 const expressWs = require('express-ws');
 const static = require('serve-static');
-const google_authController = require("./google_authController.js");
+const firebase = require('firebase/app');
+require('firebase/auth');
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBaSJo9dxz-4LuvfJ2dAx1ElZzgnvRnQQ4",
+  authDomain: "hearth-rate.firebaseapp.com",
+  projectId: "hearth-rate",
+  storageBucket: "hearth-rate.appspot.com",
+  messagingSenderId: "41236699522",
+  appId: "1:41236699522:web:29c4845a33554351c3d79b"
+};
+firebase.initializeApp(firebaseConfig);
 
 //  oracledb.js의 함수들 삽입 
 const oracleDB = require('./oracledb.js'); // oracledb.js 파일 경로에 따라 수정
 
 const app = express();
 app.use(express.json());
-app.use(google_authController);
 const server = http.createServer(app);
 const PORT_HTTP = 8081;
 const PORT_WS = 13389;
@@ -36,6 +46,25 @@ oracleDB.connectToOracleDB()
     // 연결 실패 시 동작
     console.error('Oracle DB 연결 실패:', error);
   });
+
+app.get('/login', (req, res) => {
+  // Google 로그인 페이지로 리다이렉트하는 Firebase 함수 호출
+  const provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithRedirect(provider);
+});
+
+app.get('/login/callback', (req, res) => {
+  // Google 로그인 후 콜백 처리
+  firebase.auth().getRedirectResult().then((result) => {
+    if (result.user) {
+      // 로그인 성공, 사용자 정보와 함께 처리
+      res.send(`로그인 성공: ${result.user.displayName}`);
+    }
+  }).catch((error) => {
+    // 로그인 실패 처리
+    res.send(`로그인 오류: ${error.message}`);
+  });
+});
 
 
 // WebSocket 메시지 수신 시 실행
