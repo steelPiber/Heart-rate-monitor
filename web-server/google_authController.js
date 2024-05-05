@@ -15,7 +15,7 @@ require("dotenv").config();
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const AUTHORIZE_URI = "https://accounts.google.com/o/oauth2/v2/auth";
-const REDIRECT_URL = "http://localhost:3000/oauth2/redirect";
+const REDIRECT_URL = "http://202.31.243.45";
 const RESPONSE_TYPE = "code";
 const SCOPE = "openid%20profile%20email";
 const ACCESS_TYPE = "offline";
