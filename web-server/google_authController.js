@@ -1,11 +1,13 @@
+const { default: axios } = require("axios");
 const express = require("express");
 const router = express.Router();
 const url = require("url");
-const axios = require("axios");
+const static = require('serve-static');
 const path = require('path');
-
 router.use(express.urlencoded({extended:true}));
 router.use(express.json());
+router.use('/public', static(path.join(__dirname, 'public')));
+
 
 require("dotenv").config();
 
@@ -13,7 +15,7 @@ require("dotenv").config();
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const AUTHORIZE_URI = "https://accounts.google.com/o/oauth2/v2/auth";
-const REDIRECT_URL = "http://heartrate.ddns.net/userEmail"; // 변경된 리다이렉트 URL
+const REDIRECT_URL = "http://heartrate.ddns.net";
 const RESPONSE_TYPE = "code";
 const SCOPE = "openid%20profile%20email";
 const ACCESS_TYPE = "offline";
@@ -42,29 +44,30 @@ const getUserInfo = async (accessToken) => {
         },
       }
     );
-    return userInfoApi.data.email; // 이메일 주소 반환
+    return userInfoApi;
   } catch (err) {
     return err;
   }
 };
 
-const oauth2Api = async (code, res) => { // res 매개변수 추가
+const oauth2Api = async (code) => {
   const accessToken = await getToken(code);
-  const userEmail = await getUserInfo(accessToken); // 사용자 이메일 주소 가져오기
-  res.redirect(`http://heartrate.ddns.net/${userEmail}`); // 이메일 주소를 포함한 URL로 리다이렉트
+  // NOTE 사용자 정보를 콘솔로 확인
+  console.log(await getUserInfo(accessToken));
 };
 
-// 버튼 클릭시 구글 로그인 화면으로 이동
+// NOTE 버튼 클릭시 구글 로그인 화면으로 이동
 router.get("/auth/google", (req, res) => {
   res.redirect(OAUTH_URL);
 });
 
-// 설정한 리다이렉트 페이지로 이동시 처리할 로직
+// NOTE 설정한 리다이렉트 페이지로 이동시 처리할 로직
 router.get("/oauth2/redirect", (req, res) => {
   const query = url.parse(req.url, true).query;
   if (query && query.code) {
-    oauth2Api(query.code, res); // res 매개변수 전달
+    oauth2Api(query.code);
   }
+  res.send("");
 });
 
 module.exports = router;
