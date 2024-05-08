@@ -62,12 +62,6 @@ router.get("/auth/google", (req, res) => {
 });
 
 // NOTE 설정한 리다이렉트 페이지로 이동시 처리할 로직
-router.get("/oauth2/redirect", (req, res) => {
-  const query = url.parse(req.url, true).query;
-  if (query && query.code) {
-    oauth2Api(query.code);
-  }
-  res.send("");
-});
+
 
 module.exports = router;
