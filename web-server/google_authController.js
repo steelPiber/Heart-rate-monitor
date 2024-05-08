@@ -34,34 +34,9 @@ const getToken = async (code) => {
   }
 };
 
-const getUserInfo = async (accessToken) => {
-  try {
-    const userInfoApi = await axios.get(
-      `https://www.googleapis.com/oauth2/v2/userinfo?alt=json`,
-      {
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    return userInfoApi;
-  } catch (err) {
-    return err;
-  }
-};
-
-const oauth2Api = async (code) => {
-  const accessToken = await getToken(code);
-  // NOTE 사용자 정보를 콘솔로 확인
-  console.log(await getUserInfo(accessToken));
-};
-
 // NOTE 버튼 클릭시 구글 로그인 화면으로 이동
 router.get("/auth/google", (req, res) => {
   res.redirect(OAUTH_URL);
 });
-
-// NOTE 설정한 리다이렉트 페이지로 이동시 처리할 로직
-
 
 module.exports = router;
