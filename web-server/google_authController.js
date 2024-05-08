@@ -8,7 +8,6 @@ router.use(express.urlencoded({extended:true}));
 router.use(express.json());
 router.use('/public', static(path.join(__dirname, 'public')));
 
-
 require("dotenv").config();
 
 // NOTE process.env는 dotenv라이브러리 사용
@@ -34,9 +33,48 @@ const getToken = async (code) => {
   }
 };
 
+const getUserInfo = async (accessToken) => {
+  try {
+    const userInfoApi = await axios.get(
+      `https://www.googleapis.com/oauth2/v2/userinfo`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
+    );
+    return userInfoApi.data;
+  } catch (err) {
+    return err;
+  }
+};
+
 // NOTE 버튼 클릭시 구글 로그인 화면으로 이동
 router.get("/auth/google", (req, res) => {
   res.redirect(OAUTH_URL);
+});
+
+// 사용자의 리디렉션 URL 처리
+router.get("/redirect", async (req, res) => {
+  const code = req.query.code;
+  if (code) {
+    try {
+      // 코드를 사용하여 액세스 토큰 가져오기
+      const accessToken = await getToken(code);
+      // 액세스 토큰을 사용하여 사용자 정보 가져오기
+      const userInfo = await getUserInfo(accessToken);
+      // 사용자 이메일 정보를 가져옵니다.
+      const userEmail = userInfo.email;
+      // 사용자 이메일 정보를 기반으로 리다이렉션 URL 생성
+      const userRedirectURL = `${REDIRECT_URL}/${userEmail}`;
+      // 사용자를 새로운 URL로 리다이렉트합니다.
+      res.redirect(userRedirectURL);
+    } catch (error) {
+      console.error("Error retrieving user info:", error);
+      res.status(500).send("Error retrieving user info");
+    }
+  } else {
+    res.status(400).send("Code parameter missing");
+  }
 });
 
 module.exports = router;
