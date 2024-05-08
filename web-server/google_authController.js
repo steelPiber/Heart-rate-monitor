@@ -64,8 +64,10 @@ router.get("/", async (req, res) => {
       const userInfo = await getUserInfo(accessToken);
       // 사용자 이메일 정보를 가져옵니다.
       const userEmail = userInfo.email;
+      // @를 기준으로 사용자 이메일을 처리하여 @gmail.com을 제거합니다.
+      const userEmailWithoutDomain = userEmail.split('@')[0];
       // 사용자 이메일 정보를 기반으로 리다이렉션 URL 생성
-      const userRedirectURL = `${REDIRECT_URL}/${userEmail}`;
+      const userRedirectURL = `${REDIRECT_URL}/${userEmailWithoutDomain}`;
       // 사용자를 새로운 URL로 리다이렉트합니다.
       res.redirect(userRedirectURL);
     } catch (error) {
