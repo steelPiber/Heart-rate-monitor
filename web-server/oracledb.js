@@ -365,9 +365,11 @@ module.exports = {
   selectUser,
   selectUserlog,
   selectUserErrlog,
-  realtime_query,
-  min1_query,
-  hour_query,
-  hourly_query,
-  day_query,
+  realtimeQuery,
+  minQuery,
+  hourQuery,
+  dayQuery,
+  monthQuery,
+  yearQuery,
+  everyHourDuringTheDayQuery
 };
