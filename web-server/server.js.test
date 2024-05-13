@@ -47,7 +47,7 @@ webSocket.addEventListener('message', async event => {
     const match = message.match(/^(\d+):\s*bpm:\s*(\d+)\s*user\(email=(.+)\)$/);
 
     // match 배열의 길이가 4인 경우에만 파싱이 성공한 것으로 간주
-    if (match && match.length === 4) {
+    if (match) {
         const userId = match[1];
         const bpm = match[2];
         const email = match[3];
