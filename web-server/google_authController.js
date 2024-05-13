@@ -69,6 +69,7 @@ router.get("/", async (req, res) => {
       // 사용자 이메일 정보를 기반으로 리다이렉션 URL 생성
       const userRedirectURL = `${REDIRECT_URL}/${userEmailWithoutDomain}`;
       // 사용자를 새로운 URL로 리다이렉트합니다.
+      console.log("User Email Without Domain:", userEmailWithoutDomain);
       res.redirect(userRedirectURL);
     } catch (error) {
       console.error("Error retrieving user info:", error);
