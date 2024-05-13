@@ -73,15 +73,8 @@ router.get("/", async (req, res) => {
       res.redirect(userRedirectURL);
     } catch (error) {
       // 오류를 캐치하여 처리
-      if (error.response && error.response.status === 400) {
-        // 비밀번호가 틀렸을 때 오류
-        console.error("Incorrect password:", error.response.data);
-        res.status(401).send("Incorrect password");
-      } else {
-        // 기타 오류
-        console.error("Error retrieving user info:", error);
-        res.status(500).send("Error retrieving user info");
-      }
+      console.error("Error retrieving user info:", error);
+      res.status(500).send("Error retrieving user info");
     }
   } else {
     res.status(400).send("Code parameter missing");
