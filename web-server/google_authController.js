@@ -4,6 +4,7 @@ const router = express.Router();
 const url = require("url");
 const static = require('serve-static');
 const path = require('path');
+const oracleDB = require('./oracledb.js');
 router.use(express.urlencoded({extended:true}));
 router.use(express.json());
 router.use('/public', static(path.join(__dirname, 'public')));
@@ -69,7 +70,8 @@ router.get("/", async (req, res) => {
       // 사용자 이메일 정보를 기반으로 리다이렉션 URL 생성
       const userRedirectURL = `${REDIRECT_URL}/${userEmailWithoutDomain}`;
       // 사용자를 새로운 URL로 리다이렉트합니다.
-      console.log("User Email Without Domain:", userEmailWithoutDomain);
+      console.log("User login:", userEmailWithoutDomain);
+      
       res.redirect(userRedirectURL);
     } catch (error) {
       // 오류를 캐치하여 처리
