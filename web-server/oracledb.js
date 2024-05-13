@@ -25,7 +25,7 @@ async function connectToOracleDB() {
 }
 
 // BPM데이터를 Oracle DB에 삽입
-async function insertBPMData(bpmValue, mac_address, email) {
+async function insertBPMData(bpmValue, email) {
   const connection = await connectToOracleDB();
 
   try {
