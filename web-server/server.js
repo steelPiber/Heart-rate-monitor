@@ -10,11 +10,11 @@ const expressWs = require('express-ws');
 
 //  oracledb.js의 함수들 불러오기
 const oracleDB = require('./oracledb.js');
-const authController = require('./authController.js');
+const google_authController = require("./google_authController.js");
 
 const app = express();
 app.use(express.json());
-app.use(authController);
+app.use(google_authController);
 
 const server = http.createServer(app);
 const PORT_HTTP = 8081;
@@ -35,22 +35,33 @@ oracleDB.connectToOracleDB()
   });
 
 // WebSocket 메시지 수신 시 실행
-webSocket.addEventListener('message', event =>{
+webSocket.addEventListener('message', async event => {
     const message = event.data;
+    console.log(`Received raw message: ${message}`);
 
-    //정규 표현식 사용하여 bpm값만 추출
-    const bpmMatch = message.match(/bpm:\s*(\d+)/);
-//정규 표현식 사용하여 battery값만 추출
-    const batteryMatch = message.match(/battery:\s*(\d+)/);
+    // 주어진 정규 표현식에 맞게 데이터를 파싱
+    const regex = /^(\d+):\s*bpm:\s*(\d+)\s*user\(email=(.+)\)$/;
+    
+    const match = message.toString().match(regex);
 
-    if(bpmMatch){
-        //추출한 숫자 -> 정수로 변환하여 BPM 값을 업데이트 
-        const bpmValue = parseInt(bpmMatch[1]);
-        oracleDB.insertBPMData(bpmValue);
+    if (match) {
+        const userId = match[1];
+        const bpm = match[2];
+        const email = match[3];
+        console.log('User ID: ${userId}');    // 사용자 ID 출력
+        console.log('BPM: ${bpm}');           // BPM 값 출력
+        console.log('Email: ${email}');       // 이메일 주소 출력
 
+        try {
+            const result = await oracleDB.insertBPMData(bpm, email);
+            console.log('Successfully inserted BPM data into Oracle DB');
+        } catch (error) {
+            console.error('Failed to insert BPM data into Oracle DB:', error);
+        }
+    } else {
+        console.error('Message does not contain valid BPM');
     }
 });
-
 
 expressWs(app, server);
 
