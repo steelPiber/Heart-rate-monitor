@@ -48,12 +48,9 @@ webSocket.addEventListener('message', async event => {
         const userId = match[1];
         const bpm = match[2];
         const email = match[3];
-        console.log('User ID: ${userId}');    // 사용자 ID 출력
-        console.log('BPM: ${bpm}');           // BPM 값 출력
-        console.log('Email: ${email}');       // 이메일 주소 출력
-
+        const userEmail = email.split('@')[0];
         try {
-            const result = await oracleDB.insertBPMData(bpm, email);
+            const result = await oracleDB.insertBPMData(bpm, userEmail);
             console.log('Successfully inserted BPM data into Oracle DB');
         } catch (error) {
             console.error('Failed to insert BPM data into Oracle DB:', error);
