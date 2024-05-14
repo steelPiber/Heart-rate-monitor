@@ -251,123 +251,39 @@ const query = `
 
 //실시간 쿼리
 async function realtimeQuery(paramEmail){
-     const connection = await connectToOracleDB();
-     try {
-     	const realtime_query= `SELECT bpm FROM bpmdata WHERE email = :Email ORDER BY time fetch first 1 rows only`;
-	const data = {
-		Email: paramEmail
-	};
-	const result = await connection.execute(query, data, { autoCommit: true });
-	console.log('insert sign in error log successfully');
-     }catch (error){
-     	console.error('Error inserting sign in error log');
-     } finally {
-     	await connection.close();
-     }
+     return `SELECT ROUND(bpm) FROM bpmdata WHERE email = :Email ORDER BY time fetch first 1 rows only`;
 }
 
 // 사용자 별 1분 전 bpm 평균 값
-async function minQuery(paramEmail){
-     const connection = await connectToOracleDB();
-     try {
-     	const min_query= `SELECT AVG(bpm) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' MINUTE FROM bpmdata WHERE email = :Email)`;
-	const data = {
-		Email: paramEmail
-	};
-	const result = await connection.execute(query, data, { autoCommit: true });
-	console.log('insert sign in error log successfully');
-     }catch (error){
-     	console.error('Error inserting sign in error log');
-     } finally {
-     	await connection.close();
-     }
+function minQuery(){
+     return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' MINUTE FROM bpmdata WHERE email = :Email)`;
 }
 
 // 사용자 별 1시간 전 bpm 평균 값
-async function hourQuery(paramEmail){
-     const connection = await connectToOracleDB();
-     try {
-     	const hour_query= `SELECT AVG(bpm) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' HOUR FROM bpmdata WHERE email = :Email)`;
-	const data = {
-		Email: paramEmail
-	};
-	const result = await connection.execute(query, data, { autoCommit: true });
-	console.log('insert sign in error log successfully');
-     }catch (error){
-     	console.error('Error inserting sign in error log');
-     } finally {
-     	await connection.close();
-     }
+function hourQuery(){
+     return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' HOUR FROM bpmdata WHERE email = :Email)`;
 }
 
 // 사용자 별 1일 전 bpm 평균 값
-async function dayQuery(paramEmail){
-     const connection = await connectToOracleDB();
-     try {
-     	const day_query= `SELECT AVG(bpm) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' DAY FROM bpmdata WHERE email = :Email)`;
-	const data = {
-		Email: paramEmail
-	};
-	const result = await connection.execute(query, data, { autoCommit: true });
-	console.log('insert sign in error log successfully');
-     }catch (error){
-     	console.error('Error inserting sign in error log');
-     } finally {
-     	await connection.close();
-     }
+function dayQuery(){
+     return `SELECT ROUNE(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' DAY FROM bpmdata WHERE email = :Email)`;
 }
 
 // 사용자 별 1달 전 bpm 평균 값
-async function monthQuery(paramEmail){
-     const connection = await connectToOracleDB();
-     try {
-     	const month_query= `SELECT AVG(bpm) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' MONTH FROM bpmdata WHERE email = :Email)`;
-	const data = {
-		Email: paramEmail
-	};
-	const result = await connection.execute(query, data, { autoCommit: true });
-	console.log('insert sign in error log successfully');
-     }catch (error){
-     	console.error('Error inserting sign in error log');
-     } finally {
-     	await connection.close();
-     }
+function monthQuery(){
+     return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' MONTH FROM bpmdata WHERE email = :Email)`;
 }
 
 // 사용자 별 1년 전 bpm 평균 값
-async function yearQuery(paramEmail){
-     const connection = await connectToOracleDB();
-     try {
-     	const year_query= `SELECT AVG(bpm) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' YEAR FROM bpmdata WHERE email = :Email)`;
-	const data = {
-		Email: paramEmail
-	};
-	const result = await connection.execute(query, data, { autoCommit: true });
-	console.log('insert sign in error log successfully');
-     }catch (error){
-     	console.error('Error inserting sign in error log');
-     } finally {
-     	await connection.close();
-     }
+function yearQuery(){
+     return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' YEAR FROM bpmdata WHERE email = :Email)`;
 }
 
 // 사용자 별 1일 값 중 1시간 마다 검색
 // x축 시간 :hour
 // y축 BPM :avg_bpm
-async function everyHourDuringTheDayQuery(paramEmail){
-     const connection = await connectToOracleDB();
-     try {
-     	const everyHourDuringTheDay_query= `SELECT TO_CHAR(time, 'YYYY-MM-DD HH24') AS hour, ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' DAY FROM bpmdata WHERE email = :Email) GROUP BY TO_CHAR(time, 'YYYY-MM-DD HH24) ORDER BY hour`;
-	const data = {
-		Email: paramEmail
-	};
-	const result = await connection.execute(query, data, { autoCommit: true });
-	console.log('insert sign in error log successfully');
-     }catch (error){
-     	console.error('Error inserting sign in error log');
-     } finally {
-     	await connection.close();
-     }
+function everyHourDuringTheDayQuery(){
+     return `SELECT TO_CHAR(time, 'YYYY-MM-DD HH24') AS hour, ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' DAY FROM bpmdata WHERE email = :Email) GROUP BY TO_CHAR(time, 'YYYY-MM-DD HH24) ORDER BY hour`;
 }
 
 module.exports = {
