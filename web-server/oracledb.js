@@ -250,7 +250,7 @@ const query = `
 */
 
 //실시간 쿼리
-async function realtimeQuery(paramEmail){
+function realtimeQuery(){
      return `SELECT ROUND(bpm) FROM bpmdata WHERE email = :Email ORDER BY time fetch first 1 rows only`;
 }
 
