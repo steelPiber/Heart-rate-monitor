@@ -300,6 +300,23 @@ async function hourQuery(paramEmail){
      }
 }
 
+//사용자 별 1일 전 bpm 평균 값
+async function dayQuery(paramEmail){
+     const connection = await connectToOracleDB();
+     try {
+     	const day_query= `SELECT AVG(bpm) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' DAY FROM bpmdata WHERE email = :Email)`;
+	const data = {
+		Email: paramEmail
+	};
+	const result = await connection.execute(query, data, { autoCommit: true });
+	console.log('insert sign in error log successfully');
+     }catch (error){
+     	console.error('Error inserting sign in error log');
+     } finally {
+     	await connection.close();
+     }
+}
+
 // 사용자 별 1달 전 bpm 평균 값
 async function monthQuery(paramEmail){
      const connection = await connectToOracleDB();
