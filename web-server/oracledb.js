@@ -300,7 +300,7 @@ async function hourQuery(paramEmail){
      }
 }
 
-//사용자 별 1일 전 bpm 평균 값
+// 사용자 별 1일 전 bpm 평균 값
 async function dayQuery(paramEmail){
      const connection = await connectToOracleDB();
      try {
