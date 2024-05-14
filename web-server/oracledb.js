@@ -249,42 +249,50 @@ const query = `
 `;
 */
 
-//실시간 쿼리
-function realtimeQuery(){
-     return `SELECT ROUND(bpm) FROM bpmdata WHERE email = :Email ORDER BY time fetch first 1 rows only`;
+
+function realtimeQuery() {
+  return `SELECT ROUND(bpm) FROM bpmdata WHERE email = :Email ORDER BY time FETCH FIRST 1 ROWS ONLY`;
 }
 
-// 사용자 별 1분 전 bpm 평균 값
-function minQuery(){
-     return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' MINUTE FROM bpmdata WHERE email = :Email)`;
+function minQuery() {
+  return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' MINUTE FROM bpmdata WHERE email = :Email)`;
 }
 
-// 사용자 별 1시간 전 bpm 평균 값
-function hourQuery(){
-     return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' HOUR FROM bpmdata WHERE email = :Email)`;
+function hourQuery() {
+  return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' HOUR FROM bpmdata WHERE email = :Email)`;
 }
 
-// 사용자 별 1일 전 bpm 평균 값
-function dayQuery(){
-     return `SELECT ROUNE(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' DAY FROM bpmdata WHERE email = :Email)`;
+function dayQuery() {
+  return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' DAY FROM bpmdata WHERE email = :Email)`;
 }
 
-// 사용자 별 1달 전 bpm 평균 값
-function monthQuery(){
-     return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' MONTH FROM bpmdata WHERE email = :Email)`;
+function monthQuery() {
+  return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' MONTH FROM bpmdata WHERE email = :Email)`;
 }
 
-// 사용자 별 1년 전 bpm 평균 값
-function yearQuery(){
-     return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' YEAR FROM bpmdata WHERE email = :Email)`;
+function yearQuery() {
+  return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' YEAR FROM bpmdata WHERE email = :Email)`;
 }
 
-// 사용자 별 1일 값 중 1시간 마다 검색
-// x축 시간 :hour
-// y축 BPM :avg_bpm
-function everyHourDuringTheDayQuery(){
-     return `SELECT TO_CHAR(time, 'YYYY-MM-DD HH24') AS hour, ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' DAY FROM bpmdata WHERE email = :Email) GROUP BY TO_CHAR(time, 'YYYY-MM-DD HH24) ORDER BY hour`;
+function everyHourDuringTheDayQuery() {
+  return `SELECT TO_CHAR(time, 'YYYY-MM-DD HH24') AS hour, ROUND(AVG(bpm)) AS avg_bpm 
+          FROM bpmdata 
+          WHERE email = :Email 
+          AND time > (SELECT MAX(time) - INTERVAL '1' DAY FROM bpmdata WHERE email = :Email) 
+          GROUP BY TO_CHAR(time, 'YYYY-MM-DD HH24') 
+          ORDER BY hour`;
 }
+
+function everyHourDuringTheDayQuery() {
+  return `SELECT TO_CHAR(time, 'YYYY-MM-DD HH24') AS hour, ROUND(AVG(bpm)) AS avg_bpm 
+          FROM bpmdata 
+          WHERE email = :Email 
+          AND time > (SELECT MAX(time) - INTERVAL '1' DAY FROM bpmdata WHERE email = :Email) 
+          GROUP BY TO_CHAR(time, 'YYYY-MM-DD HH24') 
+          ORDER BY hour`;
+}
+
+
 
 module.exports = {
   connectToOracleDB,
@@ -304,5 +312,5 @@ module.exports = {
   dayQuery,
   monthQuery,
   yearQuery,
-  everyHourDuringTheDayQuery
+  everyHourDuringTheDayQuery,
 };
