@@ -8,14 +8,19 @@ console.log('0.2 : 1분당 평균심박수를 JSON형태로 응답');
 const WebSocket = require('ws');
 const http = require('http');
 const express = require('express');
+const static = require('serve-static');
 const expressWs = require('express-ws');
+const path = require('path');
 
 //  oracledb.js의 함수들 삽입 
 const oracleDB = require('./oracledb.js'); // oracledb.js 파일 경로에 따라 수정
+const google_authController = require("./google_authController.js");
 
 const app = express();
 
-const path = require('path');
+app.use(express.json());
+app.use(google_authController);
+
 // 정적 파일 미들웨어를 사용하여 CSS, 이미지, JS 등의 정적 파일 제공
 app.use(express.static(path.join(__dirname, '/heart-dashboard')));
 const server = http.createServer(app);
