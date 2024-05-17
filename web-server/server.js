@@ -46,17 +46,26 @@ oracleDB.connectToOracleDB()
 // WebSocket 메시지 수신 시 실행
 webSocket.addEventListener('message', event =>{
     const message = event.data;
+    console.log(`Received raw message: ${message}`);
 
-    //정규 표현식 사용하여 bpm값만 추출
-    const bpmMatch = message.match(/bpm:\s*(\d+)/);
-//정규 표현식 사용하여 battery값만 추출
-    const batteryMatch = message.match(/battery:\s*(\d+)/);
+    // 주어진 정규 표현식에 맞게 데이터를 파싱
+    const regex = /^(\d+):\s*bpm:\s*(\d+)\s*user\(email=(.+)\)$/;
 
-    if(bpmMatch){
-        //추출한 숫자 -> 정수로 변환하여 BPM 값을 업데이트 
-        const bpmValue = parseInt(bpmMatch[1]);
-        oracleDB.insertBPMData(bpmValue);
+    const match = message.toString().match(regex);
 
+    if (match) {
+        const userId = match[1];
+        const bpm = match[2];
+        const email = match[3];
+        const userEmail = email.split('@')[0];
+        try {
+            const result = await oracleDB.insertBPMData(bpm, userEmail);
+            console.log('Successfully inserted BPM data into Oracle DB');
+        } catch (error) {
+            console.error('Failed to insert BPM data into Oracle DB:', error);
+        }
+    } else {
+        console.error('Message does not contain valid BPM');
     }
 });
 
