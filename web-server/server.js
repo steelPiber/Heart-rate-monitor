@@ -75,7 +75,7 @@ webSocket.addEventListener('message', event =>{
 expressWs(app, server);
 
 // Serve HTML page at port 8081
-app.get('/', (req, res) => {
+app.get('/auth/login/:userId', (req, res) => {
     res.sendFile(__dirname + './index.html');
 });
 app.get('/min1', (req, res) => {
