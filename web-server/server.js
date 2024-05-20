@@ -105,9 +105,19 @@ async function executeQuery(query, params) {
 // Realtime query handler
 app.get('/realquery', async (req, res) => {
   try {
-    const email = 'pyh5523';
+    const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
+    if (!accessToken) {
+      res.status(400).send('Access token is missing');
+      return;
+    }
+
+    // access 토큰을 사용하여 사용자 정보 가져오기
+    const userInfo = await getUserInfo(accessToken);
+    // 사용자 이메일 정보를 가져옵니다.
+    const userEmail = userInfo.email;
+
     const query = oracleDB.realtimeQuery();
-    const result = await executeQuery(query, { Email: email });
+    const result = await executeQuery(query, { Email: userEmail }); // 사용자 이메일을 쿼리에 전달
 
     // Convert the query result to an array
     const data = result.rows.map(row => row[0]);
@@ -123,9 +133,19 @@ app.get('/realquery', async (req, res) => {
 // Min query handler
 app.get('/minquery', async (req, res) => {
   try {
-    const email = 'pyh5523';
+    const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
+    if (!accessToken) {
+      res.status(400).send('Access token is missing');
+      return;
+    }
+
+    // access 토큰을 사용하여 사용자 정보 가져오기
+    const userInfo = await getUserInfo(accessToken);
+    // 사용자 이메일 정보를 가져옵니다.
+    const userEmail = userInfo.email;
+
     const query = oracleDB.minQuery();
-    const result = await executeQuery(query, { Email: email });
+    const result = await executeQuery(query, { Email: userEmail });
 
     // Convert the query result to an array
     const data = result.rows.map(row => row[0]);
@@ -141,9 +161,19 @@ app.get('/minquery', async (req, res) => {
 // Hour query handler
 app.get('/hourquery', async (req, res) => {
   try {
-    const email = 'pyh5523';
+    const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
+    if (!accessToken) {
+      res.status(400).send('Access token is missing');
+      return;
+    }
+
+    // access 토큰을 사용하여 사용자 정보 가져오기
+    const userInfo = await getUserInfo(accessToken);
+    // 사용자 이메일 정보를 가져옵니다.
+    const userEmail = userInfo.email;
+
     const query = oracleDB.hourQuery();
-    const result = await executeQuery(query, { Email: email });
+    const result = await executeQuery(query, { Email: userEmail });
 
     // Convert the query result to an array
     const data = result.rows.map(row => row[0]);
@@ -159,9 +189,19 @@ app.get('/hourquery', async (req, res) => {
 // Day query handler
 app.get('/dayquery', async (req, res) => {
   try {
-    const email = 'pyh5523';
+    const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
+    if (!accessToken) {
+      res.status(400).send('Access token is missing');
+      return;
+    }
+
+    // access 토큰을 사용하여 사용자 정보 가져오기
+    const userInfo = await getUserInfo(accessToken);
+    // 사용자 이메일 정보를 가져옵니다.
+    const userEmail = userInfo.email;
+    
     const query = oracleDB.dayQuery();
-    const result = await executeQuery(query, { Email: email });
+    const result = await executeQuery(query, { Email: userEmail });
 
     // Convert the query result to an array
     const data = result.rows.map(row => row[0]);
@@ -177,9 +217,19 @@ app.get('/dayquery', async (req, res) => {
 // Month query handler
 app.get('/monthquery', async (req, res) => {
   try {
-    const email = 'pyh5523';
+    const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
+    if (!accessToken) {
+      res.status(400).send('Access token is missing');
+      return;
+    }
+
+    // access 토큰을 사용하여 사용자 정보 가져오기
+    const userInfo = await getUserInfo(accessToken);
+    // 사용자 이메일 정보를 가져옵니다.
+    const userEmail = userInfo.email;
+
     const query = oracleDB.monthQuery();
-    const result = await executeQuery(query, { Email: email });
+    const result = await executeQuery(query, { Email: userEmail });
 
     // Convert the query result to an array
     const data = result.rows.map(row => row[0]);
@@ -195,9 +245,19 @@ app.get('/monthquery', async (req, res) => {
 // Year query handler
 app.get('/yearquery', async (req, res) => {
   try {
-    const email = 'pyh5523';
+    const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
+    if (!accessToken) {
+      res.status(400).send('Access token is missing');
+      return;
+    }
+
+    // access 토큰을 사용하여 사용자 정보 가져오기
+    const userInfo = await getUserInfo(accessToken);
+    // 사용자 이메일 정보를 가져옵니다.
+    const userEmail = userInfo.email;
+
     const query = oracleDB.yearQuery();
-    const result = await executeQuery(query, { Email: email });
+    const result = await executeQuery(query, { Email: userEmail });
 
     // Convert the query result to an array
     const data = result.rows.map(row => row[0]);
@@ -213,9 +273,19 @@ app.get('/yearquery', async (req, res) => {
 // Hourly chart handler
 app.get('/hourlychartquery', async (req, res) => {
   try {
-    const email = 'pyh5523';
+    const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
+    if (!accessToken) {
+      res.status(400).send('Access token is missing');
+      return;
+    }
+
+    // access 토큰을 사용하여 사용자 정보 가져오기
+    const userInfo = await getUserInfo(accessToken);
+    // 사용자 이메일 정보를 가져옵니다.
+    const userEmail = userInfo.email;
+
     const query = oracleDB.everyHourDuringTheDayQuery();
-    const result = await executeQuery(query, { Email: email });
+    const result = await executeQuery(query, { Email: userEmail });
 
     // Convert the query result to an array
     const data = result.rows.map(row => [row[0], row[1]]);
