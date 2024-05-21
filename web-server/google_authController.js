@@ -15,7 +15,7 @@ require("dotenv").config();
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const AUTHORIZE_URI = "https://accounts.google.com/o/oauth2/v2/auth";
-const REDIRECT_URL = "http://heartrate.ddns.net/auth/login";
+const REDIRECT_URL = "http://heartrate.ddns.net/:userId";
 const RESPONSE_TYPE = "code";
 const SCOPE = "openid%20profile%20email";
 const ACCESS_TYPE = "offline";
@@ -55,7 +55,7 @@ router.get("/auth/google", (req, res) => {
 });
 
 // 사용자의 리디렉션 URL 처리
-router.get("/auth/login", async (req, res) => {
+router.get("/:userId", async (req, res) => {
   const code = req.query.code;
   if (code) {
     try {
