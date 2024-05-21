@@ -116,7 +116,9 @@ app.get('/realquery', async (req, res) => {
     const userInfo = await getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
     const userEmail = userInfo.email;
-
+    
+    console.log('User Email:', userEmail);
+    
     const query = oracleDB.realtimeQuery();
     const result = await executeQuery(query, { Email: userEmail }); // 사용자 이메일을 쿼리에 전달
 
