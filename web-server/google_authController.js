@@ -15,7 +15,7 @@ require("dotenv").config();
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const AUTHORIZE_URI = "https://accounts.google.com/o/oauth2/v2/auth";
-const REDIRECT_URL = "http://heartrate.ddns.net";
+const REDIRECT_URL = "http://heartrate.ddns.net"; // 수정된 부분
 const RESPONSE_TYPE = "code";
 const SCOPE = "openid%20profile%20email";
 const ACCESS_TYPE = "offline";
@@ -68,9 +68,8 @@ router.get("/", async (req, res) => {
       // @를 기준으로 사용자 이메일을 처리하여 @gmail.com을 제거합니다.
       const userEmailWithoutDomain = userEmail.split('@')[0];
       // 사용자 이메일 정보를 기반으로 리다이렉션 URL 생성
-      const userRedirectURL = `${REDIRECT_URL}?access_token=${accessToken}`; // 토큰을 URL 파라미터로 추가
+      res.redirect(`/${userEmailWithoutDomain}`); // 수정된 부분
       await oracleDB.selectUserlog(userEmailWithoutDomain);
-      res.redirect(userRedirectURL);
     } catch (error) {
       // 오류를 캐치하여 처리
       console.error("Error retrieving user info:", error);
