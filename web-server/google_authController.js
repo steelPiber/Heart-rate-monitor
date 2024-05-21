@@ -69,7 +69,7 @@ router.get("/", async (req, res) => {
       // @를 기준으로 사용자 이메일을 처리하여 @gmail.com을 제거합니다.
       const userEmailWithoutDomain = userEmail.split('@')[0];
       // 사용자 이메일 정보를 기반으로 리다이렉션 URL 생성
-      res.redirect(`/`); // 수정된 부분
+      res.redirect(`/${userEmailWithoutDomain}?access_token=${accessToken}`); // 수정된 부분
       await oracleDB.selectUserlog(userEmailWithoutDomain);
     } catch (error) {
       // 오류를 캐치하여 처리
