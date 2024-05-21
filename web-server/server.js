@@ -44,7 +44,7 @@ oracleDB.connectToOracleDB()
 
 
 // WebSocket 메시지 수신 시 실행
-webSocket.addEventListener('message', event =>{
+webSocket.addEventListener('message',async event =>{
     const message = event.data;
     console.log(`Received raw message: ${message}`);
 
