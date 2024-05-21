@@ -115,9 +115,7 @@ app.get('/realquery', async (req, res) => {
     // access 토큰을 사용하여 사용자 정보 가져오기
     const userInfo = await getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = userInfo.email;
-    
-    console.log('User Email:', userEmail);
+    const userEmail = 'pyh5523';
     
     const query = oracleDB.realtimeQuery();
     const result = await executeQuery(query, { Email: userEmail }); // 사용자 이메일을 쿼리에 전달
@@ -145,7 +143,7 @@ app.get('/minquery', async (req, res) => {
     // access 토큰을 사용하여 사용자 정보 가져오기
     const userInfo = await getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = userInfo.email;
+    const userEmail = 'pyh5523';
 
     const query = oracleDB.minQuery();
     const result = await executeQuery(query, { Email: userEmail });
@@ -173,7 +171,7 @@ app.get('/hourquery', async (req, res) => {
     // access 토큰을 사용하여 사용자 정보 가져오기
     const userInfo = await getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = userInfo.email;
+    const userEmail = 'pyh5523';
 
     const query = oracleDB.hourQuery();
     const result = await executeQuery(query, { Email: userEmail });
@@ -201,7 +199,7 @@ app.get('/dayquery', async (req, res) => {
     // access 토큰을 사용하여 사용자 정보 가져오기
     const userInfo = await getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = userInfo.email;
+    const userEmail = 'pyh5523';
     
     const query = oracleDB.dayQuery();
     const result = await executeQuery(query, { Email: userEmail });
@@ -229,7 +227,7 @@ app.get('/monthquery', async (req, res) => {
     // access 토큰을 사용하여 사용자 정보 가져오기
     const userInfo = await getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = userInfo.email;
+    const userEmail = 'pyh5523';
 
     const query = oracleDB.monthQuery();
     const result = await executeQuery(query, { Email: userEmail });
@@ -257,7 +255,7 @@ app.get('/yearquery', async (req, res) => {
     // access 토큰을 사용하여 사용자 정보 가져오기
     const userInfo = await getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = userInfo.email;
+    const userEmail = 'pyh5523';
 
     const query = oracleDB.yearQuery();
     const result = await executeQuery(query, { Email: userEmail });
@@ -285,7 +283,7 @@ app.get('/hourlychartquery', async (req, res) => {
     // access 토큰을 사용하여 사용자 정보 가져오기
     const userInfo = await getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = userInfo.email;
+    const userEmail = 'pyh5523';
 
     const query = oracleDB.everyHourDuringTheDayQuery();
     const result = await executeQuery(query, { Email: userEmail });
