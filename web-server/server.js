@@ -139,7 +139,6 @@ app.get('/realtime-bpm', async (req, res) => {
     res.json(data);
   } catch (err) {
     res.status(500).send('Error retrieving data');
-    console.error('데이터 검색 중 오류 발생:', err);
   }
 });
 
@@ -147,8 +146,7 @@ app.get('/realtime-bpm', async (req, res) => {
 app.get('/average-bpm', async (req, res) => {
   try {
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = 'pyh5523';
-
+    const userEmail = await getUserEmailFromToken(req);
     const query = oracleDB.minQuery();
     const result = await executeQuery(query, { Email: userEmail });
 
@@ -159,16 +157,14 @@ app.get('/average-bpm', async (req, res) => {
     res.json(data);
   } catch (err) {
     res.status(500).send('Error retrieving data');
-    console.error('데이터 검색 중 오류 발생:', err);
   }
 });
 
 // Hour query handler
 app.get('/hour-bpm', async (req, res) => {
   try {
-    // access 토큰을 사용하여 사용자 정보 가져오기
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = 'pyh5523';
+    const userEmail = await getUserEmailFromToken(req);
 
     const query = oracleDB.hourQuery();
     const result = await executeQuery(query, { Email: userEmail });
@@ -180,16 +176,14 @@ app.get('/hour-bpm', async (req, res) => {
     res.json(data);
   } catch (err) {
     res.status(500).send('Error retrieving data');
-    console.error('데이터 검색 중 오류 발생:', err);
   }
 });
 
 // Day query handler
 app.get('/day-bpm', async (req, res) => {
   try {
-    // access 토큰을 사용하여 사용자 정보 가져오기
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = 'pyh5523';
+    const userEmail = await getUserEmailFromToken(req);
     
     const query = oracleDB.dayQuery();
     const result = await executeQuery(query, { Email: userEmail });
@@ -201,16 +195,14 @@ app.get('/day-bpm', async (req, res) => {
     res.json(data);
   } catch (err) {
     res.status(500).send('Error retrieving data');
-    console.error('데이터 검색 중 오류 발생:', err);
   }
 });
 
 // Month query handler
 app.get('/monthquery', async (req, res) => {
   try {
-    // access 토큰을 사용하여 사용자 정보 가져오기
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = 'pyh5523';
+    const userEmail = await getUserEmailFromToken(req);
 
     const query = oracleDB.monthQuery();
     const result = await executeQuery(query, { Email: userEmail });
@@ -222,17 +214,14 @@ app.get('/monthquery', async (req, res) => {
     res.json(data);
   } catch (err) {
     res.status(500).send('Error retrieving data');
-    console.error('데이터 검색 중 오류 발생:', err);
   }
 });
 
 // Year query handler
 app.get('/yearquery', async (req, res) => {
   try {
-    // access 토큰을 사용하여 사용자 정보 가져오기
-
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = 'pyh5523';
+    const userEmail = await getUserEmailFromToken(req);
 
     const query = oracleDB.yearQuery();
     const result = await executeQuery(query, { Email: userEmail });
@@ -244,18 +233,14 @@ app.get('/yearquery', async (req, res) => {
     res.json(data);
   } catch (err) {
     res.status(500).send('Error retrieving data');
-    console.error('데이터 검색 중 오류 발생:', err);
   }
 });
 
 // Hourly chart handler
 app.get('/hourlychartquery', async (req, res) => {
   try {
-
-    // access 토큰을 사용하여 사용자 정보 가져오기
-
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = 'pyh5523';
+    const userEmail = await getUserEmailFromToken(req);
 
     const query = oracleDB.everyHourDuringTheDayQuery();
     const result = await executeQuery(query, { Email: userEmail });
@@ -267,7 +252,6 @@ app.get('/hourlychartquery', async (req, res) => {
     res.json(data);
   } catch (err) {
     res.status(500).send('Error retrieving data');
-    console.error('데이터 검색 중 오류 발생:', err);
   }
 });
 
