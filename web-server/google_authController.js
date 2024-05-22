@@ -56,7 +56,7 @@ router.get("/auth/google", (req, res) => {
 
 // 사용자의 리디렉션 URL 처리
 // 사용자의 리디렉션 URL 처리
-router.get("/login/:userEmailWithoutDomain", async (req, res) => {
+router.get("/login", async (req, res) => {
   const code = req.query.code;
   if (code) {
     try {
