@@ -81,7 +81,7 @@ app.get('/', (req, res) => {
 });
 app.get('/login/:userEmailWithoutDomain', (req, res) => {
     const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile('/heart-dashboard/index.html');
 });
 app.get('/min1', (req, res) => {
     res.sendFile(__dirname + '/min1.html');
