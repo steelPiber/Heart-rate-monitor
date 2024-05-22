@@ -108,7 +108,7 @@ async function executeQuery(query, params) {
 }
 
 // Realtime query handler
-app.get('/realquery', async (req, res) => {
+app.get('/realtime-bpm', async (req, res) => {
   try {
     const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
     if (!accessToken) {
@@ -136,7 +136,7 @@ app.get('/realquery', async (req, res) => {
 });
 
 // Min query handler
-app.get('/minquery', async (req, res) => {
+app.get('/average-bpm', async (req, res) => {
   try {
     const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
     if (!accessToken) {
@@ -164,7 +164,7 @@ app.get('/minquery', async (req, res) => {
 });
 
 // Hour query handler
-app.get('/hourquery', async (req, res) => {
+app.get('/hour-bpm', async (req, res) => {
   try {
     const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
     if (!accessToken) {
@@ -192,7 +192,7 @@ app.get('/hourquery', async (req, res) => {
 });
 
 // Day query handler
-app.get('/dayquery', async (req, res) => {
+app.get('/day-bpm', async (req, res) => {
   try {
     const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
     if (!accessToken) {
