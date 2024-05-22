@@ -120,9 +120,11 @@ async function executeQuery(query, params) {
 app.get('/realtime-bpm', async (req, res) => {
   try {
 
-    const accesssToken = req.cookies.accessToken;
+    const accessToken = req.cookies.accessToken;
       
-    const userEmail = 'pyh5523';
+    const userInfo = await getUserInfo(accessToken);
+    // 사용자 이메일 정보를 가져옵니다.
+    const userEmail = userInfo.email;
     
     const query = oracleDB.realtimeQuery();
     const result = await executeQuery(query, { Email: userEmail }); // 사용자 이메일을 쿼리에 전달
