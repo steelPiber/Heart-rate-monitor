@@ -14,14 +14,14 @@ const path = require('path');
 
 //  oracledb.js의 함수들 삽입 
 const oracleDB = require('./oracledb.js'); // oracledb.js 파일 경로에 따라 수정
-const google_authController = require("./google_authController.js");
+const { router: googleAuthRouter, getUserInfo } = require("./google_authController.js");
 const cookieParser = require('cookie-parser');
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(google_authController);
+app.use(googleAuthRouter);
 
 // 정적 파일 미들웨어를 사용하여 CSS, 이미지, JS 등의 정적 파일 제공
 app.use(express.static(path.join(__dirname, '/heart-dashboard')));
@@ -122,7 +122,7 @@ app.get('/realtime-bpm', async (req, res) => {
 
     const accessToken = req.cookies.accessToken;
       
-    const userInfo = await google_authController.getUserInfo(accessToken);
+    const userInfo = await getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
     const userEmail = userInfo.email;
     
