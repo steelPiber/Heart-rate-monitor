@@ -5,6 +5,7 @@ const url = require("url");
 const static = require('serve-static');
 const path = require('path');
 const oracleDB = require('./oracledb.js');
+
 router.use(express.urlencoded({extended:true}));
 router.use(express.json());
 router.use('/public', static(path.join(__dirname, 'public')));
