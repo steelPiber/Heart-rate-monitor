@@ -122,7 +122,7 @@ app.get('/realtime-bpm', async (req, res) => {
 
     const accessToken = req.cookies.accessToken;
       
-    const userInfo = await getUserInfo(accessToken);
+    const userInfo = await google_authController.getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
     const userEmail = userInfo.email;
     
