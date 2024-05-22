@@ -448,7 +448,74 @@
   <script src="./assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="./assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script src="./assets/js/plugins/chartjs.min.js"></script>
-  <script>
+<script>
+	        // 심박수 데이터 가져오기 및 업데이트 함수
+        // 1분 평균 BPM 데이터를 가져오고 렌더링하는 함수
+function fetchAndRenderData() {
+    fetch('/average-bpm')
+        .then(response => response.json())
+        .then(data => {
+            const minbpmContainer = document.getElementById('minbpmContainer');
+            minbpmContainer.innerHTML = ''; // 이전 데이터 지우기
+            data.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('list-group-item', 'data-item');
+                listItem.innerHTML = `${item[1]}`;
+
+                minbpmContainer.appendChild(listItem);
+            });
+        })
+        .catch(error => {
+            console.error('데이터 가져오기 오류:', error);
+        });
+}
+function getQueryParams() {
+      const params = {};
+      const queryString = window.location.search.slice(1);
+      const queries = queryString.split("&");
+      queries.forEach(query => {
+        const [key, value] = query.split("=");
+        params[key] = decodeURIComponent(value);
+      });
+      return params;
+    }
+
+    // API 요청 함수
+    async function fetchData(endpoint, accessToken) {
+      try {
+        const response = await fetch(endpoint, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        });
+        const data = await response.json();
+        console.log(`Data from ${endpoint}:`, data);
+      } catch (error) {
+        console.error(`Error fetching data from ${endpoint}:`, error);
+      }
+    }
+
+    // main 함수
+    async function main() {
+      const params = getQueryParams();
+      const accessToken = params.access_token;
+      if (accessToken) {
+        const endpoints = [
+          '/realtime-bpm',
+          '/average-bpm',
+          '/hour-bpm',
+          '/day-bpm'
+        ];
+        endpoints.forEach(endpoint => fetchData(endpoint, accessToken));
+      } else {
+        console.error("Access token is missing");
+      }
+    }
+
+    // main 함수 호출
+    main();
+</script>
+<script>
         // 차트 업데이트 함수
  function updateChart() {
             fetch('/hourly-chart')
@@ -576,75 +643,6 @@
     </script>
 
 <script>
-
-	
-  
-        // 심박수 데이터 가져오기 및 업데이트 함수
-        // 1분 평균 BPM 데이터를 가져오고 렌더링하는 함수
-function fetchAndRenderData() {
-    fetch('/average-bpm')
-        .then(response => response.json())
-        .then(data => {
-            const minbpmContainer = document.getElementById('minbpmContainer');
-            minbpmContainer.innerHTML = ''; // 이전 데이터 지우기
-            data.forEach(item => {
-                const listItem = document.createElement('li');
-                listItem.classList.add('list-group-item', 'data-item');
-                listItem.innerHTML = `${item[1]}`;
-
-                minbpmContainer.appendChild(listItem);
-            });
-        })
-        .catch(error => {
-            console.error('데이터 가져오기 오류:', error);
-        });
-}
-function getQueryParams() {
-      const params = {};
-      const queryString = window.location.search.slice(1);
-      const queries = queryString.split("&");
-      queries.forEach(query => {
-        const [key, value] = query.split("=");
-        params[key] = decodeURIComponent(value);
-      });
-      return params;
-    }
-
-    // API 요청 함수
-    async function fetchData(endpoint, accessToken) {
-      try {
-        const response = await fetch(endpoint, {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`
-          }
-        });
-        const data = await response.json();
-        console.log(`Data from ${endpoint}:`, data);
-      } catch (error) {
-        console.error(`Error fetching data from ${endpoint}:`, error);
-      }
-    }
-
-    // main 함수
-    async function main() {
-      const params = getQueryParams();
-      const accessToken = params.access_token;
-      if (accessToken) {
-        const endpoints = [
-          '/realtime-bpm',
-          '/average-bpm',
-          '/hour-bpm',
-          '/day-bpm'
-        ];
-        endpoints.forEach(endpoint => fetchData(endpoint, accessToken));
-      } else {
-        console.error("Access token is missing");
-      }
-    }
-
-    // main 함수 호출
-    main();
-
 
 // 시간당 평균 BPM 데이터를 가져오고 렌더링하는 함수
 function fetchAndRenderHourlyData() {
