@@ -85,6 +85,7 @@ app.get('/login/:userEmailWithoutDomain', (req, res) => {
     const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
     res.sendFile(__dirname + '/heart-dashboard/index.html');
     const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
+    console.log(accessToken);
     if (!accessToken) {
       res.status(400).send('Access token is missing');
       return;
