@@ -139,10 +139,7 @@ app.get('/realtime-bpm', async (req, res) => {
 app.get('/average-bpm', async (req, res) => {
   try {
     const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
-    if (!accessToken) {
-      res.status(400).send('Access token is missing');
-      return;
-    }
+    
 
     // access 토큰을 사용하여 사용자 정보 가져오기
     const userInfo = await getUserInfo(accessToken);
