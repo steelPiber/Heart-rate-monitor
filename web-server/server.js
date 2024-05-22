@@ -15,10 +15,12 @@ const path = require('path');
 //  oracledb.js의 함수들 삽입 
 const oracleDB = require('./oracledb.js'); // oracledb.js 파일 경로에 따라 수정
 const google_authController = require("./google_authController.js");
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(google_authController);
 
 // 정적 파일 미들웨어를 사용하여 CSS, 이미지, JS 등의 정적 파일 제공
@@ -82,6 +84,13 @@ app.get('/', (req, res) => {
 app.get('/login/:userEmailWithoutDomain', (req, res) => {
     const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
     res.sendFile(__dirname + '/heart-dashboard/index.html');
+    const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
+    if (!accessToken) {
+      res.status(400).send('Access token is missing');
+      return;
+    }
+    res.cookie('accessToken', accessToken);
+    
 });
 app.get('/min1', (req, res) => {
     res.sendFile(__dirname + '/min1.html');
@@ -110,15 +119,9 @@ async function executeQuery(query, params) {
 // Realtime query handler
 app.get('/realtime-bpm', async (req, res) => {
   try {
-    const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
-    if (!accessToken) {
-      res.status(400).send('Access token is missing');
-      return;
-    }
 
-    // access 토큰을 사용하여 사용자 정보 가져오기
-    const userInfo = await getUserInfo(accessToken);
-    // 사용자 이메일 정보를 가져옵니다.
+    const accesssToken = req.cookies.accessToken;
+      
     const userEmail = 'pyh5523';
     
     const query = oracleDB.realtimeQuery();
@@ -158,12 +161,6 @@ app.get('/average-bpm', async (req, res) => {
 // Hour query handler
 app.get('/hour-bpm', async (req, res) => {
   try {
-    const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
-    if (!accessToken) {
-      res.status(400).send('Access token is missing');
-      return;
-    }
-
     // access 토큰을 사용하여 사용자 정보 가져오기
     const userInfo = await getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
@@ -186,12 +183,6 @@ app.get('/hour-bpm', async (req, res) => {
 // Day query handler
 app.get('/day-bpm', async (req, res) => {
   try {
-    const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
-    if (!accessToken) {
-      res.status(400).send('Access token is missing');
-      return;
-    }
-
     // access 토큰을 사용하여 사용자 정보 가져오기
     const userInfo = await getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
@@ -214,12 +205,6 @@ app.get('/day-bpm', async (req, res) => {
 // Month query handler
 app.get('/monthquery', async (req, res) => {
   try {
-    const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
-    if (!accessToken) {
-      res.status(400).send('Access token is missing');
-      return;
-    }
-
     // access 토큰을 사용하여 사용자 정보 가져오기
     const userInfo = await getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
@@ -242,12 +227,6 @@ app.get('/monthquery', async (req, res) => {
 // Year query handler
 app.get('/yearquery', async (req, res) => {
   try {
-    const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
-    if (!accessToken) {
-      res.status(400).send('Access token is missing');
-      return;
-    }
-
     // access 토큰을 사용하여 사용자 정보 가져오기
     const userInfo = await getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
@@ -270,11 +249,6 @@ app.get('/yearquery', async (req, res) => {
 // Hourly chart handler
 app.get('/hourlychartquery', async (req, res) => {
   try {
-    const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
-    if (!accessToken) {
-      res.status(400).send('Access token is missing');
-      return;
-    }
 
     // access 토큰을 사용하여 사용자 정보 가져오기
     const userInfo = await getUserInfo(accessToken);
