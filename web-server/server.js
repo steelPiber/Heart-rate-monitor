@@ -165,7 +165,6 @@ app.get('/average-bpm', async (req, res) => {
 app.get('/hour-bpm', async (req, res) => {
   try {
     // access 토큰을 사용하여 사용자 정보 가져오기
-    const userInfo = await getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
     const userEmail = 'pyh5523';
 
@@ -187,7 +186,6 @@ app.get('/hour-bpm', async (req, res) => {
 app.get('/day-bpm', async (req, res) => {
   try {
     // access 토큰을 사용하여 사용자 정보 가져오기
-    const userInfo = await getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
     const userEmail = 'pyh5523';
     
@@ -209,7 +207,6 @@ app.get('/day-bpm', async (req, res) => {
 app.get('/monthquery', async (req, res) => {
   try {
     // access 토큰을 사용하여 사용자 정보 가져오기
-    const userInfo = await getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
     const userEmail = 'pyh5523';
 
@@ -231,7 +228,7 @@ app.get('/monthquery', async (req, res) => {
 app.get('/yearquery', async (req, res) => {
   try {
     // access 토큰을 사용하여 사용자 정보 가져오기
-    const userInfo = await getUserInfo(accessToken);
+
     // 사용자 이메일 정보를 가져옵니다.
     const userEmail = 'pyh5523';
 
@@ -254,7 +251,7 @@ app.get('/hourlychartquery', async (req, res) => {
   try {
 
     // access 토큰을 사용하여 사용자 정보 가져오기
-    const userInfo = await getUserInfo(accessToken);
+
     // 사용자 이메일 정보를 가져옵니다.
     const userEmail = 'pyh5523';
 
