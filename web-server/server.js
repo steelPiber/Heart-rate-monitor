@@ -78,7 +78,6 @@ expressWs(app, server);
 
 // Serve HTML page at port 8081
 app.get('/', (req, res) => {
-    const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
     res.sendFile(__dirname + '/index.html');
 });
 app.get('/login/:userEmailWithoutDomain', (req, res) => {
@@ -104,6 +103,7 @@ app.get('/hourly', (req, res) => {
 ////////////////////////////////////////////////////////////////////////////
 
 
+
 async function executeQuery(query, params) {
   const connection = await oracleDB.connectToOracleDB();
   try {
@@ -117,23 +117,25 @@ async function executeQuery(query, params) {
   }
 }
 
+async function getUserEmailFromToken(req) {
+  const accessToken = req.cookies.accessToken;
+  if (!accessToken) {
+    throw new Error('Access token is missing');
+  }
+  const userInfo = await getUserInfo(accessToken);
+  return userInfo.email.split('@')[0];
+}
+
 // Realtime query handler
 app.get('/realtime-bpm', async (req, res) => {
   try {
+    const userEmail = await getUserEmailFromToken(req);
+    console.log('realtime-bpm : ', userEmail);
 
-    const accessToken = req.cookies.accessToken;
-    cosole.log('realtime-bpm : ', accessToken);
-    //const userInfo = await getUserInfo(accessToken);
-    // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = 'pyh5523';
-    
     const query = oracleDB.realtimeQuery();
-    const result = await executeQuery(query, { Email: userEmail }); // 사용자 이메일을 쿼리에 전달
+    const result = await executeQuery(query, { Email: userEmail });
 
-    // Convert the query result to an array
     const data = result.rows.map(row => row[0]);
-
-    // Send the data as JSON
     res.json(data);
   } catch (err) {
     res.status(500).send('Error retrieving data');
