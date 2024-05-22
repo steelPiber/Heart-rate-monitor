@@ -85,7 +85,7 @@ app.get('/login/:userEmailWithoutDomain', (req, res) => {
     const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
     res.sendFile(__dirname + '/heart-dashboard/index.html');
     const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
-    console.log(accessToken);
+    console.log('로그인 토큰', accessToken);
     if (!accessToken) {
       res.status(400).send('Access token is missing');
       return;
@@ -122,10 +122,10 @@ app.get('/realtime-bpm', async (req, res) => {
   try {
 
     const accessToken = req.cookies.accessToken;
-      
-    const userInfo = await getUserInfo(accessToken);
+    cosole.log('realtime-bpm : ', accessToken);
+    //const userInfo = await getUserInfo(accessToken);
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = userInfo.email;
+    const userEmail = 'pyh5523';
     
     const query = oracleDB.realtimeQuery();
     const result = await executeQuery(query, { Email: userEmail }); // 사용자 이메일을 쿼리에 전달
