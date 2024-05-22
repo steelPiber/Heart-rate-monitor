@@ -75,7 +75,11 @@ webSocket.addEventListener('message',async event =>{
 expressWs(app, server);
 
 // Serve HTML page at port 8081
-app.get('/:userEmailWithoutDomain', (req, res) => {
+app.get('/', (req, res) => {
+    const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
+    res.sendFile(__dirname + '/heart-dashboard/index.html');
+});
+app.get('/login/:userEmailWithoutDomain', (req, res) => {
     const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
     res.sendFile(__dirname + '/heart-dashboard/index.html');
 });
