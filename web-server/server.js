@@ -129,8 +129,8 @@ async function getUserEmailFromToken(req) {
 // Realtime query handler
 app.get('/realtime-bpm', async (req, res) => {
   try {
-    const userEmail = await getUserEmailFromToken(req);
-    console.log('realtime-bpm : ', userEmail);
+    //const userEmail = await getUserEmailFromToken(req);
+    const userEmail = 'bbg999123';
 
     const query = oracleDB.realtimeQuery();
     const result = await executeQuery(query, { Email: userEmail });
@@ -146,7 +146,8 @@ app.get('/realtime-bpm', async (req, res) => {
 app.get('/average-bpm', async (req, res) => {
   try {
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = await getUserEmailFromToken(req);
+     //const userEmail = await getUserEmailFromToken(req);
+    const userEmail = 'bbg999123';
     const query = oracleDB.minQuery();
     const result = await executeQuery(query, { Email: userEmail });
 
@@ -164,7 +165,8 @@ app.get('/average-bpm', async (req, res) => {
 app.get('/hour-bpm', async (req, res) => {
   try {
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = await getUserEmailFromToken(req);
+    //const userEmail = await getUserEmailFromToken(req);
+    const userEmail = 'bbg999123';
 
     const query = oracleDB.hourQuery();
     const result = await executeQuery(query, { Email: userEmail });
@@ -183,7 +185,8 @@ app.get('/hour-bpm', async (req, res) => {
 app.get('/day-bpm', async (req, res) => {
   try {
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = await getUserEmailFromToken(req);
+    //const userEmail = await getUserEmailFromToken(req);
+    const userEmail = 'bbg999123';
     
     const query = oracleDB.dayQuery();
     const result = await executeQuery(query, { Email: userEmail });
