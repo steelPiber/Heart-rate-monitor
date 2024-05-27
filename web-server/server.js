@@ -78,12 +78,12 @@ webSocket.addEventListener('message',async event =>{
 app.post("/data", async (req, res) => {
   try {
     console.log("Received request body:", req.body); // 요청 본문 전체를 출력하여 디버그
-    const { bpm, tag, timestamp, email } = req.body;
+    const { bpm, tag, email } = req.body;
     console.log(
-      `Received data - BPM: ${bpm}, Tag: ${tag}, Timestamp: ${timestamp}, Email: ${email}`,
+      `Received data - BPM: ${bpm}, Tag: ${tag}, Email: ${email}`,
     );
     
-    const result = await oracleDB.insertBPMData(bpm, timestamp, email, tag);
+    const result = await oracleDB.insertBPMData(bpm, email, tag);
     console.log('Successfully inserted BPM data into Oracle DB');
     res.sendStatus(200);
   } catch (error) {
