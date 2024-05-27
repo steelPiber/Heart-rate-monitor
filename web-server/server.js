@@ -11,6 +11,8 @@ const express = require('express');
 const static = require('serve-static');
 const expressWs = require('express-ws');
 const path = require('path');
+const bodyParser = require("body-parser");
+const cors = require("cors");
 
 //  oracledb.js의 함수들 삽입 
 const oracleDB = require('./oracledb.js'); // oracledb.js 파일 경로에 따라 수정
@@ -19,6 +21,8 @@ const cookieParser = require('cookie-parser');
 
 const app = express();
 
+app.use(cors());
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(cookieParser());
 app.use(googleAuthRouter);
@@ -71,7 +75,26 @@ webSocket.addEventListener('message',async event =>{
     }
 });
 
+app.post("/data", async (req, res) => {
+  try {
+    console.log("Received request body:", req.body); // 요청 본문 전체를 출력하여 디버그
+    const { bpm, tag, timestamp, email } = req.body;
+    console.log(
+      `Received data - BPM: ${bpm}, Tag: ${tag}, Timestamp: ${timestamp}, Email: ${email}`,
+    );
+    
+    const result = await oracleDB.insertBPMData(bpm, timestamp, email, tag);
+    console.log('Successfully inserted BPM data into Oracle DB');
+    res.sendStatus(200);
+  } catch (error) {
+    console.error('Failed to insert BPM data into Oracle DB:', error);
+    res.sendStatus(500);
+  }
+});
 
+app.listen(PORT, () => {
+  console.log(`Server is running on http://202.31.243.44:${PORT}`);
+});
 
 
 expressWs(app, server);
