@@ -92,11 +92,6 @@ app.post("/data", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://202.31.243.44:${PORT}`);
-});
-
-
 expressWs(app, server);
 
 // Serve HTML page at port 8081
