@@ -49,7 +49,7 @@ app.post("/data", (req, res) => {
     );
     
     try {
-    const result = await oracleDB.insertBPMData(bpm, email, tag);
+    const result = oracleDB.insertBPMData(bpm, email, tag);
     console.log('Successfully inserted BPM data into Oracle DB');
     res.sendStatus(200);
   } catch (error) {
