@@ -65,7 +65,7 @@ router.get('/nginx-status', (req, res) => {
     </head>
     <body>
       <div class="status-container">
-        <div class="status-text">${cachedStatus}</div>
+        <div class="status-text">Nginx status ${cachedStatus}</div>
         <div class="status-indicator"></div>
       </div>
     </body>
