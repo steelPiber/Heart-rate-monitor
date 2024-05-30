@@ -31,7 +31,7 @@ async function insertBPMData(bpm, email, tag) {
   try {
     const insertSQL = 'INSERT INTO bpmdata(IDX, BPM, TIME, EMAIL, TAG) VALUES (BPM_SEQ.NEXTVAL, :bpm, CURRENT_TIMESTAMP, :email, :tag)';
     const bindParams = {
-      bpm: bpmValue,
+      bpm: bpm,
       email: email,
       tag: tag,
     };
