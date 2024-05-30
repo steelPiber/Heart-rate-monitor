@@ -294,12 +294,8 @@ function everyHourDuringTheDayQuery() {
           ORDER BY hour`;
 }
 
-
-
-module.exports = {
-  connectToOracleDB,
-  insertBPMData,
-  checkUserEmailExists,
+/*
+checkUserEmailExists,
   checkUserNickExists,	
   checkMailAuth,
   insertUser,
@@ -307,6 +303,11 @@ module.exports = {
   insertUserErrlog,
   selectUser,
   selectUserlog,
+*/
+
+module.exports = {
+  connectToOracleDB,
+  insertBPMData,
   selectUserErrlog,
   realtimeQuery,
   minQuery,
