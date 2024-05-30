@@ -29,7 +29,7 @@ async function insertBPMData(bpm, email, tag) {
   const connection = await connectToOracleDB();
 
   try {
-    const insertSQL = 'INSERT INTO bpmdata(ID, BPM, TIME, EMAIL, TAG) VALUES (BPM_SEQ.NEXTVAL, :bpm, CURRENT_TIMESTAMP, :email, :tag)';
+    const insertSQL = 'INSERT INTO bpmdata(IDX, BPM, TIME, EMAIL, TAG) VALUES (BPM_SEQ.NEXTVAL, :bpm, CURRENT_TIMESTAMP, :email, :tag)';
     const bindParams = {
       bpm: bpmValue,
       email: email,
