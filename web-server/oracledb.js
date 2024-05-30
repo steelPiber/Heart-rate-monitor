@@ -4,7 +4,7 @@ console.log(`0.1 : oracledb.js 모듈 분리`);
 
 // oracledb에 모듈 추가
 const oracledb = require('oracledb');
-const nodemailer = require('./mail_auth.js');
+//const nodemailer = require('./mail_auth.js');
 
 // Oracle DB 연결 구성
 const dbConfig = {
@@ -49,7 +49,7 @@ async function insertBPMData(bpm, email, tag) {
 }
 
 //회원가입시 ID중복 검사 및 인증 메일 발송
-async function checkUserEmailExists(userEmail) {
+/*async function checkUserEmailExists(userEmail) {
     const connection = await connectToOracleDB();
     try {
         const selectquery = 'SELECT COUNT(*) AS count FROM USER_TABLE WHERE EMAIL = :Email';
@@ -80,9 +80,9 @@ async function checkUserEmailExists(userEmail) {
     } finally {
         await connection.close();
     }
-}
+}*/
 //mail_auth_code 확인 검사
-async function checkMailAuth(paramEmail, paramauth_code){
+/*async function checkMailAuth(paramEmail, paramauth_code){
     const connection = await connectToOracleDB();
     try {
         const query = 'SELECT * FROM ( SELECT IDX, USER_EMAIL_ID, AUTH_DATE, AUTH_CODE, RANK() OVER (PARTITION BY USER_EMAIL_ID ORDER BY IDX DESC) AS RNK FROM MAIL_AUTH_CODE WHERE USER_EMAIL_ID = :userEmail ) WHERE RNK = 1 AND AUTH_CODE = :auth_code';
@@ -99,9 +99,9 @@ async function checkMailAuth(paramEmail, paramauth_code){
     } finally {
         await connection.close();
     }
-}
+}*/
 //회원가입시 user의 닉네임 중복검사
-async function checkUserNickExists(userNick) {
+/*async function checkUserNickExists(userNick) {
     const connection = await connectToOracleDB();
     try {
         const query = 'SELECT COUNT(*) AS count FROM USER_TABLE WHERE NAME = :Nick';
@@ -116,8 +116,8 @@ async function checkUserNickExists(userNick) {
         await connection.close();
     }
 }
-
-async function insertUserlog(paramEmail, paramNickname) {
+*/
+/*async function insertUserlog(paramEmail, paramNickname) {
     const connection = await connectToOracleDB();
     try {
         const insertlogSQL = `INSERT INTO sign_up_log_access (idx, sign_up_date, user_email_id, user_name) VALUES (sign_up_idx_log_access_seq.nextval, SYSTIMESTAMP, :userEmail, :username)`;
@@ -137,7 +137,8 @@ async function insertUserlog(paramEmail, paramNickname) {
         }
     }
 }
-async function insertUserErrlog(paramEmail, paramNickname){
+*/
+/*async function insertUserErrlog(paramEmail, paramNickname){
 	const connection = await connectToOracleDB();
 
 	try {
@@ -158,9 +159,9 @@ async function insertUserErrlog(paramEmail, paramNickname){
         }
     }
 }
-
+*/
 // USER데이터를 Oracle DB에 삽입
-async function insertUser(paramEmail, paramname, paramNickname, paramPw) {
+/*async function insertUser(paramEmail, paramname, paramNickname, paramPw) {
     const connection = await connectToOracleDB();
     try {
         const insertSQL = `INSERT INTO USER_TABLE(EMAIL, NAME, USERNAME, PASSWORD) VALUES (:userEmail, :userRealname, :username, :userPassword)`;
@@ -181,9 +182,9 @@ async function insertUser(paramEmail, paramname, paramNickname, paramPw) {
             console.error('Error closing the connection:', closeError);
         }
     }
-}
+}*/
 // 로그인 처리 함수
-async function selectUser(paramEmail, paramPw){
+/*async function selectUser(paramEmail, paramPw){
     const connection = await connectToOracleDB();
     try{
     	const selectSQL = 'SELECT COUNT(*) AS count FROM USER_TABLE WHERE EMAIL = :userEmail AND PASSWORD = :userPassword';
@@ -198,7 +199,7 @@ async function selectUser(paramEmail, paramPw){
     } finally {
         await connection.close();
     }
-}
+}*/
 async function selectUserlog(paramEmail){
      const connection = await connectToOracleDB();
      try {
