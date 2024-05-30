@@ -5,7 +5,7 @@ console.log(`0.1 : 오라클 db 접속 및 포트 개선`);
 console.log(`VERSION_0.2_12.01`);
 console.log('0.2 : 1분당 평균심박수를 JSON형태로 응답');
 
-const WebSocket = require('ws');
+//const WebSocket = require('ws');
 const http = require('http');
 const express = require('express');
 const static = require('serve-static');
@@ -36,7 +36,7 @@ const PORT_HTTP = 8081;
 const PORT_WS = 13389;
 
 
-const webSocket = new WebSocket('ws://127.0.0.1:13389');
+//const webSocket = new WebSocket('ws://127.0.0.1:13389');
 
 // Oracle DB 연결 확인
 oracleDB.connectToOracleDB()
@@ -52,6 +52,7 @@ oracleDB.connectToOracleDB()
 
 
 // WebSocket 메시지 수신 시 실행
+/*
 webSocket.addEventListener('message',async event =>{
     const message = event.data;
     console.log(`Received raw message: ${message}`);
@@ -76,7 +77,7 @@ webSocket.addEventListener('message',async event =>{
         console.error('Message does not contain valid BPM');
     }
 });
-
+*/
 app.post("/data", async (req, res) => {
   try {
     console.log("Received request body:", req.body); // 요청 본문 전체를 출력하여 디버그
@@ -94,7 +95,7 @@ app.post("/data", async (req, res) => {
   }
 });
 
-expressWs(app, server);
+//expressWs(app, server);
 
 // Serve HTML page at port 8081
 app.get('/', (req, res) => {
@@ -271,9 +272,9 @@ app.get('/hourlychartquery', async (req, res) => {
 
 
 // Create a WebSocket server at port 13389
-const wss = new WebSocket.Server({ noServer: true });
+//const wss = new WebSocket.Server({ noServer: true });
 
-
+/*
 // WebSocket server logic
 wss.on('connection', ws => {
     console.log('WebSocket client connected');
@@ -298,16 +299,17 @@ wss.on('connection', ws => {
         console.log('WebSocket client disconnected');
     });
 });
-
+*/
+/*
 // Attach the WebSocket server to the HTTP server
 server.on('upgrade', (request, socket, head) => {
     wss.handleUpgrade(request, socket, head, ws => {
         wss.emit('connection', ws, request);
     });
 });
-
+*/
 // Start the HTTP server on port 8081
 server.listen(PORT_HTTP, () => {
     console.log(`HTTP server is running on port ${PORT_HTTP}`);
-    console.log(`WebSocket server is running on port ${PORT_WS}`);
+    console.log(`server is running on port ${PORT_WS}`);
 });
