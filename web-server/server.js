@@ -8,7 +8,6 @@ console.log('0.2 : 1분당 평균심박수를 JSON형태로 응답');
 const http = require('http');
 const express = require('express');
 const static = require('serve-static');
-const expressWs = require('express-ws');
 const path = require('path');
 const controltower = require("./controltower.js");
 
@@ -49,9 +48,14 @@ app.post("/data", (req, res) => {
       `Received data - BPM: ${bpm}, Tag: ${tag}, Email: ${email}`,
     );
     
-    const result = oracleDB.insertBPMData(bpm, email, tag);
+    try {
+    const result = await oracleDB.insertBPMData(bpm, email, tag);
     console.log('Successfully inserted BPM data into Oracle DB');
     res.sendStatus(200);
+  } catch (error) {
+    console.error('Error inserting BPM data into Oracle DB:', error);
+    res.sendStatus(500);
+  }
 });
 
 
