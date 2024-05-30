@@ -13,7 +13,7 @@ const expressWs = require('express-ws');
 const path = require('path');
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const top = require("./top.js");
+const log = require("./log.js");
 
 //  oracledb.js의 함수들 삽입 
 const oracleDB = require('./oracledb.js'); // oracledb.js 파일 경로에 따라 수정
