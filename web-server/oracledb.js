@@ -10,7 +10,7 @@ const nodemailer = require('./mail_auth.js');
 const dbConfig = {
   user: 'piber',
   password: 'wjsansrk',
-  connectString: '202.31.243.45:1521/ORA21'
+  connectString: '202.31.243.44:1521/ORA21APEX'
 };
 
 //Oracle DB 연결확인
