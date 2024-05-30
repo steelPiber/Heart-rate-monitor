@@ -2,21 +2,22 @@ const { spawn } = require('child_process');
 const express = require("express");
 const router = express.Router();
 
-router.get('/top', (req, res) => {
-  const top = spawn('top', ['-b', '-n', '1']);
+router.get('/nginx-status', (req, res) => {
+  const status = spawn('systemctl', ['status', 'nginx']);
 
-  top.stdout.on('data', (data) => {
-    res.write(data);
+  // 명령어의 출력을 실시간으로 읽어오기
+  let output = '';
+  status.stdout.on('data', (data) => {
+    output += data.toString();
   });
 
-  top.stderr.on('data', (data) => {
-    console.error(`stderr: ${data}`);
-    res.write(`stderr: ${data}`);
+  status.stderr.on('data', (data) => {
+    output += data.toString();
   });
 
-  top.on('close', (code) => {
+  status.on('close', (code) => {
     console.log(`child process exited with code ${code}`);
-    res.end();
+    res.send(`<pre>${output}</pre>`);
   });
 });
 module.exports = router;
