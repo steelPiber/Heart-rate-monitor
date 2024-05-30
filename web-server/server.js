@@ -41,7 +41,7 @@ oracleDB.connectToOracleDB()
     console.error('Oracle DB 연결 실패:', error);
   });
 
-app.post("/data", (req, res) => {
+app.post("/data", async (req, res) => {
     console.log("Received request body:", req.body); // 요청 본문 전체를 출력하여 디버그
     const { bpm, tag, email } = req.body;
     console.log(
@@ -49,7 +49,7 @@ app.post("/data", (req, res) => {
     );
     
     try {
-    const result = oracleDB.insertBPMData(bpm, email, tag);
+    const result = await oracleDB.insertBPMData(bpm, email, tag);
     console.log('Successfully inserted BPM data into Oracle DB');
     res.sendStatus(200);
   } catch (error) {
