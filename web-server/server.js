@@ -29,7 +29,7 @@ app.use(controltower);
 app.use(express.static(path.join(__dirname, '/heart-dashboard')));
 const server = http.createServer(app);
 const PORT_HTTP = 8081;
-const PORT_WS = 13389;
+const PORT = 13389;
 
 
 //const webSocket = new WebSocket('ws://127.0.0.1:13389');
@@ -307,5 +307,5 @@ server.on('upgrade', (request, socket, head) => {
 // Start the HTTP server on port 8081
 server.listen(PORT_HTTP, () => {
     console.log(`HTTP server is running on port ${PORT_HTTP}`);
-    console.log(`server is running on port ${PORT_WS}`);
+    console.log(`server is running on port ${PORT}`);
 });
