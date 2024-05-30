@@ -11,8 +11,6 @@ const express = require('express');
 const static = require('serve-static');
 const expressWs = require('express-ws');
 const path = require('path');
-const bodyParser = require("body-parser");
-const cors = require("cors");
 const controltower = require("./controltower.js");
 
 //  oracledb.js의 함수들 삽입 
@@ -22,8 +20,6 @@ const cookieParser = require('cookie-parser');
 
 const app = express();
 
-app.use(cors());
-app.use(bodyParser.json());
 app.use(express.json());
 app.use(cookieParser());
 app.use(googleAuthRouter);
