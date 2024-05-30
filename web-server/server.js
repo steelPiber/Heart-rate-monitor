@@ -47,9 +47,9 @@ app.post("/data", async (req, res) => {
     console.log(
       `Received data - BPM: ${bpm}, Tag: ${tag}, Email: ${email}`,
     );
-    
+    const EmailWithoutDomain = email.split('@')[0];
     try {
-    const result = await oracleDB.insertBPMData(bpm, email, tag);
+    const result = await oracleDB.insertBPMData(bpm, EmailWithoutDomain, tag);
     console.log('Successfully inserted BPM data into Oracle DB');
     res.sendStatus(200);
   } catch (error) {
