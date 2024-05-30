@@ -17,7 +17,9 @@ router.get('/nginx-status', (req, res) => {
 
   status.on('close', (code) => {
     console.log(`child process exited with code ${code}`);
-    res.send(`<pre>${output}</pre>`);
+    // 'Active:'로 시작하는 행을 추출
+    const activeLine = output.split('\n').find(line => line.trim().startsWith('Active:'));
+    res.send(`<pre>${activeLine}</pre>`);
   });
 });
 module.exports = router;
