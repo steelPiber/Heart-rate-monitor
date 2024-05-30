@@ -56,7 +56,7 @@ checkNginxStatus();
 setInterval(checkOracleStatus, 10000); // 10초마다 상태 확인
 setInterval(checkNginxStatus, 10000);  // 10초마다 상태 확인
 
-router.get('/service-status', (req, res) => {
+router.get('/control', (req, res) => {
   const html = `
     <!DOCTYPE html>
     <html lang="en">
