@@ -5,6 +5,7 @@ const oracleDB = require('./oracledb.js');
 const fs = require('fs');
 const chokidar = require('chokidar');
 
+let unauthorizedLogs = [];
 let oracleStatus = 'Status not checked yet';
 let oracleColor = 'grey';
 
@@ -14,16 +15,23 @@ let nginxColor = 'grey';
 // 로그 파일 경로
 const logFilePath = '/var/log/auth.log';
 
+const allowedUsers = ['piber', 'root'];
+
 // 새로운 로그 항목 처리 함수
 function handleLog(log) {
-  const loginRegex = /Accepted\s(\S+)\sfor\s(\S+)\sfrom\s([\d.]+)\sport\s(\d+)/;
+  const loginRegex = /Accepted\s(\S+)\sfor\s(\S+)\sfrom\s([\d.]+)\sport\s(\d+)\s.*\s\d{4}-(\d{2}-\d{2})T(\d{2}):(\d{2}):\d{2}/;
   const match = log.match(loginRegex);
   
   if (match) {
     const user = match[2];
+    const ip = match[3];
+    const port = match[4];
+    const monthAndDay = match[5];
+    const hour = match[6];
+    const minute = match[7];
     if (!allowedUsers.includes(user)) {
-      console.log(`Unauthorized login detected: ${user}`);
-      sendAlert(user, match[3]);
+      console.log(`Unauthorized login detected from IP: ${ip}, user: ${user}, date: ${monthAndDay}, time: ${hour}:${minute}, port: ${port}`);
+      unauthorizedLogs.push({ user, ip, port, monthAndDay, hour, minute });
     }
   }
 }
@@ -91,7 +99,6 @@ checkOracleStatus();
 checkNginxStatus();
 setInterval(checkOracleStatus, 10000); // 10초마다 상태 확인
 setInterval(checkNginxStatus, 10000);  // 10초마다 상태 확인
-
 router.get('/control', (req, res) => {
   const html = `
     <!DOCTYPE html>
