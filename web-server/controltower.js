@@ -19,7 +19,7 @@ const allowedUsers = ['piber', 'root'];
 
 // 새로운 로그 항목 처리 함수
 function handleLog(log) {
-  const loginRegex = /Accepted\s(\S+)\sfor\s(\S+)\sfrom\s([\d.]+)\sport\s(\d+)\s.*\s\d{4}-(\d{2}-\d{2})T(\d{2}):(\d{2}):\d{2}/;
+  const loginRegex = /Accepted\s(\S+)\sfor\s(\S+)\sfrom\s([\d.]+)\sport\s(\d+)\s.*\s\d{4}-(\d{2}-\d{2})T(\d{2}):(\d{2}):\d{2}\.\d+\+\d{2}:\d{2}/;
   const match = log.match(loginRegex);
   
   if (match) {
