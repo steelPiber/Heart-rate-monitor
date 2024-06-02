@@ -2,6 +2,8 @@ const { spawn } = require('child_process');
 const express = require('express');
 const router = express.Router();
 const oracleDB = require('./oracledb.js');
+const fs = require('fs');
+const chokidar = require('chokidar');
 
 let oracleStatus = 'Status not checked yet';
 let oracleColor = 'grey';
@@ -9,6 +11,23 @@ let oracleColor = 'grey';
 let nginxStatus = 'Status not checked yet';
 let nginxColor = 'grey';
 
+// 로그 파일 경로
+const logFilePath = '/var/log/auth.log';
+
+// 새로운 로그 항목 처리 함수
+function handleLog(log) {
+  const loginRegex = /Accepted\s(\S+)\sfor\s(\S+)\sfrom\s([\d.]+)\sport\s(\d+)/;
+  const match = log.match(loginRegex);
+  
+  if (match) {
+    const user = match[2];
+    if (!allowedUsers.includes(user)) {
+      console.log(`Unauthorized login detected: ${user}`);
+      sendAlert(user, match[3]);
+    }
+  }
+}
+//oracledb status 확인
 function checkOracleStatus() {
   oracleDB.connectToOracleDB()
     .then(connection => {
@@ -22,7 +41,7 @@ function checkOracleStatus() {
       oracleColor = 'red';
     });
 }
-
+// Nginx status 확인
 function checkNginxStatus() {
   const status = spawn('systemctl', ['status', 'nginx']);
 
@@ -49,6 +68,23 @@ function checkNginxStatus() {
     }
   });
 }
+
+// 로그 파일 모니터링
+const watcher = chokidar.watch(logFilePath, {
+  persistent: true,
+  usePolling: true,
+  interval: 1000
+});
+
+watcher.on('change', path => {
+  fs.readFile(logFilePath, 'utf8', (err, data) => {
+    if (err) {
+      return console.log(err);
+    }
+    const logs = data.split('\n');
+    handleLog(logs[logs.length - 2]);
+  });
+});
 
 // 처음 서버가 시작할 때 상태를 확인하고 일정 시간마다 상태를 확인하도록 설정
 checkOracleStatus();
@@ -91,6 +127,22 @@ router.get('/control', (req, res) => {
       <div class="status-container">
         <div class="status-text">OracleDB status: ${oracleStatus}</div>
         <div class="status-indicator" style="background-color: ${oracleColor};"></div>
+      </div>
+
+      <!-- 불법 접속 기록을 표시하는 섹션 -->
+      <div class="unauthorized-access">
+        <h2>Unauthorized Access Attempts:</h2>
+        <ul>
+          ${unauthorizedLogs.map(log => `
+            <li>
+              <b>User:</b> ${log.user}, 
+              <b>IP:</b> ${log.ip}, 
+              <b>Port:</b> ${log.port}, 
+              <b>Date:</b> ${log.monthAndDay}, 
+              <b>Time:</b> ${log.hour}:${log.minute}
+            </li>
+          `).join('')}
+        </ul>
       </div>
     </body>
     </html>
