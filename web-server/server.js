@@ -61,11 +61,11 @@ app.post("/data", async (req, res) => {
 
 // Serve HTML page at port 8081
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(path.join(__dirname, 'heart-dashboard', 'index.html'));
 });
 app.get('/login/:userEmailWithoutDomain', (req, res) => {
     const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
-    res.sendFile(__dirname + '/heart-dashboard/index.html');
+    res.sendFile(path.join(__dirname, 'heart-dashboard', 'index.html'));
     const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
     console.log('로그인 토큰', accessToken);
     if (!accessToken) {
