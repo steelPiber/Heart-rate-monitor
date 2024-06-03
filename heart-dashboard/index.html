@@ -622,7 +622,7 @@ function fetchAndRenderHourlyData() {
 
 
 // 시간당 평균 BPM 데이터를 가져오고 렌더링하는 함수
-function fetchAndRenderdayData() {
+function fetchAndRenderDayData() {
     fetch('/day-bpm')
         .then(response => response.json())
         .then(data => {
