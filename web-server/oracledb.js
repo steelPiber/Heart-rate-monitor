@@ -276,14 +276,6 @@ function yearQuery() {
   return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' YEAR FROM bpmdata WHERE email = :Email)`;
 }
 
-function everyHourDuringTheDayQuery() {
-  return `SELECT TO_CHAR(time, 'YYYY-MM-DD HH24') AS hour, ROUND(AVG(bpm)) AS avg_bpm 
-          FROM bpmdata 
-          WHERE email = :Email 
-          AND time > (SELECT MAX(time) - INTERVAL '1' DAY FROM bpmdata WHERE email = :Email) 
-          GROUP BY TO_CHAR(time, 'YYYY-MM-DD HH24') 
-          ORDER BY hour`;
-}
 
 function everyHourDuringTheDayQuery() {
   return `SELECT TO_CHAR(time, 'YYYY-MM-DD HH24') AS hour, ROUND(AVG(bpm)) AS avg_bpm 
