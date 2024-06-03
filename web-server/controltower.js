@@ -135,22 +135,6 @@ router.get('/control', (req, res) => {
         <div class="status-text">OracleDB status: ${oracleStatus}</div>
         <div class="status-indicator" style="background-color: ${oracleColor};"></div>
       </div>
-
-      <!-- 불법 접속 기록을 표시하는 섹션 -->
-      <div class="unauthorized-access">
-        <h2>Unauthorized Access Attempts:</h2>
-        <ul>
-          ${unauthorizedLogs.map(log => `
-            <li>
-              <b>User:</b> ${log.user}, 
-              <b>IP:</b> ${log.ip}, 
-              <b>Port:</b> ${log.port}, 
-              <b>Date:</b> ${log.monthAndDay}, 
-              <b>Time:</b> ${log.hour}:${log.minute}
-            </li>
-          `).join('')}
-        </ul>
-      </div>
     </body>
     </html>
   `;
