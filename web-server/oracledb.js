@@ -253,7 +253,7 @@ const query = `
 
 
 function realtimeQuery() {
-  return `SELECT ROUND(bpm) FROM bpmdata WHERE email = :Email ORDER BY time FETCH FIRST 1 ROWS ONLY`;
+  return `SELECT ROUND(bpm) FROM bpmdata WHERE email = :Email ORDER BY time DESC FETCH FIRST 1 ROWS ONLY`;
 }
 
 function minQuery() {
