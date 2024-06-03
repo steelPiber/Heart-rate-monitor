@@ -19,16 +19,17 @@ const allowedUsers = ['piber', 'root'];
 
 // 새로운 로그 항목 처리 함수
 function handleLog(log) {
-  const loginRegex = /Accepted\s(\S+)\sfor\s(\S+)\sfrom\s([\d.]+)\sport\s(\d+)\s.*\s\d{4}-(\d{2}-\d{2})T(\d{2}):(\d{2}):\d{2}\.\d+\+\d{2}:\d{2}/;
+  const loginRegex = /Accepted password\sfor\s(\S+)\sfrom\s([\d.]+)\sport\s(\d+)\s.*\s\d{4}-(\d{2}-\d{2})T(\d{2}):(\d{2}):\d{2}\.\d+\+\d{2}:\d{2}/;
   const match = log.match(loginRegex);
-  
+
   if (match) {
-    const user = match[2];
-    const ip = match[3];
-    const port = match[4];
-    const monthAndDay = match[5];
-    const hour = match[6];
-    const minute = match[7];
+    const user = match[1];
+    const ip = match[2];
+    const port = match[3];
+    const monthAndDay = match[4];
+    const hour = match[5];
+    const minute = match[6];
+
     if (!allowedUsers.includes(user)) {
       console.log(`Unauthorized login detected from IP: ${ip}, user: ${user}, date: ${monthAndDay}, time: ${hour}:${minute}, port: ${port}`);
       unauthorizedLogs.push({ user, ip, port, monthAndDay, hour, minute });
@@ -89,8 +90,10 @@ watcher.on('change', path => {
     if (err) {
       return console.log(err);
     }
-    const logs = data.split('\n');
-    handleLog(logs[logs.length - 2]);
+    const logs = data.trim().split('\n');
+    if (logs.length > 0) {
+      handleLog(logs[logs.length - 1]); // 가장 마지막 로그 항목만 처리
+    }
   });
 });
 
@@ -124,6 +127,9 @@ router.get('/control', (req, res) => {
         .status-text {
           font-size: 1.2em;
         }
+        .log-entry {
+          margin-bottom: 5px;
+        }
       </style>
     </head>
     <body>
@@ -135,6 +141,12 @@ router.get('/control', (req, res) => {
         <div class="status-text">OracleDB status: ${oracleStatus}</div>
         <div class="status-indicator" style="background-color: ${oracleColor};"></div>
       </div>
+      <h3>Unauthorized Logs</h3>
+      ${unauthorizedLogs.map(log => `
+        <div class="log-entry">
+          User: ${log.user}, IP: ${log.ip}, Port: ${log.port}, Date: ${log.monthAndDay}, Time: ${log.hour}:${log.minute}
+        </div>
+      `).join('')}
     </body>
     </html>
   `;
