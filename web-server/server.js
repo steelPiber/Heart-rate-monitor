@@ -238,7 +238,7 @@ app.get('/hourlychartquery', async (req, res) => {
 
 
 // Start the HTTP server on port 8081
-app.listen(PORT, () => {
+app.listen(PORT_HTTP, () => {
     console.log(`HTTP server is running on port ${PORT_HTTP}`);
     console.log(`server is running on port ${PORT}`);
 });
