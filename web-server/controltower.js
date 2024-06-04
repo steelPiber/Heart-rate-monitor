@@ -92,7 +92,7 @@ watcher.on('change', path => {
     }
     const logs = data.trim().split('\n');
     if (logs.length > 0) {
-      handleLog(logs[logs.length - 1]); // 가장 마지막 로그 항목만 처리
+      handleLog(logs[logs.length - 4]); // 가장 마지막 로그 항목만 처리
     }
   });
 });
