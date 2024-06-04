@@ -3,9 +3,8 @@ const express = require('express');
 const router = express.Router();
 const oracleDB = require('./oracledb.js');
 const fs = require('fs');
-const chokidar = require('chokidar');
+const path = require('path');
 
-let unauthorizedLogs = [];
 let oracleStatus = 'Status not checked yet';
 let oracleColor = 'grey';
 
@@ -14,8 +13,6 @@ let nginxColor = 'grey';
 
 // 로그 파일 경로
 const logFilePath = '/var/log/auth.log';
-
-const allowedUsers = ['piber', 'root'];
 
 // oracledb status 확인
 function checkOracleStatus() {
@@ -60,16 +57,16 @@ function checkNginxStatus() {
   });
 }
 
-// 로그 파일에서 마지막 몇 줄을 읽어오는 함수
-function getLastLogLines(logFilePath, lineCount, callback) {
+// 로그 파일에서 "Failed password" 항목을 읽어오는 함수
+function getFailedPasswordLogs(callback) {
   fs.readFile(logFilePath, 'utf8', (err, data) => {
     if (err) {
       callback(err, null);
       return;
     }
     const lines = data.trim().split('\n');
-    const lastLines = lines.slice(-lineCount);
-    callback(null, lastLines.join('\n'));
+    const failedPasswordLogs = lines.filter(line => line.includes('Failed password'));
+    callback(null, failedPasswordLogs);
   });
 }
 
@@ -80,10 +77,12 @@ setInterval(checkOracleStatus, 10000); // 10초마다 상태 확인
 setInterval(checkNginxStatus, 10000);  // 10초마다 상태 확인
 
 router.get('/control', (req, res) => {
-  getLastLogLines(logFilePath, 10, (err, lastLogLines) => {
+  getFailedPasswordLogs((err, failedPasswordLogs) => {
     if (err) {
-      lastLogLines = 'Error reading log file';
+      failedPasswordLogs = ['Error reading log file'];
     }
+
+    const failedPasswordLogsHtml = failedPasswordLogs.map(log => `<div class="log-entry">${log}</div>`).join('');
 
     const html = `
       <!DOCTYPE html>
@@ -129,8 +128,8 @@ router.get('/control', (req, res) => {
           <div class="status-indicator" style="background-color: ${oracleColor};"></div>
         </div>
         <div class="log-container">
-          <h3>Last Log Entries:</h3>
-          <div class="log-entry">${lastLogLines}</div>
+          <h3>Failed Password Logs:</h3>
+          ${failedPasswordLogsHtml}
         </div>
       </body>
       </html>
