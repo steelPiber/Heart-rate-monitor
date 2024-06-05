@@ -251,32 +251,37 @@ const query = `
 `;
 */
 
-
+// 실시간 삼박수
 function realtimeQuery() {
   return `SELECT ROUND(bpm) FROM bpmdata WHERE email = :Email ORDER BY time DESC FETCH FIRST 1 ROWS ONLY`;
 }
 
+// 1분 전 평균값
 function minQuery() {
   return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' MINUTE FROM bpmdata WHERE email = :Email)`;
 }
 
+// 1시간 전 평균값
 function hourQuery() {
   return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' HOUR FROM bpmdata WHERE email = :Email)`;
 }
 
+// 1일 전 평균값
 function dayQuery() {
   return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' DAY FROM bpmdata WHERE email = :Email)`;
 }
 
+// 1달 전 평균값
 function monthQuery() {
   return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' MONTH FROM bpmdata WHERE email = :Email)`;
 }
 
+// 1년 전 평균값
 function yearQuery() {
   return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' YEAR FROM bpmdata WHERE email = :Email)`;
 }
 
-
+// 1일 중 1시간 마다 평균값 그래프
 function everyHourDuringTheDayQuery() {
   return `SELECT TO_CHAR(time, 'YYYY-MM-DD HH24') AS hour, ROUND(AVG(bpm)) AS avg_bpm 
           FROM bpmdata 
@@ -284,6 +289,84 @@ function everyHourDuringTheDayQuery() {
           AND time > (SELECT MAX(time) - INTERVAL '1' DAY FROM bpmdata WHERE email = :Email) 
           GROUP BY TO_CHAR(time, 'YYYY-MM-DD HH24') 
           ORDER BY hour`;
+}
+
+// 각 태그 별 1일 평균값, 최고값, 최저값 계산
+function calculate_tag_statistics_per_day() {
+  return `SELECT tag, MAX(bpm), MIN(bpm), ROUND(AVG(bpm)) FROM bpmdata WHERE time > (SELECT MAX(time) – INTERVAL ‘1’ DAY FROM bpmdata) AND email = :Email GROUP BY tag`;
+}
+
+// 각 태그 별 1주일 평균값, 최고값, 최저값 계산
+function calculate_tag_statistics_per_week() {
+  return `SELECT tag, MAX(bpm), MIN(bpm), ROUND(AVG(bpm)) FROM bpmdata WHERE time > (SELECT MAX(time) – INTERVAL ‘1’ WEEK FROM bpmdata) AND email = :Email GROUP BY tag`;
+}
+
+// 각 태그 별 1달 평균값, 최고값, 최저값 계산
+function calculate_tag_statistics_per_month() {
+  return `SELECT tag, MAX(bpm), MIN(bpm), ROUND(AVG(bpm)) FROM bpmdata WHERE time > (SELECT MAX(time) – INTERVAL ‘1’ MONTH FROM bpmdata) AND email = :Email GROUP BY tag`;
+}
+
+// 각 태그 별 1주일 요일마다 평균값 그래프
+function weekly_graph() {
+  return `WITH all_days AS (
+    	  	SELECT TO_CHAR(TRUNC(SYSDATE, 'D') + LEVEL - 1, 'Dy') AS day_of_week, TO_CHAR(TRUNC(SYSDATE, 'D') + LEVEL - 1, 'D') AS day_num
+    	  	FROM DUAL
+    	  	CONNECT BY LEVEL <= 7
+	 ),
+	 tag_days AS (
+    		SELECT DISTINCT tag
+    		FROM bpmdata
+	 ),
+	filtered_data AS (
+    		SELECT *
+    		FROM bpmdata
+    		WHERE time > (SELECT MAX(time) - INTERVAL '7' DAY FROM bpmdata) AND email = 'pyh5523'
+	)
+	SELECT td.tag, ad.day_of_week, NVL(round(AVG(fd.bpm)), 0) AS avg_bpm
+	FROM all_days ad
+	CROSS JOIN
+    	tag_days td
+	LEFT JOIN
+    	filtered_data fd
+    	ON td.tag = fd.tag
+    	AND TO_CHAR(fd.time, 'Dy') = ad.day_of_week
+	WHERE td.tag IS NOT NULL
+	GROUP BY td.tag, ad.day_of_week, ad.day_num
+	ORDER BY td.tag,ad.day_num`;
+}
+
+// 각 태그 별 1달 1일마다 평균값 그래프
+function monthly_graph() {
+  return `WITH all_days AS (
+    		SELECT TO_CHAR(TRUNC(SYSDATE, 'D') + LEVEL - 1, 'Dy') AS day_of_week, TO_CHAR(TRUNC(SYSDATE, 'D') + LEVEL - 1, 'D') AS day_num
+    		FROM DUAL
+    		CONNECT BY LEVEL <= 7
+	 ),
+	 tag_days AS (
+    		SELECT DISTINCT tag
+    		FROM bpmdata
+	 ),
+	 filtered_data AS (
+    		SELECT *
+    		FROM bpmdata
+    		WHERE time > (SELECT MAX(time) - INTERVAL '7' DAY FROM bpmdata) AND email = 'pyh5523'
+	 )
+	SELECT td.tag, ad.day_of_week, NVL(round(AVG(fd.bpm)), 0) AS avg_bpm
+	FROM all_days ad
+	CROSS JOIN
+    	tag_days td
+	LEFT JOIN
+    	filtered_data fd
+    	ON td.tag = fd.tag
+    	AND TO_CHAR(fd.time, 'Dy') = ad.day_of_week
+	WHERE td.tag IS NOT NULL
+	GROUP BY td.tag, ad.day_of_week, ad.day_num
+	ORDER BY td.tag, ad.day_num`;
+}
+
+// 각 태그 별 심박수 수(도넛 차트)
+function daily_donut_chart() {
+  return `SELECT tag, COUNT(*) AS data_count FROM bpmdata WHERE email=:Email AND TO_CHAR(time, ‘HH24:MI:SS’) BETWEEN ’00:00:00’ AND ’23:59:59’ GROUP BY tag ORDER BY tag`;
 }
 
 /*
@@ -308,4 +391,10 @@ module.exports = {
   monthQuery,
   yearQuery,
   everyHourDuringTheDayQuery,
+  calculate_tag_statistics_per_day,
+  calculate_tag_statistics_per_week,
+  calculate_tag_statistics_per_month,
+  weekly_graph,
+  monthly_graph,
+  daily_donut_chart,
 };
