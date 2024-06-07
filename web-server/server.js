@@ -214,7 +214,7 @@ app.get('/yearquery', async (req, res) => {
 });
 
 // Hourly chart handler
-app.get('/hourlychartquery', async (req, res) => {
+app.get('/hourly-chart', async (req, res) => {
   try {
     // 사용자 이메일 정보를 가져옵니다.
     const userEmail = await getUserEmailFromToken(req);
