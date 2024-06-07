@@ -271,6 +271,11 @@ function dayQuery() {
   return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' DAY FROM bpmdata WHERE email = :Email)`;
 }
 
+// 1주일 전 평균값
+function weekQuery() {
+  return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' WEEK FROM bpmdata WHERE email = :Email)`;
+}
+
 // 1달 전 평균값
 function monthQuery() {
   return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' MONTH FROM bpmdata WHERE email = :Email)`;
@@ -388,6 +393,7 @@ module.exports = {
   minQuery,
   hourQuery,
   dayQuery,
+  weekQuery,
   monthQuery,
   yearQuery,
   everyHourDuringTheDayQuery,
