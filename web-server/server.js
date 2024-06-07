@@ -223,7 +223,13 @@ app.get('/hourly-chart', async (req, res) => {
     const result = await executeQuery(query, { Email: userEmail });
 
     // Convert the query result to an array
-    const data = result.rows.map(row => [row[0], row[1]]);
+    const data = result.rows.map(row => {
+      // row[0]에서 "2024-" 부분을 제거하고 월 일만 추출
+      const date = row[0].slice(5, 16); // "06-07 11"
+      const [month, day, hour] = date.split(' ');
+      const formattedDate = `${month} ${day}`;
+      return [formattedDate, row[1]];
+    });
     
     const responseData = {
       userEmail: userEmail,
