@@ -24,7 +24,7 @@ app.use(googleAuthRouter);
 app.use(controltower);
 
 // 정적 파일 미들웨어를 사용하여 CSS, 이미지, JS 등의 정적 파일 제공
-app.use(express.static(path.join(__dirname, '/heart-dashboard')));
+app.use(express.static(path.join(__dirname, '/dashboard')));
 const server = http.createServer(app);
 const PORT_HTTP = 8081;
 const PORT = 13389;
@@ -65,7 +65,7 @@ app.get('/', (req, res) => {
 });
 app.get('/login/:userEmailWithoutDomain', (req, res) => {
     const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
-    res.sendFile(path.join(__dirname, 'heart-dashboard', 'index.html'));
+    res.sendFile(path.join(__dirname, 'dashboard', 'index.html'));
     const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
     console.log('로그인 토큰', accessToken);
     if (!accessToken) {
