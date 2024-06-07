@@ -388,6 +388,7 @@ checkUserEmailExists,
 module.exports = {
   connectToOracleDB,
   insertBPMData,
+  selectUserlog,
   selectUserErrlog,
   realtimeQuery,
   minQuery,
