@@ -176,9 +176,26 @@ app.get('/day-bpm', async (req, res) => {
     res.status(500).send('Error retrieving data');
   }
 });
+// Week query handler
+app.get('/week-bpm', async (req, res) => {
+  try {
+    // 사용자 이메일 정보를 가져옵니다.
+    const userEmail = await getUserEmailFromToken(req);
+    const query = oracleDB.weekQuery();
+    const result = await executeQuery(query, { Email: userEmail });
+
+    // Convert the query result to an array
+    const data = result.rows.map(row => row[0]);
+
+    // Send the data as JSON
+    res.json(data);
+  } catch (err) {
+    res.status(500).send('Error retrieving data');
+  }
+});
 
 // Month query handler
-app.get('/monthquery', async (req, res) => {
+app.get('/month-bpm', async (req, res) => {
   try {
     // 사용자 이메일 정보를 가져옵니다.
     const userEmail = await getUserEmailFromToken(req);
@@ -196,7 +213,7 @@ app.get('/monthquery', async (req, res) => {
 });
 
 // Year query handler
-app.get('/yearquery', async (req, res) => {
+app.get('/year-bpm', async (req, res) => {
   try {
     // 사용자 이메일 정보를 가져옵니다.
     const userEmail = await getUserEmailFromToken(req);
