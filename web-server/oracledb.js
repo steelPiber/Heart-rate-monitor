@@ -325,7 +325,7 @@ function weekly_graph() {
 	filtered_data AS (
     		SELECT *
     		FROM bpmdata
-    		WHERE time > (SELECT MAX(time) - INTERVAL '7' DAY FROM bpmdata) AND email = 'pyh5523'
+    		WHERE time > (SELECT MAX(time) - INTERVAL '7' DAY FROM bpmdata) AND email = :Email
 	)
 	SELECT td.tag, ad.day_of_week, NVL(round(AVG(fd.bpm)), 0) AS avg_bpm
 	FROM all_days ad
@@ -354,7 +354,7 @@ function monthly_graph() {
 	 filtered_data AS (
     		SELECT *
     		FROM bpmdata
-    		WHERE time > (SELECT MAX(time) - INTERVAL '7' DAY FROM bpmdata) AND email = 'pyh5523'
+    		WHERE time > (SELECT MAX(time) - INTERVAL '7' DAY FROM bpmdata) AND email = :Email
 	 )
 	SELECT td.tag, ad.day_of_week, NVL(round(AVG(fd.bpm)), 0) AS avg_bpm
 	FROM all_days ad
