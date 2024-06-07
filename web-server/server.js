@@ -65,7 +65,7 @@ app.get('/', (req, res) => {
 });
 app.get('/login/:userEmailWithoutDomain', (req, res) => {
     const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
-    res.sendFile(path.join(__dirname, 'dashboard', 'index.html'));
+    res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
     const accessToken = req.query.access_token; // 클라이언트에서 access token을 쿼리 파라미터로 전달
     console.log('로그인 토큰', accessToken);
     if (!accessToken) {
