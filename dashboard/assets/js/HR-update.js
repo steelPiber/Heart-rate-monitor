@@ -24,19 +24,22 @@ function fetchAndRenderData() {
         .then(data => {
             const minbpmContainer = document.getElementById('minbpmContainer');
             minbpmContainer.innerHTML = ''; // 이전 데이터 지우기
-            data.forEach(item => {
+
+            // 데이터가 배열이고 첫 번째 항목이 존재하는지 확인
+            if (data.length > 0) {
                 const listItem = document.createElement('li');
                 listItem.classList.add('list-group-item', 'data-item');
-                listItem.innerHTML = `${item[1]}`;
+                listItem.innerHTML = `${data[0]}`; // 첫 번째 항목을 사용
 
                 minbpmContainer.appendChild(listItem);
-            });
+            } else {
+                console.error('데이터가 비어 있습니다.');
+            }
         })
         .catch(error => {
             console.error('데이터 가져오기 오류:', error);
         });
 }
-
 
 // 시간당 평균 BPM 데이터를 가져오고 렌더링하는 함수
 function fetchAndRenderHourlyData() {
@@ -45,19 +48,20 @@ function fetchAndRenderHourlyData() {
         .then(data => {
             const hourbpmContainer = document.getElementById('hourbpmContainer');
             hourbpmContainer.innerHTML = ''; // 이전 데이터 지우기
-            data.forEach(item => {
+            if(data.length > 0) {
                 const hourItem = document.createElement('li');
                 hourItem.classList.add('list-group-item', 'data-item');
-                hourItem.innerHTML = `${item[0]}`;
+                hourItem.innerHTML = `${data[0]}`;
 
                 hourbpmContainer.appendChild(hourItem);
-            });
+            } else {
+                	console.error('데이터가 비어 있습니다.');
+               }
         })
         .catch(error => {
             console.error('데이터 가져오기 오류:', error);
         });
 }
-
 
 // 하루 평균 BPM 데이터를 가져오고 렌더링하는 함수
 function fetchAndRenderDayData() {
@@ -66,19 +70,20 @@ function fetchAndRenderDayData() {
         .then(data => {
             const daybpmContainer = document.getElementById('daybpmContainer');
             daybpmContainer.innerHTML = ''; // 이전 데이터 지우기
-            data.forEach(item => {
-                const hourItem = document.createElement('li');
-                hourItem.classList.add('list-group-item', 'data-item');
-                    hourItem.innerHTML = `${item[0]}`;
+            if(data.length > 0) {
+                const dayItem = document.createElement('li');
+                dayItem.classList.add('list-group-item', 'data-item');
+                 dayItem.innerHTML = `${data[0]}`;
 
-                daybpmContainer.appendChild(hourItem);
-            });
+                daybpmContainer.appendChild(dayItem);
+            }else {
+            	console.error('데이터가 비어 있습니다.');
+               }
         })
         .catch(error => {
             console.error('데이터 가져오기 오류:', error);
         });
 }
-
 
 // 주 평균 BPM 데이터를 가져오고 렌더링하는 함수
 function fetchAndRenderWeekData() {
