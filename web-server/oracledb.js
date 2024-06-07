@@ -273,7 +273,7 @@ function dayQuery() {
 
 // 1주일 전 평균값
 function weekQuery() {
-  return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' WEEK FROM bpmdata WHERE email = :Email)`;
+  return `SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '7' DAY FROM bpmdata WHERE email = :Email)`;
 }
 
 // 1달 전 평균값
@@ -303,7 +303,7 @@ function calculate_tag_statistics_per_day() {
 
 // 각 태그 별 1주일 평균값, 최고값, 최저값 계산
 function calculate_tag_statistics_per_week() {
-  return `SELECT tag, MAX(bpm), MIN(bpm), ROUND(AVG(bpm)) FROM bpmdata WHERE time > (SELECT MAX(time) – INTERVAL ‘1’ WEEK FROM bpmdata) AND email = :Email GROUP BY tag`;
+  return `SELECT tag, MAX(bpm), MIN(bpm), ROUND(AVG(bpm)) FROM bpmdata WHERE time > (SELECT MAX(time) – INTERVAL ‘7’ DAY FROM bpmdata) AND email = :Email GROUP BY tag`;
 }
 
 // 각 태그 별 1달 평균값, 최고값, 최저값 계산
