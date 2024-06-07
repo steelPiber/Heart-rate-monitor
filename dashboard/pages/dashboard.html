@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link id="pagestyle" href="../assets/css/Layout.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Dashboard</title>
+</head>
+<body>
+    
+    <div class="header">
+        <h1>(로그인사용자) <div class="status"><img src="../assets/img/loading.gif" id="dynamicImage"></div></h1>
+    </div>
+   <!--PC 네비바-->
+    <div class="nav-bar">
+        <ul>
+            <li class="login-name">(로그인 사용자 이름)</li>
+            <li class="profile-pic"><img src="../assets/img/profile-pic-ex.png" alt="프로필 사진"></li>
+            <li class="menu-box"><a href="./dashboard.html">메인 보드</a></li>
+            <li class="menu-box"><a href="">프로필</a></li>
+            <li class="menu-box"><a href="">친구</a></li>
+            <li class="menu-box"><a href="">트레이닝</a></li>
+            <li class="logout">로그아웃</li>
+        </ul>
+    </div>
+    <!-- 모바일 네비바 -->
+    <div class="bar">Heart Rate Monitor</div>
+    <div class="hamburger-mob" id="hamburger-mob">☰</div> 
+    <nav class="nav-mob" id="nav-mob">
+        <a href="./dashboard.html">메인 보드</a>
+        <a href="./beat-track.html">트레이닝</a>
+        <a href="./training-record.html">트레이닝 기록</a>
+    </nav>
+
+    <!--모바일 전용 레이아웃-->
+    <div class="wrap-cont">
+        <div class="motd-img"><img src="../assets/img/motdimg1.png" alt=""></div>
+        <h1>(로그인사용자) <div class="status"><img src="../assets/img/loading.gif" id="dynamicImage"></div></h1>
+        <div class="dash-board">
+            <div class="heart-board">         
+                <ul>
+                    <li><img src="../assets/img/heart-shape.png" alt=""></li>
+                    <li><div class="heart-rate-container-big">
+                        <div class="heart-rate">Real Time</div>
+                        <div class="heart-rate"><span class="real-time">
+                            <div id="bpmValue">0</div></span></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="scroll-board" data-simplebar>
+    
+                <div class="heart-rate-container">
+                <div class="heart-rate">1분 평균</div>
+                <div class="heart-rate">
+                    <div id="minbpmContainer">0</div></div></div>
+            
+                <div class="heart-rate-container">
+                <div class="heart-rate">1시간 평균</div>
+                <div class="heart-rate">
+                    <div id="hourbpmContainer"> 0</div></div></div>
+        
+                <div class="heart-rate-container">
+                <div class="heart-rate">하루 평균</div>
+                <div class="heart-rate">
+                    <div id="daybpmContainer"> 0</div></div></div>
+
+                <div class="heart-rate-container">
+                <div class="heart-rate">주 평균</div>
+                <div class="heart-rate">
+                    <div id="weekbpmContainer"> 0</div></div></div>
+
+                <div class="heart-rate-container">
+                <div class="heart-rate">한 달 평균</div>
+                <div class="heart-rate">
+                    <div id="monthbpmContainer"> 0</div></div></div>
+
+                <div class="heart-rate-container">
+                <div class="heart-rate">연 평균</div>
+                <div class="heart-rate">
+                    <div id="yearbpmContainer"> 0</div></div></div>
+                 
+    
+            </div>
+                   
+        </div>
+    
+        <div class="chart-container-main">
+            <div class="container-title-main">심박수 평균</div>
+
+            <ul class="button-container">
+                <li class="button active"><a href="#">Daily</a></li>
+                <li class="button"><a href="#">Weekly</a></li>
+                <li class="button"><a href="#">Monthly</a></li>
+            </ul>
+                
+            <canvas id="graph" width="1000" height="400"></canvas>
+
+        </div>
+        <div class="chart-container">
+            <div class="container-title">안정활동휴식</div>
+            <canvas id="bar-graph" width="1000" height="400"></canvas>
+        </div>
+        <div class="chart-container">
+            <div class="container-title">안정활동휴식 </div>
+            <canvas id="donut-graph" width="1000" height="350"></canvas>
+        </div>
+
+        <div class="footer">
+            <div class="footer-nav">
+                <ul class="d-flex justify-content-around">
+                    <li class="footer-logout"><a href=""> 로그아웃 </a></li>
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+    
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+    <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+    <script src="../assets/js/plugins/chartjs.min.js"></script>
+
+    <script src="../assets/js/HR-update.js"></script>
+
+    <script> //태그값 변경시 아이콘 변경 스크립트
+        function fetchDynamicIconData() {
+            fetch('/status')
+            .then(response => response.json())
+            .then(data => {
+                var serverTag = data.tag; // 서버에서 받은 태그 값
+
+                // 이미지 요소 선택
+                var imgElement = document.getElementById("dynamicImage");
+
+                // 태그 값이 'workout'인지 확인하고 이미지 src 변경
+                if (serverTag === "workout") {
+                    imgElement.src = "../assets/img/workout.png";
+                }
+                else if (serverTag === "rest") {
+                    imgElement.src = "../assets/img/rest.png";
+                }
+                else if (serverTag === "sleep") {
+                    imgElement.src = "../assets/img/sleep.png";
+                }
+                else if (serverTag === "normal") {
+                    imgElement.src = "../assets/img/normal.png";
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching status data:', error);
+                var imgElement = document.getElementById("dynamicImage");
+                imgElement.src = "../assets/img/loading.gif";
+            });
+        };
+        
+        setInterval(fetchDynamicIconData,1000);
+        document.addEventListener('DOMContentLoaded', fetchDynamicIconData);
+    </script>
+
+
+    <script> //모바일네비바 펼치기스크립트
+        document.getElementById('hamburger-mob').addEventListener('click', function() {
+            document.getElementById('nav-mob').classList.toggle('open');
+        });
+    </script>
+    <script>
+        //로그아웃 버튼 클릭 이벤트 리스너 추가
+        document.querySelector('.logout').addEventListener('click', function() {
+            fetch('/logout', { //클릭 시 서버로 로그아웃 요청을 보냄
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // 로그아웃 성공 시, 홈 페이지로 리디렉션
+                    window.location.href = '../index.html';
+                } else {
+                    // 로그아웃 실패 시, 에러 메시지 출력
+                    alert('로그아웃에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error during logout:', error);
+                alert('로그아웃 중 에러가 발생했습니다.');
+            });
+        });
+    </script>
+
+    <script>
+        // 버튼 클릭 이벤트 리스너 추가
+        document.querySelector('.button-container').addEventListener('click', function(event) {
+            if (event.target.tagName === 'A') {
+                event.preventDefault(); // 기본 동작 방지
+                
+                // 모든 버튼을 비활성화 상태로 초기화
+                document.querySelectorAll('.button').forEach(function(button) {
+                    button.classList.remove('active');
+                });
+                
+                // 클릭한 버튼을 활성화 상태로 변경
+                event.target.parentElement.classList.add('active');
+
+                // 클릭한 버튼에 따라 다른 URL로 데이터 요청
+                let url;
+                const buttonText = event.target.textContent.trim();
+                
+                //버튼 클릭 시 차트 변경
+                if (buttonText === 'Daily'){
+                    url = '/hourly-chart';
+                } else if (buttonText === 'Weekly'){
+                    url = '/weekly-chart';
+                } else if (buttonText === 'Monthly') {
+                    url = '/monthly-chart';
+                }
+
+                updateChart(url);
+
+                
+            }
+        });
+
+        // 페이지 로드 시 초기 버튼 활성화 상태 설정
+        document.querySelector('.button-container .button:first-child a').click();
+    
+        // 캔버스 요소와 2D 컨텍스트 가져오기
+        var canvas = document.getElementById('graph');
+        var ctx = canvas.getContext('2d');
+        //차트 생성 함수 1분 1시간 하루 주 월 년
+        function updateChart(url) {
+            let avgBPMs;
+            const hourLabels = ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5', 'Label 6', 'Label 7', 'Label 8'];
+            avgBPMs = [90, 75, 90, 98, 80, 105, 110, 115];
+            /*fetch(url) 
+                .then(response => response.json())
+                .then(data => {
+                    const hourLabels = data.map(item => item[0]);
+                    const avgBPMs = data.map(item => item[1]);*/
+
+                    var canvas = document.getElementById('graph');
+                    var ctx = canvas.getContext('2d');
+
+                    new Chart(ctx, {
+                        type: "line",
+                        data: {
+                            labels: hourLabels,
+                            datasets: [{
+                                label: "BPM 박동수",
+                                tension: 0.4,
+                                borderWidth: 0,
+                                pointRadius: 0,
+                                borderColor: "#F5675D",
+                                borderWidth: 3,
+                                fill: true,
+                                data: avgBPMs,
+                                maxBarThickness: 6
+                            }],
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false,
+                                }
+                            },
+                            interaction: {
+                                intersect: false,
+                                mode: 'index',
+                            },
+                            scales: {
+                                y: {
+                                    grid: {
+                                        drawBorder: false,
+                                        display: true,
+                                        drawOnChartArea: true,
+                                        drawTicks: false,
+                                        borderDash: [5, 5]
+                                    },
+                                    ticks: {
+                                        display: true,
+                                        padding: 10,
+                                        color: '#fbfbfb',
+                                        font: {
+                                            size: 11,
+                                            family: "Open Sans",
+                                            style: 'normal',
+                                            lineHeight: 2
+                                        },
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        drawBorder: false,
+                                        display: false,
+                                        drawOnChartArea: false,
+                                        drawTicks: false,
+                                        borderDash: [5, 5]
+                                    },
+                                    ticks: {
+                                        display: true,
+                                        color: '#ccc',
+                                        padding: 20,
+                                        font: {
+                                            size: 11,
+                                            family: "Open Sans",
+                                            style: 'normal',
+                                            lineHeight: 2
+                                        },
+                                    }
+                                },
+                            },
+                        },
+                    });
+                }/*)
+                .catch(error => {
+                    console.error('Error fetching chart data:', error);
+                });
+        }*/
+
+        updateChart();
+    
+    </script>
+
+    <script>
+        // 캔버스 요소와 2D 컨텍스트 가져오기
+        var canvas = document.getElementById('bar-graph');
+        var ctx = canvas.getContext('2d');
+        //차트 생성 함수
+        function barChart(url) {
+            let yellow, pink;
+            const hourLabels = ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5', 'Label 6', 'Label 7', 'Label 8'];
+            yellow = [90, 75, 90, 98, 80, 105, 110, 115];
+            pink = [90, 75, 90, 98, 80, 105, 110, 115];
+            /*fetch(url) 
+                .then(response => response.json())
+                .then(data => {
+                    const hourLabels = data.map(item => item[0]);
+                    const avgBPMs = data.map(item => item[1]);*/
+
+                    var canvas = document.getElementById('bar-graph');
+                    var ctx = canvas.getContext('2d');
+
+                    new Chart(ctx, {
+                        type: "bar",
+                        data: {
+                            labels: hourLabels,
+                            datasets: [{
+                                label: "BPM 박동수",
+                                fill: true,
+                                data: yellow,
+                                backgroundColor: '',
+                                barThickness: 20
+                            },{
+                                label: "",
+                                fill: true,
+                                data: pink,
+                                backgroundColor: '',
+                                barThickness: 20
+                            }],
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false,
+                                }
+                            },
+                            interaction: {
+                                intersect: false,
+                                mode: 'index',
+                            },
+                            scales: {
+                                y: {
+                                    grid: {
+                                        drawBorder: false,
+                                        display: true,
+                                        drawOnChartArea: true,
+                                        drawTicks: false,
+                                        borderDash: [5, 5]
+                                    },
+                                    ticks: {
+                                        display: true,
+                                        padding: 0,
+                                        color: '#fbfbfb',
+                                        font: {
+                                            size: 11,
+                                            family: "Open Sans",
+                                            style: 'normal',
+                                            lineHeight: 2
+                                        },
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        drawBorder: false,
+                                        display: false,
+                                        drawOnChartArea: false,
+                                        drawTicks: false,
+                                        borderDash: [5, 5]
+                                    },
+                                    ticks: {
+                                        display: true,
+                                        color: '#ccc',
+                                        padding: 30,
+                                        font: {
+                                            size: 11,
+                                            family: "Open Sans",
+                                            style: 'normal',
+                                            lineHeight: 2
+                                        },
+                                    }
+                                },
+                            },
+                        },
+                    });
+                }/*)
+                .catch(error => {
+                    console.error('Error fetching chart data:', error);
+                });
+        }*/
+
+        barChart();
+    
+    </script>
+    
+    <script>
+        // 캔버스 요소와 2D 컨텍스트 가져오기
+        var canvas = document.getElementById('donut-graph');
+        var ctx = canvas.getContext('2d');
+        //차트 생성 함수
+        function donutChart(url) {
+            let avgBPMs;
+            const hourLabels = ['Label 1', 'Label 2', 'Label 3', 'Label 4'];
+            avgBPMs = [90, 75, 90, 98];
+            /*fetch(url) 
+                .then(response => response.json())
+                .then(data => {
+                    const hourLabels = data.map(item => item[0]);
+                    const avgBPMs = data.map(item => item[1]);*/
+
+                    var canvas = document.getElementById('donut-graph');
+                    var ctx = canvas.getContext('2d');
+
+                    new Chart(ctx, {
+                        type: "doughnut",
+                        data: {
+                            labels: hourLabels,
+                            datasets: [{
+                                label: "BPM 박동수",
+                                fill: true,
+                                data: avgBPMs,
+                                maxBarThickness: 6
+                            }],
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false,
+                                }
+                            },
+                            interaction: {
+                                intersect: false,
+                                mode: 'index',
+                            },
+                            scales: {
+                                y: {
+                                    grid: {
+                                        drawBorder: false,
+                                        display: true,
+                                        drawOnChartArea: true,
+                                        drawTicks: false,
+                                        borderDash: [5, 5]
+                                    },
+                                    ticks: {
+                                        display: true,
+                                        padding: 10,
+                                        color: '#fbfbfb',
+                                        font: {
+                                            size: 11,
+                                            family: "Open Sans",
+                                            style: 'normal',
+                                            lineHeight: 2
+                                        },
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        drawBorder: false,
+                                        display: false,
+                                        drawOnChartArea: false,
+                                        drawTicks: false,
+                                        borderDash: [5, 5]
+                                    },
+                                    ticks: {
+                                        display: false,
+                                        color: '#ccc',
+                                        padding: 20,
+                                        font: {
+                                            size: 11,
+                                            family: "Open Sans",
+                                            style: 'normal',
+                                            lineHeight: 2
+                                        },
+                                    }
+                                },
+                            },
+                        },
+                    });
+                }/*)
+                .catch(error => {
+                    console.error('Error fetching chart data:', error);
+                });
+        }*/
+
+        donutChart();
+    
+    </script>
+</body>
+</html>

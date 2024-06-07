@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link id="pagestyle" href="../assets/css/signup.css" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+</head>
+<body class="pink-bg">
+    <img src="../assets/img/wave_green.webp" alt="배경꾸밈" class="wave">
+    <div class="white-bg-2"></div><div class="fill"></div>
+    <div class="container-3">
+        <h3>이미 회원이신가요?</h3>
+        <a href="./login.html" class="goto-login">로그인하러 가기</a>
+    </div>
+    <div class="container-2">
+        <h2>회원가입</h2>
+        <form id="signupForm" method="post" action="signup.html">
+            <div class="form-group">
+                <label for="email" class="small-text">이메일</label>
+                <input type="email" class="text-field" name="useremail" required>
+                <button type="button" class="confirm-button" id="sendcode">코드 발송</button>
+            </div>
+            <div class="form-group">
+                <label for="username" class="small-text">닉네임</label>
+                <input type="text" class="text-field" name="userNick" required>
+                <button type="button" class="confirm-button" id="checkDuplicateBtn">중복 확인</button>
+            </div>            
+            <div class="form-group">
+                <label for="password" class="small-text">비밀번호</label>
+                <input type="password" class="text-field" name="userpasswd" required>
+            </div>
+            <div class="form-group">
+                <label for="mac_address" class="small-text">MAC 주소</label>
+                <input type="text" class="text-field" name="userMac" required>
+            </div><br><br>
+            <input type="submit" class="sign-up-button" value="회원가입"> 
+        </form>
+    </div>
+    
+
+    <script>
+        // 닉네임 중복 확인 버튼에 대한 클릭 이벤트 핸들러 (수정필요)
+        document.getElementById('checkDuplicateBtn').addEventListener('click', async () => {
+            const id = document.getElementById('id').value;
+
+            // 중복 확인을 위한 비동기 요청
+            try {
+                const response = await fetch(`/checkDuplicate?id=${id}`);
+                const data = await response.json();
+
+                if (data.isDuplicate) {
+                    alert('이미 사용 중인 닉네임입니다.');
+                } else {
+                    alert('사용 가능한 닉네임입니다.');
+                }
+            } catch (error) {
+                console.error('중복 확인 오류:', error);
+                alert('중복 확인 중 오류가 발생했습니다.');
+            }
+        });
+    </script>
+</body>
+</html>

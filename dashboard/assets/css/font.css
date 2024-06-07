@@ -1,0 +1,75 @@
+/* noto-sans-kr-300 - korean */
+@font-face {
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 300;
+  src: url("../../css/fonts/noto-sans-kr-v13-korean-300.html"); /* IE9 Compat Modes */
+  src: local(""),
+    url("../../css/fonts/noto-sans-kr-v13-korean-300d41d.html?#iefix")
+      format("embedded-opentype"),
+    /* IE6-IE8 */ url("../../css/fonts/noto-sans-kr-v13-korean-301.html")
+      format("woff2"),
+    /* Super Modern Browsers */
+      url("../../css/fonts/noto-sans-kr-v13-korean-302.html") format("woff"),
+    /* Modern Browsers */ url("../../css/fonts/noto-sans-kr-v13-korean-303.html")
+      format("truetype"),
+    /* Safari, Android, iOS */
+      url("../../css/fonts/noto-sans-kr-v13-korean-304.html#NotoSansKR") format("svg"); /* Legacy iOS */
+}
+
+/* noto-sans-kr-regular - korean */
+@font-face {
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../../css/fonts/noto-sans-kr-v13-korean-regular.html"); /* IE9 Compat Modes */
+  src: local(""),
+    url("../../css/fonts/noto-sans-kr-v13-korean-regulard41d.html?#iefix")
+      format("embedded-opentype"),
+    /* IE6-IE8 */ url("../../css/fonts/noto-sans-kr-v13-korean-regular-2.html")
+      format("woff2"),
+    /* Super Modern Browsers */
+      url("../../css/fonts/noto-sans-kr-v13-korean-regular-3.html") format("woff"),
+    /* Modern Browsers */ url("../../css/fonts/noto-sans-kr-v13-korean-regular-4.html")
+      format("truetype"),
+    /* Safari, Android, iOS */
+      url("fonts/noto-sans-kr-v13-korean-regular.svg#NotoSansKR") format("svg"); /* Legacy iOS */
+}
+
+/* noto-sans-kr-500 - korean */
+@font-face {
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 500;
+  src: url("../../css/fonts/noto-sans-kr-v13-korean-500.html"); /* IE9 Compat Modes */
+  src: local(""),
+    url("../../css/fonts/noto-sans-kr-v13-korean-500d41d.html?#iefix")
+      format("embedded-opentype"),
+    /* IE6-IE8 */ url("../../css/fonts/noto-sans-kr-v13-korean-501.html")
+      format("woff2"),
+    /* Super Modern Browsers */
+      url("../../css/fonts/noto-sans-kr-v13-korean-502.html") format("woff"),
+    /* Modern Browsers */ url("../../css/fonts/noto-sans-kr-v13-korean-503.html")
+      format("truetype"),
+    /* Safari, Android, iOS */
+      url("../../css/fonts/noto-sans-kr-v13-korean-504.html#NotoSansKR") format("svg"); /* Legacy iOS */
+}
+
+/* noto-sans-kr-700 - korean */
+@font-face {
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../../css/fonts/noto-sans-kr-v13-korean-700.html"); /* IE9 Compat Modes */
+  src: local(""),
+    url("../../css/fonts/noto-sans-kr-v13-korean-700d41d.html?#iefix")
+      format("embedded-opentype"),
+    /* IE6-IE8 */ url("../../css/fonts/noto-sans-kr-v13-korean-701.html")
+      format("woff2"),
+    /* Super Modern Browsers */
+      url("../../css/fonts/noto-sans-kr-v13-korean-702.html") format("woff"),
+    /* Modern Browsers */ url("../../css/fonts/noto-sans-kr-v13-korean-703.html")
+      format("truetype"),
+    /* Safari, Android, iOS */
+      url("../../css/fonts/noto-sans-kr-v13-korean-704.html#NotoSansKR") format("svg"); /* Legacy iOS */
+}

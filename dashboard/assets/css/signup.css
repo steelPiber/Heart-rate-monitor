@@ -1,0 +1,171 @@
+
+
+
+body
+{position: relative;
+background: #F5675D;
+}
+
+
+.frame {
+width: 40vw; /* 창 너비의 40% */
+height: 100vh; /* 창 높이와 같음 */
+right: 0px;
+position: fixed; /* 위치를 고정 */
+top: 0; /* 상단에 위치 */
+right: 0; /* 오른쪽에 위치 */
+
+background: linear-gradient(180deg, #F5675D 90.72%, #862E28 100%);
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.white_bg {
+
+width: calc(100vw + 200px);
+height: calc(100vh - 112px); /* 높이를 화면 높이에서 위아래 여백 56px을 뺀 값으로 설정 */
+background-color: #f0f0f0; /* 배경색 */
+position: fixed; /* 위치를 고정 */
+top: 50%; /* 화면 상단으로부터 50% 떨어진 위치 */
+left: 50%; /* 화면 왼쪽으로부터 50% 떨어진 위치 */
+transform: translate(-50%, -50%); /* 중앙 정렬 */
+
+background: #FFFFFF;
+border-radius: 52px;
+}
+
+.input_place {
+    /* Group 1 */
+
+width: 358px;
+
+
+position: fixed; /* 위치를 고정 */
+top: 45%; /* 창의 상단에서부터 40% 위치 */
+left: 30%; /* 창의 왼쪽에서부터 30% 위치 */
+transform: translate(-50%, -50%);
+
+
+}
+
+.login_button {
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 13px 134px;
+gap: 10px;
+outline: none;
+border: none;
+
+
+width: 100%;
+height: 53px;
+left: calc(50% - 354px/2 - 309px);
+bottom: 418px;
+margin-top: 19px;
+background: #F5675D;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 300;
+font-size: 20px;
+line-height: 24px;
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+}
+
+
+.sign_up_button {
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 13px 134px;
+gap: 10px;
+
+width: 100%;
+height: 53px;
+left: calc(50% - 354px/2 - 309px);
+bottom: 355px;
+margin-top: 10px;
+
+background: #FFFFFF;
+border: 1px solid #F5675D;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 300;
+font-size: 20px;
+line-height: 24px;
+text-decoration: none;
+
+color: #F5675D;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+}
+
+h2{ 
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 700;
+font-size: 40px;
+line-height: 48px;
+
+color: #F5675D;
+
+}
+
+.small_text{
+font-family: 'Inter';
+font-style: normal;
+font-weight: 600;
+font-size: 15px;
+line-height: 18px;
+margin-top: 28px;
+
+color: #898989;
+}
+
+.small_text2{
+font-family: 'Inter';
+font-style: normal;
+font-weight: 600;
+font-size: 12px;
+line-height: 18px;
+
+color: #000000;
+}
+
+.text-field {
+width: 100%; /* 상자에 꽉 맞게 너비 설정 */
+border: none; /* 기본 테두리 제거 */
+border-bottom: 1px solid #A9A9A9; /* 밑줄 스타일 설정 */
+outline: none; /* 포커스 시 테두리 제거 */
+font-size: 24px; /* 폰트 크기 설정 */
+padding: 5px 0; /* 위아래 여백 설정 */
+}
+
+.checkbox-container {
+    display: flex; /* 요소를 수평으로 배치하기 위해 */
+    align-items: center; /* 요소를 수직 중앙으로 정렬하기 위해 */
+    margin-top: 13px;
+}
+
+input[type="checkbox"] {
+    margin-right: 5px; /* 체크박스와 텍스트 사이의 간격 조정 */
+}

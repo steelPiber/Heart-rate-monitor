@@ -1,0 +1,293 @@
+@charset "euc-kr";
+
+/* ------------------------------------------ font import ------------------------------------------ */
+@import url("../../../fonts.googleapis.com/earlyaccess/notosanskr.css");
+@import url("../../css/font.html");
+
+/*@font-face {
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 300;
+    src: url(../fonts/NotoSansKR-Light.eot) format('embedded-opentype'),
+        url(../fonts/NotoSansKR-Light.eot?#iefix) format('embedded-opentype'),
+        url(../fonts/NotoSansKR-Light.woff) format('woff'),
+        url(../fonts/NotoSansKR-Light.otf) format('opentype');
+}
+@font-face {
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 400;
+    src: url(../fonts/NotoSansKR-Regular.eot) format('embedded-opentype'),
+        url(../fonts/NotoSansKR-Regular.eot?#iefix) format('embedded-opentype'),
+        url(../fonts/NotoSansKR-Regular.woff) format('woff'),
+        url(../fonts/NotoSansKR-Regular.otf) format('opentype');
+}
+@font-face {
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: bold;
+    src: url(../fonts/NotoSansKR-Medium.eot) format('embedded-opentype'),
+        url(../fonts/NotoSansKR-Medium.eot?#iefix) format('embedded-opentype'),
+        url(../fonts/NotoSansKR-Medium.woff) format('woff'),
+        url(../fonts/NotoSansKR-Medium.otf) format('opentype');
+} 
+
+/* ------------------------------------------ reset ------------------------------------------ */
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-print-color-adjust: exact;
+}
+html {
+  margin: 0;
+  padding: 0;
+  font-size: 62.5%;
+}
+@media screen and (max-width: 1023px) {
+  html {
+    font-size: 10px;
+  }
+}
+@media screen and (max-width: 719px) {
+  html {
+    font-size: 6px;
+  }
+}
+@media screen and (max-width: 370px) {
+  html {
+    font-size: 5.5px;
+  }
+}
+@media screen and (max-width: 350px) {
+  html {
+    font-size: 5px;
+  }
+}
+@media screen and (max-device-height: 420px) and (orientation: landscape) {
+  html {
+    font-size: 6px;
+  }
+} /* 모바일 가로모드 */
+body,
+input,
+select,
+button,
+textarea,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+table,
+font {
+  color: #212121;
+  font-family: "Noto Sans KR", "맑은 고딕", "Malgun Gothic", "돋움", "Dotum",
+    "AppleGothic", sans-serif;
+  line-height: 1.5rem;
+  font-weight: 400;
+  word-wrap: break-word;
+  word-break: keep-all;
+}
+label {
+  vertical-align: middle;
+}
+address,
+em {
+  font-style: normal;
+}
+fieldset,
+img {
+  border: 0;
+  vertical-align: middle;
+}
+button {
+  border: 0;
+  background-color: transparent;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+} 
+
+ul,
+ol,
+dl,
+dd,
+li {
+  list-style: none;
+}
+input,
+select {
+  border: 1px solid #dddddd;
+  padding: 4px 10px;
+  height: 36px;
+  margin-left: 10px;
+  vertical-align: middle;
+  max-width: 100%;
+}
+input.b0 {
+  border: 0 !important;
+  padding: 0;
+  height: auto;
+  margin-left: 0;
+  max-width: 100%;
+}
+textarea {
+  border: 1px solid #dddddd;
+  padding: 4px 10px;
+  width: 100%;
+  line-height: 26px;
+}
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section,
+summary {
+  display: block;
+}
+a {
+  text-decoration: none !important;
+  color: #212121;
+  outline: none;
+} /* 2021-04-05 수정 */
+a:hover {
+  text-decoration: none;
+}
+table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+iframe {
+  margin: 0;
+  border: 0;
+  width: 100%;
+  height: 100%;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="email"],
+select {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-border-radius: 0;
+  -webkit-appearance: none;
+}
+input[type="text"]::-ms-reveal,
+input[type="password"]::-ms-reveal,
+input[type="number"]::-ms-reveal,
+input[type="tel"]::-ms-reveal,
+input[type="email"]::-ms-reveal {
+  display: none;
+  width: 0;
+  height: 0;
+} /* 2021-04-08 수정 */
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="email"],
+input[type="date"]:focus {
+  vertical-align: middle;
+}
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+  font-weight: 300;
+  color: #a0a0a0;
+} /* IE 10 + */
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  font-weight: 300;
+  color: #a0a0a0;
+} /* Webkit Browser */
+input:-moz-placeholder,
+textarea:-moz-placeholder {
+  font-weight: 300;
+  color: #a0a0a0;
+} /* Mozilla Firefox 4 to 18 */
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+  font-weight: 300;
+  color: #a0a0a0;
+} /* Mozilla Firefox 19+ */
+input:focus:-ms-input-placeholder,
+textarea:focus:-ms-input-placeholder {
+  color: transparent;
+} /* IE 10 + */
+input:focus::-webkit-input-placeholder,
+textarea:focus::-webkit-input-placeholder {
+  color: transparent;
+} /* Webkit Browser */
+input:focus:-moz-placeholder,
+textarea:focus:-moz-placeholder {
+  color: transparent;
+} /* Mozilla Firefox 4 to 18 */
+input:focus::-moz-placeholder,
+textarea:focus::-moz-placeholder {
+  color: transparent;
+} /* Mozilla Firefox 19+ */
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+textarea {
+  -webkit-border-radius: 0;
+  -webkit-appearance: none;
+}
+input[type="image"] {
+  -webkit-border-radius: 0;
+  -webkit-appearance: none;
+}
+input[type="button"],
+input[type="submit"] {
+  -webkit-appearance: button;
+  border-radius: 0;
+}
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 3rem white inset;
+}
+select::-ms-expand {
+  display: none;
+}
+
+figcaption,
+caption,
+legend,
+.blind,
+.skip,
+.hiddenItem {
+  position: fixed;
+  overflow: hidden;
+  border: 0;
+  margin: -1px;
+  width: 1px;
+  height: 1px;
+  clip: rect(1px, 1px, 1px, 1px);
+  -webkit-clip-path: inset(50%);
+  clip-path: inset(50%);
+}
+caption {
+  position: static;
+}
+.hidden {
+  display: none !important;
+}
+
+.m0{margin: 0 !important;}
