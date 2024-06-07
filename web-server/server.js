@@ -224,9 +224,14 @@ app.get('/hourly-chart', async (req, res) => {
 
     // Convert the query result to an array
     const data = result.rows.map(row => [row[0], row[1]]);
-
+    
+    const responseData = {
+      userEmail: userEmail,
+      data: data
+    };
+    
     // Send the data as JSON
-    res.json(data);
+    res.json(responseData);
   } catch (err) {
     res.status(500).send('Error retrieving data');
   }
