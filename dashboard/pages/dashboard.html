@@ -269,7 +269,9 @@
         // 페이지 로드 시 초기 차트 데이터를 로드
         fetch('/hourly-chart')
         .then(response => response.json())
-        .then(data => {
+        .then(responseData => {
+            const { userEmail, data } = responseData;
+            console.log('User Email:', userEmail); // 추가된 userEmail을 로그에 출력
             updateChart(data);
         })
         .catch(error => {
