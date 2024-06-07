@@ -209,16 +209,23 @@
                 // 클릭한 버튼에 따라 다른 URL로 데이터 요청
                 let url;
                 const buttonText = event.target.textContent.trim();
-                
-                //버튼 클릭 시 차트 변경
-                if (buttonText === 'Daily'){
+
+                if (buttonText === 'Daily') {
                     url = '/hourly-chart';
-                } else if (buttonText === 'Weekly'){
+                } else if (buttonText === 'Weekly') {
                     url = '/weekly-chart';
                 } else if (buttonText === 'Monthly') {
                     url = '/monthly-chart';
                 }
-                updateChart(url);      
+
+                fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    updateChart(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching chart data:', error);
+                });
             }
         });
 
@@ -229,96 +236,43 @@
         var canvas = document.getElementById('graph');
         var ctx = canvas.getContext('2d');
         //차트 생성 함수 1분 1시간 하루 주 월 년
-        function updateChart(url) {
-            fetch(url) 
-                .then(response => response.json())
-                .then(data => {
-                    const hourLabels = data.map(item => item[0]);
-                    const avgBPMs = data.map(item => item[1]);*/
+         function updateChart(data) {
+            // 차트를 초기화
+            const ctx = document.getElementById('graph').getContext('2d');
+            const labels = data.map(item => item[0]); // 첫 번째 요소는 시간
+            const values = data.map(item => item[1]); // 두 번째 요소는 BPM 값
 
-                    var canvas = document.getElementById('graph');
-                    var ctx = canvas.getContext('2d');
-
-                    new Chart(ctx, {
-                        type: "line",
-                        data: {
-                            labels: hourLabels,
-                            datasets: [{
-                                label: "BPM 박동수",
-                                tension: 0.4,
-                                borderWidth: 0,
-                                pointRadius: 0,
-                                borderColor: "#F5675D",
-                                borderWidth: 3,
-                                fill: true,
-                                data: avgBPMs,
-                                maxBarThickness: 6
-                            }],
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    display: false,
-                                }
-                            },
-                            interaction: {
-                                intersect: false,
-                                mode: 'index',
-                            },
-                            scales: {
-                                y: {
-                                    grid: {
-                                        drawBorder: false,
-                                        display: true,
-                                        drawOnChartArea: true,
-                                        drawTicks: false,
-                                        borderDash: [5, 5]
-                                    },
-                                    ticks: {
-                                        display: true,
-                                        padding: 10,
-                                        color: '#fbfbfb',
-                                        font: {
-                                            size: 11,
-                                            family: "Open Sans",
-                                            style: 'normal',
-                                            lineHeight: 2
-                                        },
-                                    }
-                                },
-                                x: {
-                                    grid: {
-                                        drawBorder: false,
-                                        display: false,
-                                        drawOnChartArea: false,
-                                        drawTicks: false,
-                                        borderDash: [5, 5]
-                                    },
-                                    ticks: {
-                                        display: true,
-                                        color: '#ccc',
-                                        padding: 20,
-                                        font: {
-                                            size: 11,
-                                            family: "Open Sans",
-                                            style: 'normal',
-                                            lineHeight: 2
-                                        },
-                                    }
-                                },
-                            },
-                        },
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching chart data:', error);
-                });
+            // 새로운 차트를 생성 (기존 차트를 덮어씀)
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Heart Rate',
+                        data: values,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
         }
 
-        updateChart(url);
-    
+        // 페이지 로드 시 초기 차트 데이터를 로드
+        fetch('/hourly-chart')
+        .then(response => response.json())
+        .then(data => {
+            updateChart(data);
+        })
+        .catch(error => {
+            console.error('Error fetching initial chart data:', error);
+        });   
     </script>
 
     <script>
