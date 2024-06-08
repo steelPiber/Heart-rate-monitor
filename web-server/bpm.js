@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const oracleDB = require('./oracledb.js');
 const { executeQuery, getUserEmailFromToken } = require('./server.js'); // Ensure these are exported
-
+const server = require('./server.js');
+  
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
