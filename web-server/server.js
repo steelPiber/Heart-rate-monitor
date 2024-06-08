@@ -42,7 +42,7 @@ app.get('/login/:userEmailWithoutDomain', (req, res) => {
     res.status(400).send('Access token is missing');
     return;
   }
-  res.cookie('accessToken', accessToken);
+  res.cookie('accessToken', accessToken, { sameSite: 'None', secure: true });
 });
 app.get('/min1', (req, res) => {
   res.sendFile(__dirname + '/min1.html');
