@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const static = require('serve-static');
-const path = require('path');
 const oracleDB = require('./oracledb.js');
+const server = require('./server.js');
 
 router.use(express.urlencoded({extended:true}));
 router.use(express.json());
@@ -24,34 +23,12 @@ router.post("/data", async (req, res) => {
   }
 });
 
-async function executeQuery(query, params) {
-  const connection = await oracleDB.connectToOracleDB();
-  try {
-    const result = await connection.execute(query, params);
-    await connection.close();
-    return result;
-  } catch (err) {
-    console.error('Error executing query:', err);
-    await connection.close();
-    throw err;
-  }
-}
-
-async function getUserEmailFromToken(req) {
-  const accessToken = req.cookies.accessToken;
-  if (!accessToken) {
-    throw new Error('Access token is missing');
-  }
-  const userInfo = await getUserInfo(accessToken);
-  return userInfo.email.split('@')[0];
-}
-
 // Realtime query handler
 router.get('/realtime-bpm', async (req, res) => {
   try {
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = await server.getUserEmailFromToken(req);
     const query = oracleDB.realtimeQuery();
-    const result = await executeQuery(query, { Email: userEmail });
+    const result = await server.executeQuery(query, { Email: userEmail });
 
     const data = result.rows.map(row => row[0]);
     res.json(data);
@@ -64,9 +41,9 @@ router.get('/realtime-bpm', async (req, res) => {
 router.get('/average-bpm', async (req, res) => {
   try {
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = await server.getUserEmailFromToken(req);
     const query = oracleDB.minQuery();
-    const result = await executeQuery(query, { Email: userEmail });
+    const result = await server.executeQuery(query, { Email: userEmail });
 
     // Convert the query result to an array
     const data = result.rows.map(row => row[0]);
@@ -82,9 +59,9 @@ router.get('/average-bpm', async (req, res) => {
 router.get('/hour-bpm', async (req, res) => {
   try {
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = await server.getUserEmailFromToken(req);
     const query = oracleDB.hourQuery();
-    const result = await executeQuery(query, { Email: userEmail });
+    const result = await server.executeQuery(query, { Email: userEmail });
 
     // Convert the query result to an array
     const data = result.rows.map(row => row[0]);
@@ -100,9 +77,9 @@ router.get('/hour-bpm', async (req, res) => {
 router.get('/day-bpm', async (req, res) => {
   try {
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = await server.getUserEmailFromToken(req);
     const query = oracleDB.dayQuery();
-    const result = await executeQuery(query, { Email: userEmail });
+    const result = await server.executeQuery(query, { Email: userEmail });
 
     // Convert the query result to an array
     const data = result.rows.map(row => row[0]);
@@ -117,9 +94,9 @@ router.get('/day-bpm', async (req, res) => {
 router.get('/week-bpm', async (req, res) => {
   try {
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = await server.getUserEmailFromToken(req);
     const query = oracleDB.weekQuery();
-    const result = await executeQuery(query, { Email: userEmail });
+    const result = await server.executeQuery(query, { Email: userEmail });
 
     // Convert the query result to an array
     const data = result.rows.map(row => row[0]);
@@ -135,9 +112,9 @@ router.get('/week-bpm', async (req, res) => {
 router.get('/month-bpm', async (req, res) => {
   try {
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = await server.getUserEmailFromToken(req);
     const query = oracleDB.monthQuery();
-    const result = await executeQuery(query, { Email: userEmail });
+    const result = await server.executeQuery(query, { Email: userEmail });
 
     // Convert the query result to an array
     const data = result.rows.map(row => row[0]);
@@ -153,9 +130,9 @@ router.get('/month-bpm', async (req, res) => {
 router.get('/year-bpm', async (req, res) => {
   try {
     // 사용자 이메일 정보를 가져옵니다.
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = await server.getUserEmailFromToken(req);
     const query = oracleDB.yearQuery();
-    const result = await executeQuery(query, { Email: userEmail });
+    const result = await server.executeQuery(query, { Email: userEmail });
 
     // Convert the query result to an array
     const data = result.rows.map(row => row[0]);
@@ -167,4 +144,4 @@ router.get('/year-bpm', async (req, res) => {
   }
 });
 
-module.exports = { router, getUserInfo };
+module.exports = { router };
