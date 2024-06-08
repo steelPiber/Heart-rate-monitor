@@ -117,4 +117,18 @@ router.get('/year-bpm', async (req, res) => {
   }
 });
 
+// Realtime query handler
+router.get('/realtime-tag', async (req, res) => {
+  try {
+    const userEmail = await getUserEmailFromToken(req);
+    const query = oracleDB.realtimeTagQuery();
+    const result = await executeQuery(query, { Email: userEmail });
+
+    const data = result.rows.map(row => row[0]);
+    res.json(data);
+  } catch (err) {
+    res.status(500).send('Error retrieving data');
+  }
+});
+
 module.exports = router;
