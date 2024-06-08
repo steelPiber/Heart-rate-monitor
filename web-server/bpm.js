@@ -23,9 +23,9 @@ router.post("/data", async (req, res) => {
 
 const createQueryHandler = (queryFunction) => async (req, res) => {
   try {
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = await server.getUserEmailFromToken(req);
     const query = queryFunction();
-    const result = await executeQuery(query, { Email: userEmail });
+    const result = await server.executeQuery(query, { Email: userEmail });
     const data = result.rows.map(row => row[0]);
     res.json(data);
   } catch (err) {
