@@ -77,7 +77,7 @@ app.get('/hourly-chart', async (req, res) => {
 });
 
 // Weekly chart handler
-app.get('/Weekly-chart', async (req, res) => {
+app.get('/weekly-chart', async (req, res) => {
   try {
     const userEmail = await getUserEmailFromToken(req);
     const query = oracleDB.everySevenHourDuringTheWeekQuery();
@@ -102,7 +102,7 @@ app.get('/Weekly-chart', async (req, res) => {
 });
 
 // Monthly chart handler
-app.get('/Monthly-chart', async (req, res) => {
+app.get('/monthly-chart', async (req, res) => {
   try {
     const userEmail = await getUserEmailFromToken(req);
     const query = oracleDB.everyDayDuringTheMonthQuery();
