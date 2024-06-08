@@ -76,6 +76,48 @@ app.get('/hourly-chart', async (req, res) => {
   }
 });
 
+// Weekly chart handler
+app.get('/Weekly-chart', async (req, res) => {
+  try {
+    const userEmail = await getUserEmailFromToken(req);
+    const query = oracleDB.everySevenHourDuringTheWeekQuery();
+    const result = await executeQuery(query, { Email: userEmail });
+
+    const data = result.rows.map(row => {
+      const date = row[0].slice(5, 16); // "2024-" 부분을 제거하고 월 일만 추출
+      const [month, day, hour] = date.split(' ');
+      const formattedDate = `${month} ${day}`;
+      return [formattedDate, row[1]];
+    });
+    
+    const responseData = {
+      userEmail: userEmail,
+      data: data
+    };
+    
+    res.json(responseData);
+  } catch (err) {
+    res.status(500).send('Error retrieving data');
+  }
+});
+
+// Monthly chart handler
+app.get('/Monthly-chart', async (req, res) => {
+  try {
+    const userEmail = await getUserEmailFromToken(req);
+    const query = oracleDB.everyDayDuringTheMonthQuery();
+    const result = await executeQuery(query, { Email: userEmail });
+
+    const data = result.rows.map(row => [row[0], row[1]]);
+
+    // Send the data as JSON
+    res.json(data);
+  } catch (err) {
+    res.status(500).send('Error retrieving data');
+  }
+});
+
+
 // Start the HTTP server on port 8081
 app.listen(PORT_HTTP, () => {
   console.log(`HTTP server is running on port ${PORT_HTTP}`);
