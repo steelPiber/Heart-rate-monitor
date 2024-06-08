@@ -49,7 +49,7 @@ router.get("/auth/google", (req, res) => {
   res.redirect(OAUTH_URL);
 });
 
-router.get("/login", async (req, res) => {
+router.get("/auth", async (req, res) => {
   const code = req.query.code;
   if (code) {
     try {
@@ -63,7 +63,7 @@ router.get("/login", async (req, res) => {
 
       await oracleDB.selectUserlog(userEmailWithoutDomain);
 
-      res.redirect(`${REDIRECT_URL}/${userEmailWithoutDomain}`);
+      res.redirect(`${REDIRECT_URL}`);
     } catch (error) {
       console.error("Error retrieving user info:", error);
       res.status(500).send("Error retrieving user info");
