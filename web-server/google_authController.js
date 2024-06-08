@@ -53,6 +53,7 @@ const oauth2Api = async (code) => {
     const userEmailWithoutDomain = userEmail.split('@')[0];
     
     await oracleDB.selectUserlog(userEmailWithoutDomain);
+    return accessToken;
   } catch (error) {
     throw new Error('Failed to execute OAuth2 API');
   }
@@ -67,7 +68,7 @@ router.get("/login", async (req, res) => {
 
   if (code) {
     try {
-      await oauth2Api(code); // OAuth2 API 호출
+      const accessToken = await oauth2Api(code); // OAuth2 API 호출
       // Set the access token as an HTTP-only cookie
       res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'None' });
       res.send("");
