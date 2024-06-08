@@ -90,9 +90,9 @@ router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.error("Error destroying session:", err);
-      res.status(500).send("Error logging out");
+      return res.status(500).json({ message: "Error logging out" });
     } else {
-      res.redirect('/'); // 로그아웃 후 리디렉트할 URL
+      return res.status(200).json({ message: "Logged out successfully" });
     }
   });
 });
