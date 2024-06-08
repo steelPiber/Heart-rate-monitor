@@ -91,7 +91,12 @@ app.get('/weekly-chart', async (req, res) => {
       return [formattedDate, row[1]];
     });
 
-    res.json(data);
+    const responseData = {
+      userEmail: userEmail,
+      data: data
+    };
+    
+    res.json(responseData);
   } catch (err) {
     res.status(500).send('Error retrieving data');
   }
@@ -105,10 +110,12 @@ app.get('/monthly-chart', async (req, res) => {
     const query = oracleDB.everyDayDuringTheMonthQuery();
     const result = await executeQuery(query, { Email: userEmail });
 
-    const data = result.rows.map(row => [row[0], row[1]]);
-
-    // Send the data as JSON
-    res.json(data);
+    const responseData = {
+      userEmail: userEmail,
+      data: data
+    };
+    
+    res.json(responseData);
   } catch (err) {
     res.status(500).send('Error retrieving data');
   }
