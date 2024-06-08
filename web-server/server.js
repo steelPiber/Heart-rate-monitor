@@ -33,9 +33,9 @@ oracleDB.connectToOracleDB()
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
+
 app.get('/login/:userEmailWithoutDomain', (req, res) => {
   const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
-  res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
   const accessToken = req.query.access_token;
   console.log('로그인 토큰', accessToken);
   if (!accessToken) {
@@ -43,7 +43,9 @@ app.get('/login/:userEmailWithoutDomain', (req, res) => {
     return;
   }
   res.cookie('accessToken', accessToken);
+  res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
+
 app.get('/min1', (req, res) => {
   res.sendFile(__dirname + '/min1.html');
 });
