@@ -90,9 +90,9 @@ router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.error("Error destroying session:", err);
-      return res.status(500).json({ message: "Error logging out" });
+      return res.status(500)
     } else {
-      return res.status(200).json({ message: "Logged out successfully" });
+      return res.status(200)
     }
   });
 });
