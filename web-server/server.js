@@ -9,6 +9,7 @@ const http = require('http');
 const express = require('express');
 const static = require('serve-static');
 const path = require('path');
+const { router: googleAuthRouter, getUserInfo } = require("./google_authController.js");
 
 //  oracledb.js의 함수들 삽입 
 const oracleDB = require('./oracledb.js'); // oracledb.js 파일 경로에 따라 수정
@@ -18,6 +19,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(googleAuthRouter);
 
 // 정적 파일 미들웨어를 사용하여 CSS, 이미지, JS 등의 정적 파일 제공
 app.use(express.static(path.join(__dirname, '/dashboard')));
