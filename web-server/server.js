@@ -91,7 +91,6 @@ app.get('/weekly-chart', async (req, res) => {
       const formattedDate = `${month} ${day}`;
       return [formattedDate, row[1]];
     });
-    console.log('weekly data: ', data);
     
     res.json(data);
   } catch (err) {
