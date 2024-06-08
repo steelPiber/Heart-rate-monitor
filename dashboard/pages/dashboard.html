@@ -171,7 +171,7 @@
         //로그아웃 버튼 클릭 이벤트 리스너 추가
         document.querySelector('.logout').addEventListener('click', function() {
             fetch('/logout', { //클릭 시 서버로 로그아웃 요청을 보냄
-                method: 'POST',
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
                 }
