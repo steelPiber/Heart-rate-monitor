@@ -31,7 +31,7 @@ oracleDB.connectToOracleDB()
 
 // Serve HTML page at port 8081
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'heart-dashboard', 'index.html'));
+  res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
 app.get('/login/:userEmailWithoutDomain', (req, res) => {
   const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
