@@ -82,7 +82,7 @@ app.get('/hourly-chart', async (req, res) => {
 app.get('/weekly-chart', async (req, res) => {
   try {
     const userEmail = await getUserEmailFromToken(req);
-    const query = oracleDB.everyHourDuringTheDayQuery();
+    const query = oracleDB.everySevenHourDuringTheWeekQuery();
     const result = await executeQuery(query, { Email: userEmail });
 
     const data = result.rows.map(row => {
@@ -91,13 +91,9 @@ app.get('/weekly-chart', async (req, res) => {
       const formattedDate = `${month} ${day}`;
       return [formattedDate, row[1]];
     });
+    console.log('weekly data: ', data);
     
-    const responseData = {
-      userEmail: userEmail,
-      data: data
-    };
-    
-    res.json(responseData);
+    res.json(data);
   } catch (err) {
     res.status(500).send('Error retrieving data');
   }
