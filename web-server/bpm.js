@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const oracleDB = require('./oracledb.js');
-const { getUserInfo, getUserEmailFromToken, executeQuery } = require('./server.js'); // server.js 에 있는 유틸리티 함수들 사용
+const { getUserEmailFromToken, executeQuery } = require('./utility.js'); // 유틸리티 함수들 사용
 
 // POST handler for /data
 router.post('/data', async (req, res) => {
-  console.log("Received request body:", req.body); // 요청 본문 전체를 출력하여 디버그
+  console.log("Received request body:", req.body);
   const { bpm, tag, email } = req.body;
   console.log(`Received data - BPM: ${bpm}, Tag: ${tag}, Email: ${email}`);
   const EmailWithoutDomain = email.split('@')[0];
