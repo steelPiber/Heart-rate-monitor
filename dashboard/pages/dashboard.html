@@ -127,40 +127,40 @@
     <script src="../assets/js/HR-update.js"></script>
 
     <script> //태그값 변경시 아이콘 변경 스크립트
-        function fetchDynamicIconData() {
-            fetch('/status')
-            .then(response => response.json())
-            .then(data => {
-                var serverTag = data.tag; // 서버에서 받은 태그 값
+    function fetchDynamicIconData() {
+        fetch('/status')
+        .then(response => response.json())
+        .then(data => {
+            // 서버에서 받은 데이터의 첫 번째 값을 추출
+            var serverTag = data[0]; // 서버에서 받은 태그 값
 
-                // 이미지 요소 선택
-                var imgElement = document.getElementById("dynamicImage");
+            // 이미지 요소 선택
+            var imgElement = document.getElementById("dynamicImage");
 
-                // 태그 값이 'workout'인지 확인하고 이미지 src 변경
-                if (serverTag === "workout") {
-                    imgElement.src = "../assets/img/workout.png";
-                }
-                else if (serverTag === "rest") {
-                    imgElement.src = "../assets/img/rest.png";
-                }
-                else if (serverTag === "sleep") {
-                    imgElement.src = "../assets/img/sleep.png";
-                }
-                else if (serverTag === "normal") {
-                    imgElement.src = "../assets/img/normal.png";
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching status data:', error);
-                var imgElement = document.getElementById("dynamicImage");
-                imgElement.src = "../assets/img/loading.gif";
-            });
-        };
-        
-        setInterval(fetchDynamicIconData,1000);
-        document.addEventListener('DOMContentLoaded', fetchDynamicIconData);
-    </script>
-
+            // 태그 값이 'workout'인지 확인하고 이미지 src 변경
+            if (serverTag === "workout") {
+                imgElement.src = "../assets/img/workout.png";
+            }
+            else if (serverTag === "rest") {
+                imgElement.src = "../assets/img/rest.png";
+            }
+            else if (serverTag === "sleep") {
+                imgElement.src = "../assets/img/sleep.png";
+            }
+            else if (serverTag === "normal") {
+                imgElement.src = "../assets/img/normal.png";
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching status data:', error);
+            var imgElement = document.getElementById("dynamicImage");
+            imgElement.src = "../assets/img/loading.gif";
+        });
+    };
+    
+    setInterval(fetchDynamicIconData,1000);
+    document.addEventListener('DOMContentLoaded', fetchDynamicIconData);
+</script>
 
     <script> //모바일네비바 펼치기스크립트
         document.getElementById('hamburger-mob').addEventListener('click', function() {
