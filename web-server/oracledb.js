@@ -296,6 +296,31 @@ function everyHourDuringTheDayQuery() {
           ORDER BY hour`;
 }
 
+// 1주일 중 7시간 마다 평균값 그래프
+function everySevenHourDuringTheWeekQuery() {
+  return `SELECT TO_CHAR( 
+  	  	TRUNC(time, 'DD') + INTERVAL '1' HOUR * (FLOOR((EXTRACT(HOUR FROM time) + MOD(EXTRACT(HOUR FROM time), 7)) / 7) * 7), 
+          	'YYYY-MM-DD HH24'
+    	  ) AS period, 
+    	  ROUND(AVG(bpm)) AS avg_bpm 
+	  FROM bpmdata 
+	  WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '7' DAY FROM bpmdata WHERE email = :Email) 
+	  GROUP BY TO_CHAR(
+        	 TRUNC(time, 'DD') + INTERVAL '1' HOUR * (FLOOR((EXTRACT(HOUR FROM time) + MOD(EXTRACT(HOUR FROM time), 7)) / 7) * 7), 
+        	 'YYYY-MM-DD HH24'
+    	  )
+	  ORDER BY period`;
+}
+
+// 1달 중 1일 마다 평균값 그래프
+function everyDayDuringTheMonthQuery() {
+  return `SELECT TO_CHAR(TRUNC(time, 'DD'), 'YYYY-MM-DD') AS period, ROUND(AVG(bpm)) AS avg_bpm 
+	  FROM bpmdata 
+	  WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' MONTH FROM bpmdata WHERE email = :Email) 
+	  GROUP BY TO_CHAR(TRUNC(time, 'DD'), 'YYYY-MM-DD')
+	  ORDER BY period`;
+}
+
 // 각 태그 별 1일 평균값, 최고값, 최저값 계산
 function calculate_tag_statistics_per_day() {
   return `SELECT tag, MAX(bpm), MIN(bpm), ROUND(AVG(bpm)) FROM bpmdata WHERE time > (SELECT MAX(time) – INTERVAL ‘1’ DAY FROM bpmdata) AND email = :Email GROUP BY tag`;
@@ -398,6 +423,8 @@ module.exports = {
   monthQuery,
   yearQuery,
   everyHourDuringTheDayQuery,
+  everySevenHourDuringTheWeekQuery,
+  everyDayDuringTheMonthQuery,
   calculate_tag_statistics_per_day,
   calculate_tag_statistics_per_week,
   calculate_tag_statistics_per_month,
