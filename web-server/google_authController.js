@@ -15,7 +15,7 @@ router.use(session({
   saveUninitialized: false,
   cookie: { 
     secure: false,
-    maxAge: 1000 * 60 * 1 // 
+    maxAge: 1000 * 60 * 60 // 
   }
 }));
 
@@ -29,7 +29,7 @@ const REDIRECT_URL = "https://heartrate.ddns.net/login"; // 수정된 부분
 const RESPONSE_TYPE = "code";
 const SCOPE = "openid%20profile%20email";
 const ACCESS_TYPE = "offline";
-const OAUTH_URL = `${AUTHORIZE_URI}?client_id=${CLIENT_ID}&response_type=${RESPONSE_TYPE}&redirect_uri=${REDIRECT_URL}&scope=${SCOPE}&access_type=${ACCESS_TYPE}`;
+const OAUTH_URL = `${AUTHORIZE_URI}?client_id=${CLIENT_ID}&response_type=${RESPONSE_TYPE}&redirect_uri=${REDIRECT_URL}&scope=${SCOPE}&access_type=${ACCESS_TYPE}&prompt=consent`;
 
 const getToken = async (code) => {
   try {
