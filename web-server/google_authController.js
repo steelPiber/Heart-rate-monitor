@@ -49,11 +49,11 @@ router.get("/auth/google", (req, res) => {
   res.redirect(OAUTH_URL);
 });
 
-router.get("/auth", async (req, res) => {
-  const code = req.query.code;
-  if (code) {
+router.get("/oauth2/redirect", async (req, res) => {
+  const query = url.parse(req.url, true).query;
+  if (query && query.code) {
     try {
-      const accessToken = await getToken(code);
+      const accessToken = await getToken(query.code);
       const userInfo = await getUserInfo(accessToken);
       const userEmail = userInfo.email;
       const userEmailWithoutDomain = userEmail.split('@')[0];
