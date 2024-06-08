@@ -89,14 +89,20 @@ app.get('/weekly-chart', async (req, res) => {
       const date = row[0].slice(5, 16); // "2024-" 부분을 제거하고 월 일만 추출
       const [month, day, hour] = date.split(' ');
       const formattedDate = `${month} ${day}`;
+      console.log('formattedDate:', formattedDate);
+      console.log('row[1]:', row[1]); // 값 확인을 위해 콘솔에 출력
+
       return [formattedDate, row[1]];
     });
     
+    console.log('data:', data); // data 값을 콘솔에 출력
+
     res.json(data);
   } catch (err) {
     res.status(500).send('Error retrieving data');
   }
 });
+
 
 // Monthly chart handler
 app.get('/monthly-chart', async (req, res) => {
