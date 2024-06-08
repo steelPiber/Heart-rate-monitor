@@ -33,16 +33,8 @@ oracleDB.connectToOracleDB()
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'heart-dashboard', 'index.html'));
 });
-app.get('/login/:userEmailWithoutDomain', (req, res) => {
-  const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
+app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
-  const accessToken = req.query.access_token;
-  console.log('로그인 토큰', accessToken);
-  if (!accessToken) {
-    res.status(400).send('Access token is missing');
-    return;
-  }
-  res.cookie('accessToken', accessToken);
 });
 app.get('/min1', (req, res) => {
   res.sendFile(__dirname + '/min1.html');
