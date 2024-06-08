@@ -93,7 +93,7 @@ router.get("/logout", (req, res) => {
       return res.status(500).send("Error logging out");
     } else {
       res.clearCookie('connect.sid'); // express-session의 기본 쿠키 이름
-      return res.status(200).send("Logged out successfully");
+      res.redirect('https://heartrate.ddns.net');
     }
   });
 });
