@@ -192,6 +192,7 @@
         });
     </script>
 
+    <!-- 변경된 부분 시작 -->
     <script>
         // 버튼 클릭 이벤트 리스너 추가
         document.querySelector('.button-container').addEventListener('click', function(event) {
@@ -218,8 +219,14 @@
                     url = '/monthly-chart';
                 }
 
+                // 데이터 요청 및 차트 업데이트
                 fetch(url)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(responseData => {
                     const { userEmail, data } = responseData;
                     console.log('User Email:', userEmail); // 추가된 userEmail을 로그에 출력
@@ -231,21 +238,20 @@
             }
         });
 
-        // 페이지 로드 시 초기 버튼 활성화 상태 설정
-        document.querySelector('.button-container .button:first-child a').click();
-    
-        // 캔버스 요소와 2D 컨텍스트 가져오기
-        var canvas = document.getElementById('graph');
-        var ctx = canvas.getContext('2d');
-        //차트 생성 함수 1분 1시간 하루 주 월 년
-         function updateChart(data) {
+        // 차트 업데이트 함수
+        function updateChart(data) {
             // 차트를 초기화
             const ctx = document.getElementById('graph').getContext('2d');
             const labels = data.map(item => item[0]); // 첫 번째 요소는 시간
             const values = data.map(item => item[1]); // 두 번째 요소는 BPM 값
 
-            // 새로운 차트를 생성 (기존 차트를 덮어씀)
-            new Chart(ctx, {
+            // 기존 차트를 초기화
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+
+            // 새로운 차트를 생성
+            window.myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
@@ -266,215 +272,10 @@
             });
         }
 
-        // 페이지 로드 시 초기 차트 데이터를 로드
-        fetch('/hourly-chart')
-        .then(response => response.json())
-        .then(responseData => {
-            const { userEmail, data } = responseData;
-            console.log('User Email:', userEmail); // 추가된 userEmail을 로그에 출력
-            updateChart(data);
-        })
-        .catch(error => {
-            console.error('Error fetching initial chart data:', error);
-        });   
+        // 페이지 로드 시 초기 버튼 활성화 상태 설정
+        document.querySelector('.button-container .button:first-child a').click();
     </script>
-
-    <script>
-        // 캔버스 요소와 2D 컨텍스트 가져오기
-        var canvas = document.getElementById('bar-graph');
-        var ctx = canvas.getContext('2d');
-        //차트 생성 함수
-        function barChart(url) {
-            let yellow, pink;
-            const hourLabels = ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5', 'Label 6', 'Label 7', 'Label 8'];
-            yellow = [90, 75, 90, 98, 80, 105, 110, 115];
-            pink = [90, 75, 90, 98, 80, 105, 110, 115];
-            /*fetch(url) 
-                .then(response => response.json())
-                .then(data => {
-                    const hourLabels = data.map(item => item[0]);
-                    const avgBPMs = data.map(item => item[1]);*/
-
-                    var canvas = document.getElementById('bar-graph');
-                    var ctx = canvas.getContext('2d');
-
-                    new Chart(ctx, {
-                        type: "bar",
-                        data: {
-                            labels: hourLabels,
-                            datasets: [{
-                                label: "BPM 박동수",
-                                fill: true,
-                                data: yellow,
-                                backgroundColor: '',
-                                barThickness: 20
-                            },{
-                                label: "",
-                                fill: true,
-                                data: pink,
-                                backgroundColor: '',
-                                barThickness: 20
-                            }],
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    display: false,
-                                }
-                            },
-                            interaction: {
-                                intersect: false,
-                                mode: 'index',
-                            },
-                            scales: {
-                                y: {
-                                    grid: {
-                                        drawBorder: false,
-                                        display: true,
-                                        drawOnChartArea: true,
-                                        drawTicks: false,
-                                        borderDash: [5, 5]
-                                    },
-                                    ticks: {
-                                        display: true,
-                                        padding: 0,
-                                        color: '#fbfbfb',
-                                        font: {
-                                            size: 11,
-                                            family: "Open Sans",
-                                            style: 'normal',
-                                            lineHeight: 2
-                                        },
-                                    }
-                                },
-                                x: {
-                                    grid: {
-                                        drawBorder: false,
-                                        display: false,
-                                        drawOnChartArea: false,
-                                        drawTicks: false,
-                                        borderDash: [5, 5]
-                                    },
-                                    ticks: {
-                                        display: true,
-                                        color: '#ccc',
-                                        padding: 30,
-                                        font: {
-                                            size: 11,
-                                            family: "Open Sans",
-                                            style: 'normal',
-                                            lineHeight: 2
-                                        },
-                                    }
-                                },
-                            },
-                        },
-                    });
-                }/*)
-                .catch(error => {
-                    console.error('Error fetching chart data:', error);
-                });
-        }*/
-
-        barChart();
+    <!-- 변경된 부분 끝 -->
     
-    </script>
-    
-    <script>
-        // 캔버스 요소와 2D 컨텍스트 가져오기
-        var canvas = document.getElementById('donut-graph');
-        var ctx = canvas.getContext('2d');
-        //차트 생성 함수
-        function donutChart(url) {
-            let avgBPMs;
-            const hourLabels = ['Label 1', 'Label 2', 'Label 3', 'Label 4'];
-            avgBPMs = [90, 75, 90, 98];
-            /*fetch(url) 
-                .then(response => response.json())
-                .then(data => {
-                    const hourLabels = data.map(item => item[0]);
-                    const avgBPMs = data.map(item => item[1]);*/
-
-                    var canvas = document.getElementById('donut-graph');
-                    var ctx = canvas.getContext('2d');
-
-                    new Chart(ctx, {
-                        type: "doughnut",
-                        data: {
-                            labels: hourLabels,
-                            datasets: [{
-                                label: "BPM 박동수",
-                                fill: true,
-                                data: avgBPMs,
-                                maxBarThickness: 6
-                            }],
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    display: false,
-                                }
-                            },
-                            interaction: {
-                                intersect: false,
-                                mode: 'index',
-                            },
-                            scales: {
-                                y: {
-                                    grid: {
-                                        drawBorder: false,
-                                        display: true,
-                                        drawOnChartArea: true,
-                                        drawTicks: false,
-                                        borderDash: [5, 5]
-                                    },
-                                    ticks: {
-                                        display: true,
-                                        padding: 10,
-                                        color: '#fbfbfb',
-                                        font: {
-                                            size: 11,
-                                            family: "Open Sans",
-                                            style: 'normal',
-                                            lineHeight: 2
-                                        },
-                                    }
-                                },
-                                x: {
-                                    grid: {
-                                        drawBorder: false,
-                                        display: false,
-                                        drawOnChartArea: false,
-                                        drawTicks: false,
-                                        borderDash: [5, 5]
-                                    },
-                                    ticks: {
-                                        display: false,
-                                        color: '#ccc',
-                                        padding: 20,
-                                        font: {
-                                            size: 11,
-                                            family: "Open Sans",
-                                            style: 'normal',
-                                            lineHeight: 2
-                                        },
-                                    }
-                                },
-                            },
-                        },
-                    });
-                }/*)
-                .catch(error => {
-                    console.error('Error fetching chart data:', error);
-                });
-        }*/
-
-        donutChart();
-    
-    </script>
 </body>
 </html>
