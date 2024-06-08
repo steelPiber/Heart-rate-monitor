@@ -85,14 +85,15 @@ router.get("/login", async (req, res) => {
   }
 });
 
-// 로그아웃 라우터 추가
+// 로그아웃 라우터 수정
 router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.error("Error destroying session:", err);
-      return res.status(500)
+      return res.status(500).send("Error logging out");
     } else {
-      return res.status(200)
+      res.clearCookie('connect.sid'); // express-session의 기본 쿠키 이름
+      return res.status(200).send("Logged out successfully");
     }
   });
 });
