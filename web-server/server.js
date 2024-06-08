@@ -82,23 +82,30 @@ app.get('/hourly-chart', async (req, res) => {
 app.get('/weekly-chart', async (req, res) => {
   try {
     const userEmail = await getUserEmailFromToken(req);
+    console.log('User Email:', userEmail); // 디버깅 로그 추가
+
     const query = oracleDB.everySevenHourDuringTheWeekQuery();
     const result = await executeQuery(query, { Email: userEmail });
 
+    console.log('Query Result:', result); // 디버깅 로그 추가
+
     const data = result.rows.map(row => {
+      console.log('Row:', row); // 디버깅 로그 추가
+
       const date = row[0].slice(5, 16); // "2024-" 부분을 제거하고 월 일만 추출
+      console.log('Date:', date); // 디버깅 로그 추가
+
       const [month, day, hour] = date.split(' ');
       const formattedDate = `${month} ${day}`;
-      console.log('formattedDate:', formattedDate);
-      console.log('row[1]:', row[1]); // 값 확인을 위해 콘솔에 출력
 
       return [formattedDate, row[1]];
     });
-    
-    console.log('data:', data); // data 값을 콘솔에 출력
+
+    console.log('Data:', data); // 디버깅 로그 추가
 
     res.json(data);
   } catch (err) {
+    console.error('Error retrieving weekly chart data:', err); // 에러 로그 추가
     res.status(500).send('Error retrieving data');
   }
 });
