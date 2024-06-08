@@ -131,8 +131,11 @@
         fetch('/status')
         .then(response => response.json())
         .then(data => {
+            console.log('Received data:', data); // 받은 데이터 출력
+
             // 서버에서 받은 데이터의 첫 번째 값을 추출
             var serverTag = data[0]; // 서버에서 받은 태그 값
+            console.log('Server tag:', serverTag); // 추출한 태그 값 출력
 
             // 이미지 요소 선택
             var imgElement = document.getElementById("dynamicImage");
@@ -158,9 +161,10 @@
         });
     };
     
-    setInterval(fetchDynamicIconData,1000);
+    setInterval(fetchDynamicIconData, 1000);
     document.addEventListener('DOMContentLoaded', fetchDynamicIconData);
 </script>
+
 
     <script> //모바일네비바 펼치기스크립트
         document.getElementById('hamburger-mob').addEventListener('click', function() {
