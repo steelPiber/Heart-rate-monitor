@@ -118,7 +118,7 @@ router.get('/year-bpm', async (req, res) => {
 });
 
 // Realtime query handler
-router.get('/realtime-tag', async (req, res) => {
+router.get('/status', async (req, res) => {
   try {
     const userEmail = await getUserEmailFromToken(req);
     const query = oracleDB.realtimeTagQuery();
