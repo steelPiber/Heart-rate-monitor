@@ -109,7 +109,7 @@ app.get('/monthly-chart', async (req, res) => {
     const userEmail = await getUserEmailFromToken(req);
     const query = oracleDB.everyDayDuringTheMonthQuery();
     const result = await executeQuery(query, { Email: userEmail });
-
+    const data = result.rows.map(row => [row[0], row[1]]);
     const responseData = {
       userEmail: userEmail,
       data: data
