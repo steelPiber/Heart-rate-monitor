@@ -399,6 +399,11 @@ function daily_donut_chart() {
   return `SELECT tag, COUNT(*) AS data_count FROM bpmdata WHERE email=:Email AND TO_CHAR(time, ‘HH24:MI:SS’) BETWEEN ’00:00:00’ AND ’23:59:59’ GROUP BY tag ORDER BY tag`;
 }
 
+// 실시간 태그
+function realtimeTagQuery() {
+  return `SELECT tag FROM bpmdata WHERE email = :Email ORDER BY time DESC FETCH FIRST 1 ROWS ONLY`;
+}
+
 /*
 checkUserEmailExists,
   checkUserNickExists,	
@@ -431,4 +436,5 @@ module.exports = {
   weekly_graph,
   monthly_graph,
   daily_donut_chart,
+  realtimeTagQuery,
 };
