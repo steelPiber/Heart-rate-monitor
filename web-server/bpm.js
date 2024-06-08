@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const oracleDB = require('./oracledb.js');
 const { executeQuery, getUserEmailFromToken } = require('./server.js'); // Ensure these are exported
-const server = require('./server.js');
   
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
@@ -24,9 +23,9 @@ router.post("/data", async (req, res) => {
 
 const createQueryHandler = (queryFunction) => async (req, res) => {
   try {
-    const userEmail = await server.getUserEmailFromToken(req);
+    const userEmail = await getUserEmailFromToken(req);
     const query = queryFunction();
-    const result = await server.executeQuery(query, { Email: userEmail });
+    const result = await executeQuery(query, { Email: userEmail });
     const data = result.rows.map(row => row[0]);
     res.json(data);
   } catch (err) {
