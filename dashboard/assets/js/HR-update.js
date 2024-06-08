@@ -92,13 +92,15 @@ function fetchAndRenderWeekData() {
         .then(data => {
             const weekbpmContainer = document.getElementById('weekbpmContainer');
             weekbpmContainer.innerHTML = ''; // 이전 데이터 지우기
-            data.forEach(item => {
-                const hourItem = document.createElement('li');
-                hourItem.classList.add('list-group-item', 'data-item');
-                    hourItem.innerHTML = `${item[0]}`;
+            if(data.length > 0) {
+                const weekItem = document.createElement('li');
+                weekItem.classList.add('list-group-item', 'data-item');
+                 weekItem.innerHTML = `${data[0]}`;
 
-                weekbpmContainer.appendChild(hourItem);
-            });
+                weekbpmContainer.appendChild(weekItem);
+            }else {
+            	console.error('데이터가 비어 있습니다.');
+               }
         })
         .catch(error => {
             console.error('데이터 가져오기 오류:', error);
@@ -112,13 +114,15 @@ function fetchAndRenderMonthData() {
         .then(data => {
             const monthbpmContainer = document.getElementById('monthbpmContainer');
             monthbpmContainer.innerHTML = ''; // 이전 데이터 지우기
-            data.forEach(item => {
-                const hourItem = document.createElement('li');
-                hourItem.classList.add('list-group-item', 'data-item');
-                    hourItem.innerHTML = `${item[0]}`;
+            if(data.length > 0) {
+                const monthItem = document.createElement('li');
+                monthItem.classList.add('list-group-item', 'data-item');
+                 monthItem.innerHTML = `${data[0]}`;
 
-                monthbpmContainer.appendChild(hourItem);
-            });
+                monthbpmContainer.appendChild(monthItem);
+            }else {
+            	console.error('데이터가 비어 있습니다.');
+               }
         })
         .catch(error => {
             console.error('데이터 가져오기 오류:', error);
@@ -132,13 +136,15 @@ function fetchAndRenderYearData() {
         .then(data => {
             const yearbpmContainer = document.getElementById('yearbpmContainer');
             yearbpmContainer.innerHTML = ''; // 이전 데이터 지우기
-            data.forEach(item => {
-                const hourItem = document.createElement('li');
-                hourItem.classList.add('list-group-item', 'data-item');
-                    hourItem.innerHTML = `${item[0]}`;
+            if(data.length > 0) {
+                const yearItem = document.createElement('li');
+                yearItem.classList.add('list-group-item', 'data-item');
+                 yearItem.innerHTML = `${data[0]}`;
 
-                yearbpmContainer.appendChild(hourItem);
-            });
+                yearbpmContainer.appendChild(yearItem);
+            }else {
+            	console.error('데이터가 비어 있습니다.');
+               }
         })
         .catch(error => {
             console.error('데이터 가져오기 오류:', error);
