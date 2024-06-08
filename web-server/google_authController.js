@@ -65,10 +65,11 @@ router.get("/auth/google", (req, res) => {
 
 router.get("/login", async (req, res) => {
   const query = url.parse(req.url, true).query;
-
+  console.log("query: ", query);
   if (query && query.code) {
     try {
       const accessToken = await oauth2Api(code); // OAuth2 API 호출
+      console.log("accessToken", accessToken);
       // Set the access token as an HTTP-only cookie
       res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'None' });
       res.send("");
