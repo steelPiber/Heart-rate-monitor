@@ -2,6 +2,7 @@ const { default: axios } = require("axios");
 const express = require("express");
 const router = express.Router();
 const url = require("url");
+const static = require('serve-static');
 const path = require('path');
 const oracleDB = require('./oracledb.js');
 
@@ -10,10 +11,11 @@ router.use(express.json());
 
 require("dotenv").config();
 
+// NOTE process.env는 dotenv라이브러리 사용
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const AUTHORIZE_URI = "https://accounts.google.com/o/oauth2/v2/auth";
-const REDIRECT_URL = "https://heartrate.ddns.net/login"; 
+const REDIRECT_URL = "https://heartrate.ddns.net/login"; // 수정된 부분
 const RESPONSE_TYPE = "code";
 const SCOPE = "openid%20profile%20email";
 const ACCESS_TYPE = "offline";
@@ -24,9 +26,11 @@ const getToken = async (code) => {
     const tokenApi = await axios.post(
       `https://oauth2.googleapis.com/token?code=${code}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&redirect_uri=${REDIRECT_URL}&grant_type=authorization_code`
     );
-    return tokenApi.data.access_token;
+    const accessToken = tokenApi.data.access_token;
+
+    return accessToken;
   } catch (err) {
-    throw new Error('Failed to retrieve access token');
+    return err;
   }
 };
 
@@ -41,30 +45,33 @@ const getUserInfo = async (accessToken) => {
     );
     return userInfoApi.data;
   } catch (err) {
-    throw new Error('Failed to retrieve user info');
+    return err;
   }
 };
 
+// NOTE 버튼 클릭시 구글 로그인 화면으로 이동
 router.get("/auth/google", (req, res) => {
   res.redirect(OAUTH_URL);
 });
 
-router.get("/auth", async (req, res) => {
+// 사용자의 리디렉션 URL 처리
+router.get("/login", async (req, res) => {
   const code = req.query.code;
   if (code) {
     try {
+      // 코드를 사용하여 액세스 토큰 가져오기
       const accessToken = await getToken(code);
+      // 액세스 토큰을 사용하여 사용자 정보 가져오기
       const userInfo = await getUserInfo(accessToken);
+      // 사용자 이메일 정보를 가져옵니다.
       const userEmail = userInfo.email;
+      // @를 기준으로 사용자 이메일을 처리하여 @gmail.com을 제거합니다.
       const userEmailWithoutDomain = userEmail.split('@')[0];
-      
-      // Set the access token as an HTTP-only cookie
-      res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'None' });
-
+      // 사용자 이메일 정보를 기반으로 리다이렉션 URL 생성
+      res.redirect(`${REDIRECT_URL}/${userEmailWithoutDomain}?access_token=${accessToken}`);
       await oracleDB.selectUserlog(userEmailWithoutDomain);
-
-      res.redirect(`${REDIRECT_URL}`);
     } catch (error) {
+      // 오류를 캐치하여 처리
       console.error("Error retrieving user info:", error);
       res.status(500).send("Error retrieving user info");
     }
