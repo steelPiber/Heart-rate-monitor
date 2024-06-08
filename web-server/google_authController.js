@@ -45,25 +45,31 @@ const getUserInfo = async (accessToken) => {
   }
 };
 
+const oauth2Api = async (code) => {
+  try {
+    const accessToken = await getToken(code);
+    const userInfo = await getUserInfo(accessToken);
+    const userEmail = userInfo.email;
+    const userEmailWithoutDomain = userEmail.split('@')[0];
+    
+    await oracleDB.selectUserlog(userEmailWithoutDomain);
+  } catch (error) {
+    throw new Error('Failed to execute OAuth2 API');
+  }
+};
+
 router.get("/auth/google", (req, res) => {
   res.redirect(OAUTH_URL);
 });
 
-router.get("/oauth2/redirect", async (req, res) => {
+router.get("/login", async (req, res) => {
   const query = url.parse(req.url, true).query;
   if (query && query.code) {
     try {
-      const accessToken = await getToken(query.code);
-      const userInfo = await getUserInfo(accessToken);
-      const userEmail = userInfo.email;
-      const userEmailWithoutDomain = userEmail.split('@')[0];
-      
+      await oauth2Api(query.code);
       // Set the access token as an HTTP-only cookie
       res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'None' });
-
-      await oracleDB.selectUserlog(userEmailWithoutDomain);
-
-      res.redirect(`${REDIRECT_URL}`);
+      res.send("");
     } catch (error) {
       console.error("Error retrieving user info:", error);
       res.status(500).send("Error retrieving user info");
@@ -73,4 +79,4 @@ router.get("/oauth2/redirect", async (req, res) => {
   }
 });
 
-module.exports = { router, getUserInfo };
+module.exports = router;
