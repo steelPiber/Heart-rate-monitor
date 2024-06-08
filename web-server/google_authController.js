@@ -10,11 +10,15 @@ const session = require('express-session');
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 router.use(session({
-  secret: 'your_secret_key', // 환경 변수로 관리하는 것이 좋습니다.
+  secret: 'your_secret_key',
   resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false } // HTTPS를 사용하지 않는 경우 false로 설정
+  saveUninitialized: false,
+  cookie: { 
+    secure: false,
+    maxAge: 1000 * 60 * 1 // 
+  }
 }));
+
 
 require("dotenv").config();
 
