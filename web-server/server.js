@@ -6,13 +6,14 @@ const oracleDB = require('./oracledb.js');
 const { router: googleAuthRouter } = require("./google_authController.js");
 const bpmRouter = require('./bpm.js'); // bpm 라우터 모듈 불러오기
 const { executeQuery, getUserEmailFromToken } = require('./utility.js'); // 유틸리티 함수들 사용
-
+const hrvRouter = require('./hrv.js');
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(googleAuthRouter);
 app.use(bpmRouter); // bpm 라우터 사용
+app.use(hrvRouter);
 
 // 정적 파일 미들웨어를 사용하여 CSS, 이미지, JS 등의 정적 파일 제공
 app.use(express.static(path.join(__dirname, '/dashboard')));
