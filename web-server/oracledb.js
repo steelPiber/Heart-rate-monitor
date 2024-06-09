@@ -5,7 +5,7 @@ console.log(`0.1 : oracledb.js 모듈 분리`);
 // oracledb에 모듈 추가
 const oracledb = require('oracledb');
 //const nodemailer = require('./mail_auth.js');
-
+const pandas = require('pandas-js');
 // Oracle DB 연결 구성
 const dbConfig = {
   user: 'piber',
