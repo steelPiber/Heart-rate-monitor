@@ -1,64 +1,95 @@
 const express = require('express');
 const oracleDB = require('./oracledb.js');
 const router = express.Router();
-const { timeDomain } = require('hrv-analysis');
 const moment = require('moment');
 
-
-function calculateRRIntervals(data) {
-    const rrIntervals = data.get('BPM').toArray().map(bpm => (60.0 / bpm) * 1000);
-    return rrIntervals;
-}
-
-function detectArrhythmiaWithHRV(rrIntervals, rmssdThreshold, sdnnThreshold) {
-    if (rrIntervals.length < 2) {
-        return [false, null, null];
+const { calculateRRIntervals, detectArrhythmiaWithHRV, analyzeAbnormalHR, evaluateAbnormalPatterns } = (() => {
+    // HRV 분석 함수들
+    function calculateRRIntervals(data) {
+        const rrIntervals = data.get('BPM').toArray().map(bpm => (60.0 / bpm) * 1000);
+        return rrIntervals;
     }
 
-    const timeDomainFeatures = timeDomain(rrIntervals);
-    const rmssd = timeDomainFeatures.rmssd;
-    const sdnn = timeDomainFeatures.sdnn;
-
-    console.log(`Calculated RMSSD: ${rmssd}, Threshold: ${rmssdThreshold}`);
-    console.log(`Calculated SDNN: ${sdnn}, Threshold: ${sdnnThreshold}`);
-
-    const isArrhythmia = rmssd > rmssdThreshold || sdnn < sdnnThreshold;
-    return [isArrhythmia, rmssd, sdnn];
-}
-
-function analyzeAbnormalHR(data, lowerThreshold, upperThreshold) {
-    const abnormalPeriods = data.filter(row => row.get('BPM') < lowerThreshold || row.get('BPM') > upperThreshold);
-    let totalAbnormalTime = 0;
-    let numAbnormalPeriods = abnormalPeriods.length;
-
-    if (numAbnormalPeriods > 0) {
-        for (let i = 1; i < numAbnormalPeriods; i++) {
-            const duration = moment(abnormalPeriods.at(i).get('TIME')).diff(moment(abnormalPeriods.at(i - 1).get('TIME')), 'seconds');
-            totalAbnormalTime += duration;
+    function calculateRMSSD(rrIntervals) {
+        if (rrIntervals.length < 2) {
+            return null;
         }
+        let sumSquares = 0;
+        for (let i = 1; i < rrIntervals.length; i++) {
+            const diff = rrIntervals[i] - rrIntervals[i - 1];
+            sumSquares += diff * diff;
+        }
+        const meanSquare = sumSquares / (rrIntervals.length - 1);
+        return Math.sqrt(meanSquare);
     }
 
-    return [numAbnormalPeriods, totalAbnormalTime, abnormalPeriods];
-}
-
-function evaluateAbnormalPatterns(abnormalPeriods) {
-    if (abnormalPeriods.length < 2) {
-        return false;
+    function calculateSDNN(rrIntervals) {
+        if (rrIntervals.length < 2) {
+            return null;
+        }
+        const meanRR = rrIntervals.reduce((a, b) => a + b) / rrIntervals.length;
+        let sumSquares = 0;
+        for (let i = 0; i < rrIntervals.length; i++) {
+            const diff = rrIntervals[i] - meanRR;
+            sumSquares += diff * diff;
+        }
+        const variance = sumSquares / rrIntervals.length;
+        return Math.sqrt(variance);
     }
 
-    const differences = abnormalPeriods.map((row, index) => {
-        if (index === 0) return 0;
-        return Math.abs(row.get('BPM') - abnormalPeriods.at(index - 1).get('BPM'));
-    });
+    function detectArrhythmiaWithHRV(rrIntervals, rmssdThreshold, sdnnThreshold) {
+        if (rrIntervals.length < 2) {
+            return [false, null, null];
+        }
 
-    const threshold = 20;  // BPM 변화가 이 값을 넘으면 비정상 패턴으로 간주
-    const abnormalPattern = differences.some(diff => diff > threshold);
+        const rmssd = calculateRMSSD(rrIntervals);
+        const sdnn = calculateSDNN(rrIntervals);
 
-    return abnormalPattern;
-}
+        console.log(`Calculated RMSSD: ${rmssd}, Threshold: ${rmssdThreshold}`);
+        console.log(`Calculated SDNN: ${sdnn}, Threshold: ${sdnnThreshold}`);
+
+        const isArrhythmia = rmssd > rmssdThreshold || sdnn < sdnnThreshold;
+        return [isArrhythmia, rmssd, sdnn];
+    }
+
+    function analyzeAbnormalHR(data, lowerThreshold, upperThreshold) {
+        const abnormalPeriods = data.filter(row => row.get('BPM') < lowerThreshold || row.get('BPM') > upperThreshold);
+        let totalAbnormalTime = 0;
+        let numAbnormalPeriods = abnormalPeriods.length;
+
+        if (numAbnormalPeriods > 0) {
+            for (let i = 1; i < numAbnormalPeriods; i++) {
+                const duration = moment(abnormalPeriods.at(i).get('TIME')).diff(moment(abnormalPeriods.at(i - 1).get('TIME')), 'seconds');
+                totalAbnormalTime += duration;
+            }
+        }
+
+        return [numAbnormalPeriods, totalAbnormalTime, abnormalPeriods];
+    }
+
+    function evaluateAbnormalPatterns(abnormalPeriods) {
+        if (abnormalPeriods.length < 2) {
+            return false;
+        }
+
+        const differences = abnormalPeriods.map((row, index) => {
+            if (index === 0) return 0;
+            return Math.abs(row.get('BPM') - abnormalPeriods.at(index - 1).get('BPM'));
+        });
+
+        const threshold = 20;  // BPM 변화가 이 값을 넘으면 비정상 패턴으로 간주
+        const abnormalPattern = differences.some(diff => diff > threshold);
+
+        return abnormalPattern;
+    }
+
+    return { calculateRRIntervals, detectArrhythmiaWithHRV, analyzeAbnormalHR, evaluateAbnormalPatterns };
+})();
+
+const app = express();
 
 router.get('/analyze-heart-rate', async (req, res) => {
-    const heartRateData = await oracleDB.fetchHeartRateData();
+    const heartRateData = await fetchHeartRateData();
 
     if (heartRateData.length < 5000) {
         res.json({ message: "Your heart rate is not high enough to detect an arrhythmia." });
