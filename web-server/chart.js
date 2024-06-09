@@ -4,7 +4,7 @@ const oracleDB = require('./oracledb.js');
 const { getUserEmailFromToken, executeQuery } = require('./utility.js'); // 유틸리티 함수들 사용
 
 // Hourly chart handler
-app.get('/hourly-chart', async (req, res) => {
+router.get('/hourly-chart', async (req, res) => {
   try {
     const userEmail = await getUserEmailFromToken(req);
     const query = oracleDB.everyHourDuringTheDayQuery();
@@ -29,7 +29,7 @@ app.get('/hourly-chart', async (req, res) => {
 });
 
 // Weekly chart handler
-app.get('/weekly-chart', async (req, res) => {
+router.get('/weekly-chart', async (req, res) => {
   try {
     const userEmail = await getUserEmailFromToken(req);
     const query = oracleDB.everySevenHourDuringTheWeekQuery();
@@ -54,7 +54,7 @@ app.get('/weekly-chart', async (req, res) => {
 
 
 // Monthly chart handler
-app.get('/monthly-chart', async (req, res) => {
+router.get('/monthly-chart', async (req, res) => {
   try {
     const userEmail = await getUserEmailFromToken(req);
     const query = oracleDB.everyDayDuringTheMonthQuery();
