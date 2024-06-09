@@ -78,6 +78,35 @@ async function selectUserErrlog(paramEmail){
      }
 }
 
+// DB에서 최근 24시간 동안의 심박수 데이터 가져오기
+async function fetchHeartRateData() {
+  let connection;
+
+  try {
+    connection = await connectToOracleDB();
+
+    const result = await connection.execute(
+      `SELECT idx, bpm, time, email, tag
+       FROM bpmdata
+       WHERE time > (SELECT max(time) - INTERVAL '24' HOUR FROM bpmdata) AND email='pyh5523' AND bpm <> 0 
+       ORDER BY time`
+    );
+
+    const df = new pandas.DataFrame(result.rows, result.metaData.map(meta => meta.name.toUpperCase()));
+    return df;
+  } catch (err) {
+    console.error(err);
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+}
+
 // 실시간 삼박수
 function realtimeQuery() {
   return `SELECT ROUND(bpm) FROM bpmdata WHERE email = :Email ORDER BY time DESC FETCH FIRST 1 ROWS ONLY`;
@@ -236,6 +265,7 @@ module.exports = {
   insertBPMData,
   selectUserlog,
   selectUserErrlog,
+  fetchHeartRateData,
   realtimeQuery,
   minQuery,
   hourQuery,
