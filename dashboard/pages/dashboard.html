@@ -8,22 +8,16 @@
     <title>Heart Dashboard</title>
 </head>
 <body>
-    
-    <div class="header">
-        <h1>(로그인사용자) <div class="status"><img src="../assets/img/loading.gif" id="dynamicImage"></div></h1>
-    </div>
    <!--PC 네비바-->
-    <div class="nav-bar">
-        <ul>
-            <li class="login-name">(로그인 사용자 이름)</li>
-            <li class="profile-pic"><img src="../assets/img/profile-pic-ex.png" alt="프로필 사진"></li>
-            <li class="menu-box"><a href="./dashboard.html">메인 보드</a></li>
-            <li class="menu-box"><a href="">프로필</a></li>
-            <li class="menu-box"><a href="">친구</a></li>
-            <li class="menu-box"><a href="">트레이닝</a></li>
-            <li class="logout">로그아웃</li>
+    <nav class="nav-pc">
+        <div class="hamburger-pc" id="hamburger-pc">☰</div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="./dashboard.html"><img src="../assets/img/bottom_icon03-w.png"></a></li>
+            <li><a href="./beat-track.html"><img src="../assets/img/bottom_icon02-w.png"></a></li>
+            <li><a href="./training-record.html"><img src="../assets/img/bottom_icon04-w.png"></a></li>
         </ul>
-    </div>
+        <div class="nav-logout"><a href="./sitemap.html"></a><img src="../assets/img/bottom_icon05-w.png"></div>
+    </nav>
     <!-- 모바일 네비바 -->
     <div class="bar">Heart Rate Monitor</div>
     <div class="hamburger-mob" id="hamburger-mob">☰</div> 
@@ -33,10 +27,32 @@
         <a href="./training-record.html">트레이닝 기록</a>
     </nav>
 
+    <!--pc 전용 레이아웃--><!--
+    <div class="wrap-cont-pc">
+        <div class="first-row">
+            <div class="rt-heart-board"></div>
+            <div class="status-container">
+                <canvas></canvas>
+                <div class="status-icon"><img src="../assets/img/normal.png" alt=""></div>
+            </div>
+            <div class="average-heart-board"></div>
+        </div>
+        <div class="second-row">
+            <div class="donut-chart-container">
+
+            </div>
+            <div class="bar-chart-container">
+
+            </div>
+        </div>
+        <div class="third-row">
+            <div class="chart-container"></div>
+        </div>
+    </div>-->
+
     <!--모바일 전용 레이아웃-->
     <div class="wrap-cont">
-        <div class="motd-img"><img src="../assets/img/motdimg1.png" alt=""></div>
-        <h1>(로그인사용자) <div class="status"><img src="../assets/img/loading.gif" id="dynamicImage"></div></h1>
+        <h1>(로그인사용자) <div class="status"><img src="../assets/img/normal.png" id="dynamicImage"></div></h1>
         <div class="dash-board">
             <div class="heart-board">         
                 <ul>
@@ -97,27 +113,41 @@
             <canvas id="graph" width="1000" height="400"></canvas>
 
         </div>
-        <div class="chart-container">
-            <div class="container-title">안정활동휴식</div>
-            <canvas id="bar-graph" width="1000" height="400"></canvas>
+        <div class="chart-container" data-simplebar style="overflow-x: auto; overflow-y:hidden; white-space:nowrap;" >
+            <div class="container-title" style="padding-top: 0;">안정활동휴식</div>
+            <canvas id="bar-graph" width="1000" height="350" style="padding-bottom: 20px;"></canvas>
         </div>
         <div class="chart-container">
             <div class="container-title">안정활동휴식 </div>
             <canvas id="donut-graph" width="1000" height="350"></canvas>
+            <img id="centerIcon" src="" alt="Icon" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
         </div>
 
         <div class="footer">
             <div class="footer-nav">
                 <ul class="d-flex justify-content-around">
-                    <li class="footer-logout"><a href="/logout"> 로그아웃 </a></li>
+                    <li class="footer-logout"><a href=""> 로그아웃 </a></li>
                 </ul>
             </div>
         </div>
-        
+    </div>
+    <div class="bottom_icon">
+        <ul>
+            <li>
+                <a href="../index.html"><img src="../assets/img/bottom_icon01.png"></a></li>
+            <li>
+                <a href="./beat-track.html"><img src="../assets/img/bottom_icon02.png"></a></li>            
+            <li>
+                <a href="./dashboard.html"><img src="../assets/img/bottom_icon03.png"></a></li>
+            <li>
+                <a href="./training-record.html"><img src="../assets/img/bottom_icon04.png"></a></li>
+            <li>
+                <a href="./sitemap.html"><img src="../assets/img/bottom_icon05.png"></a></li>
+        </ul>
     </div>
     
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
     <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
@@ -127,40 +157,44 @@
     <script src="../assets/js/HR-update.js"></script>
 
     <script> //태그값 변경시 아이콘 변경 스크립트
-    function fetchDynamicIconData() {
-        fetch('/status')
-        .then(response => response.json())
-        .then(data => {
-            // 서버에서 받은 데이터의 첫 번째 값을 추출
-            var serverTag = data[0]; // 서버에서 받은 태그 값
+        function fetchDynamicIconData() {
+            fetch('/status')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    var serverTag = data.tag; // 서버에서 받은 태그 값
 
-            // 이미지 요소 선택
-            var imgElement = document.getElementById("dynamicImage");
+                    // 이미지 요소 선택
+                    var imgElement = document.getElementById("dynamicImage");
 
-            // 태그 값이 'workout'인지 확인하고 이미지 src 변경
-            if (serverTag === "workout") {
-                imgElement.src = "../assets/img/workout.png";
-            }
-            else if (serverTag === "rest") {
-                imgElement.src = "../assets/img/rest.png";
-            }
-            else if (serverTag === "sleep") {
-                imgElement.src = "../assets/img/sleep.png";
-            }
-            else if (serverTag === "normal") {
-                imgElement.src = "../assets/img/normal.png";
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching status data:', error);
-            var imgElement = document.getElementById("dynamicImage");
-            imgElement.src = "../assets/img/loading.gif";
-        });
-    };
-    
-    setInterval(fetchDynamicIconData, 1000);
-    document.addEventListener('DOMContentLoaded', fetchDynamicIconData);
-</script>
+                    // 태그 값이 'workout'인지 확인하고 이미지 src 변경
+                    if (serverTag === "workout") {
+                        imgElement.src = "../assets/img/workout.png";
+                    }
+                    else if (serverTag === "rest") {
+                        imgElement.src = "../assets/img/rest.png";
+                    }
+                    else if (serverTag === "sleep") {
+                        imgElement.src = "../assets/img/sleep.png";
+                    }
+                    else if (serverTag === "normal") {
+                        imgElement.src = "../assets/img/normal.png";
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching status data:', error);
+                    var imgElement = document.getElementById("dynamicImage");
+                    imgElement.src = "../assets/img/loading.gif";
+                });
+        };
+        
+        setInterval(fetchDynamicIconData,1000);
+        document.addEventListener('DOMContentLoaded', fetchDynamicIconData);
+    </script>
 
 
     <script> //모바일네비바 펼치기스크립트
@@ -172,7 +206,7 @@
         //로그아웃 버튼 클릭 이벤트 리스너 추가
         document.querySelector('.logout').addEventListener('click', function() {
             fetch('/logout', { //클릭 시 서버로 로그아웃 요청을 보냄
-                method: 'GET',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -180,7 +214,7 @@
             .then(response => {
                 if (response.ok) {
                     // 로그아웃 성공 시, 홈 페이지로 리디렉션
-                    window.location.href = 'https://heartrate.ddns.net';
+                    window.location.href = '../index.html';
                 } else {
                     // 로그아웃 실패 시, 에러 메시지 출력
                     alert('로그아웃에 실패했습니다.');
@@ -193,7 +227,6 @@
         });
     </script>
 
-    <!-- 변경된 부분 시작 -->
     <script>
         // 버튼 클릭 이벤트 리스너 추가
         document.querySelector('.button-container').addEventListener('click', function(event) {
@@ -211,116 +244,56 @@
                 // 클릭한 버튼에 따라 다른 URL로 데이터 요청
                 let url;
                 const buttonText = event.target.textContent.trim();
-
-                if (buttonText === 'Daily') {
+                
+                //버튼 클릭 시 차트 변경
+                if (buttonText === 'Daily'){
                     url = '/hourly-chart';
-                } else if (buttonText === 'Weekly') {
+                } else if (buttonText === 'Weekly'){
                     url = '/weekly-chart';
                 } else if (buttonText === 'Monthly') {
                     url = '/monthly-chart';
                 }
 
-                // 데이터 요청 및 차트 업데이트
-                fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(responseData => {
-                    const { userEmail, data } = responseData;
-                    console.log('User Email:', userEmail); // 추가된 userEmail을 로그에 출력
-                    updateChart(data);
-                })
-                .catch(error => {
-                    console.error('Error fetching chart data:', error);
-                });
+                updateChart(url);
+
+                
             }
         });
 
-        // 차트 업데이트 함수
-        function updateChart(data) {
-            // 차트를 초기화
-            const ctx = document.getElementById('graph').getContext('2d');
-            const labels = data.map(item => item[0]); // 첫 번째 요소는 시간
-            const values = data.map(item => item[1]); // 두 번째 요소는 BPM 값
-
-            // 기존 차트를 초기화
-            if (window.myChart) {
-                window.myChart.destroy();
-            }
-
-            // 새로운 차트를 생성
-            window.myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Heart Rate',
-                        data: values,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        }
-
-        // 페이지 로드 시 초기 차트 데이터를 로드
-        fetch('/hourly-chart')
-        .then(response => response.json())
-        .then(responseData => {
-            const { userEmail, data } = responseData;
-            console.log('User Email:', userEmail); // 추가된 userEmail을 로그에 출력
-            updateChart(data);
-        })
-        .catch(error => {
-            console.error('Error fetching initial chart data:', error);
-        });   
-    </script>
-
-    <script>
+        // 페이지 로드 시 초기 버튼 활성화 상태 설정
+        document.querySelector('.button-container .button:first-child a').click();
+    
         // 캔버스 요소와 2D 컨텍스트 가져오기
-        var canvas = document.getElementById('bar-graph');
+        var canvas = document.getElementById('graph');
         var ctx = canvas.getContext('2d');
-        //차트 생성 함수
-        function barChart(url) {
-            let yellow, pink;
+        //차트 생성 함수 1분 1시간 하루 주 월 년
+        function updateChart(url) {
+            let avgBPMs;
             const hourLabels = ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5', 'Label 6', 'Label 7', 'Label 8'];
-            yellow = [90, 75, 90, 98, 80, 105, 110, 115];
-            pink = [90, 75, 90, 98, 80, 105, 110, 115];
+            avgBPMs = [90, 75, 90, 98, 80, 105, 110, 115];
             /*fetch(url) 
                 .then(response => response.json())
                 .then(data => {
                     const hourLabels = data.map(item => item[0]);
                     const avgBPMs = data.map(item => item[1]);*/
 
-                    var canvas = document.getElementById('bar-graph');
+                    var canvas = document.getElementById('graph');
                     var ctx = canvas.getContext('2d');
 
                     new Chart(ctx, {
-                        type: "bar",
+                        type: "line",
                         data: {
                             labels: hourLabels,
                             datasets: [{
                                 label: "BPM 박동수",
+                                tension: 0.4,
+                                borderWidth: 0,
+                                pointRadius: 0,
+                                borderColor: "#F5675D",
+                                borderWidth: 3,
                                 fill: true,
-                                data: yellow,
-                                backgroundColor: '',
-                                barThickness: 20
-                            },{
-                                label: "",
-                                fill: true,
-                                data: pink,
-                                backgroundColor: '',
-                                barThickness: 20
+                                data: avgBPMs,
+                                maxBarThickness: 6
                             }],
                         },
                         options: {
@@ -346,7 +319,7 @@
                                     },
                                     ticks: {
                                         display: true,
-                                        padding: 0,
+                                        padding: 10,
                                         color: '#fbfbfb',
                                         font: {
                                             size: 11,
@@ -367,7 +340,145 @@
                                     ticks: {
                                         display: true,
                                         color: '#ccc',
-                                        padding: 30,
+                                        padding: 20,
+                                        font: {
+                                            size: 11,
+                                            family: "Open Sans",
+                                            style: 'normal',
+                                            lineHeight: 2
+                                        },
+                                    }
+                                },
+                            },
+                        },
+                    });
+                }/*)
+                .catch(error => {
+                    console.error('Error fetching chart data:', error);
+                });
+        }*/
+
+        updateChart();
+    
+    </script>
+
+    <script>
+        // 캔버스 요소와 2D 컨텍스트 가져오기
+        var canvas = document.getElementById('bar-graph');
+        var ctx = canvas.getContext('2d');
+        //차트 생성 함수
+        function barChart(url) {
+            const hourLabels = ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23'];
+            /*fetch(url) 
+                .then(response => response.json())
+                .then(data => {
+                    const hourLabels = data.map(item => item[0]);
+                    const avgBPMs = data.map(item => item[1]);*/
+
+                    var canvas = document.getElementById('bar-graph');
+                    var ctx = canvas.getContext('2d');
+
+                    new Chart(ctx, {
+                        type: "bar",
+                        data: {
+                            labels: hourLabels,
+                            datasets: [{
+                                label: "활동",
+                                fill: true,
+                                data: [12, 19, 3, 5, 2, 3, 9, 10,12, 19, 3, 5, 2, 3, 9, 10,12, 19, 3, 5, 2, 3, 9, 10],
+                                backgroundColor: '#ef476f',
+                                barThickness: 20
+                            },{
+                                label: "수면",
+                                fill: true,
+                                data:  [2, 3, 20, 5, 1, 4, 6, 8,2, 3, 20, 5, 1, 4, 6, 8,2, 3, 20, 5, 1, 4, 6, 8],
+                                backgroundColor: '#ffd166',
+                                barThickness: 20
+                            },{
+                                label: "안정",
+                                fill: true,
+                                data: [3, 10, 13, 15, 22, 7, 11, 6,3, 10, 13, 15, 22, 7, 11, 6,3, 10, 13, 15, 22, 7, 11, 6],
+                                backgroundColor: '#06d6a0',
+                                barThickness: 20
+                            },{
+                                label: "평상",
+                                fill: true,
+                                data: [5, 2, 10, 20, 30, 14, 8, 12,5, 2, 10, 20, 30, 14, 8, 12,5, 2, 10, 20, 30, 14, 8, 12],
+                                backgroundColor: '#118ab2',
+                                barThickness: 20
+                            },{
+                                label: "운동",
+                                fill: true,
+                                data: [20, 30, 15, 10, 5, 9, 3, 1,20, 30, 15, 10, 5, 9, 3, 1,20, 30, 15, 10, 5, 9, 3, 1],
+                                backgroundColor: '#073b4c',
+                                barThickness: 20
+                            }],
+                        },
+                        options: {
+                            responsive: false,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(tooltipItem) {
+                                            const datasetIndex = tooltipItem.datasetIndex;
+                                            const datasets = tooltipItem.chart.data.datasets;
+                                            const orderedDatasets = [datasets[4], datasets[3], datasets[2], datasets[1], datasets[0]]; // 운동, 평상, 안정, 수면, 활동 순서
+                                            const dataset = orderedDatasets[datasetIndex];
+                                            return dataset.label + ': ' + dataset.data[tooltipItem.dataIndex];
+                                        },
+                                        datasetLabel: function(context) {
+                                            return context.dataset.label || '';
+                                        }
+                                    },
+                                    itemSort: function(a, b) {
+                                        const order = ['운동', '평상', '안정', '수면', '활동'];
+                                        return order.indexOf(a.dataset.label) - order.indexOf(b.dataset.label);
+                                    }
+                                },
+                                legend: {
+                                    display: false,
+                                }
+                            },
+                            interaction: {
+                                intersect: false,
+                                mode: 'index',
+                            },
+                            scales: {
+                                y: {
+                                    stacked: true,
+                                    grid: {
+                                        drawBorder: false,
+                                        display: true,
+                                        drawOnChartArea: true,
+                                        drawTicks: false,
+                                        borderDash: [5, 5]
+                                    },
+                                    ticks: {
+                                        display: true,
+                                        padding: 0,
+                                        color: '#fbfbfb',
+                                        font: {
+                                            size: 11,
+                                            family: "Open Sans",
+                                            style: 'normal',
+                                            lineHeight: 2
+                                        },
+                                    }
+                                },
+                                x: {
+                                    stacked: true,
+                                    grid: {
+                                        drawBorder: false,
+                                        display: false,
+                                        drawOnChartArea: false,
+                                        drawTicks: false,
+                                        borderDash: [5, 5]
+                                    },
+                                    ticks: {
+                                        display: true,
+                                        color: '#ccc',
+                                        padding: 10,
                                         font: {
                                             size: 11,
                                             family: "Open Sans",
@@ -386,27 +497,41 @@
         }*/
 
         barChart();
-
-        // 페이지 로드 시 초기 버튼 활성화 상태 설정
-        document.querySelector('.button-container .button:first-child a').click();
+    
     </script>
-        <script>
+    
+    <script>
         // 캔버스 요소와 2D 컨텍스트 가져오기
         var canvas = document.getElementById('donut-graph');
         var ctx = canvas.getContext('2d');
         //차트 생성 함수
+
+        var icons = [
+            '../assets/img/normal.png', 
+            '../assets/img/rest.png', 
+            '../assets/img/sleep.png',
+            '../assets/img/workout.png',
+            '../assets/img/loading.gif'
+        ];
+
         function donutChart(url) {
-            let avgBPMs;
-            const hourLabels = ['Label 1', 'Label 2', 'Label 3', 'Label 4'];
-            avgBPMs = [90, 75, 90, 98];
+            let dailyTag;
+            const hourLabels = ['활동', '수면', '안정', '평상', '운동'];
+            dailyTag = [90, 75, 90, 98, 37];
             /*fetch(url) 
                 .then(response => response.json())
                 .then(data => {
                     const hourLabels = data.map(item => item[0]);
-                    const avgBPMs = data.map(item => item[1]);*/
+                    const dailyTag = data.map(item => item[1]);*/
 
                     var canvas = document.getElementById('donut-graph');
                     var ctx = canvas.getContext('2d');
+                    var centerIcon = document.getElementById('centerIcon');
+                    
+                    const backgroundColors = [
+                        '#ef476f','#ffd166','#06d6a0','#118ab2','#073b4c'
+                    ];
+
 
                     new Chart(ctx, {
                         type: "doughnut",
@@ -415,7 +540,8 @@
                             datasets: [{
                                 label: "BPM 박동수",
                                 fill: true,
-                                data: avgBPMs,
+                                data: dailyTag,
+                                backgroundColor: backgroundColors,
                                 maxBarThickness: 6
                             }],
                         },
@@ -430,6 +556,27 @@
                             interaction: {
                                 intersect: false,
                                 mode: 'index',
+                            },
+                            hover: {
+                                onHover: function(event, chartElement) {
+                                    if (chartElement.length) {
+                                        // 마우스가 데이터 포인트 위에 있을 때
+                                        var index = chartElement[0].index;
+                                        centerIcon.src = icons[index];
+                                        centerIcon.style.display = 'block';
+                                    } else {
+                                        // 마우스가 데이터 포인트 밖에 있을 때
+                                        centerIcon.style.display = 'none';
+                                    }
+                                }
+                            },
+                            layout: {
+                                padding: {
+                                    left: 0,
+                                    right: 0,
+                                    top: 0,
+                                    bottom: 0
+                                }
                             },
                             scales: {
                                 y: {
@@ -482,9 +629,6 @@
         }*/
 
         donutChart();
-
-    </script>
-    <!-- 변경된 부분 끝 -->
     
-</body>
+    </script>
 </html>
