@@ -1,54 +1,15 @@
 const express = require('express');
-const oracledb = require('oracledb');
-const pandas = require('pandas-js');
+const oracleDB = require('./oracledb.js');
+const router = express.Router();
 const { timeDomain } = require('hrv-analysis');
 const moment = require('moment');
 
-const router = express.Router();
 
-// 오라클 데이터베이스 연결 설정
-const dsn = {
-    user: "piber",
-    password: "wjsansrk",
-    connectString: "localhost:1521/ORA21APEX"
-};
-
-// DB에서 최근 24시간 동안의 심박수 데이터 가져오기
-async function fetchHeartRateData() {
-    let connection;
-
-    try {
-        connection = await oracledb.getConnection(dsn);
-
-        const result = await connection.execute(
-            `SELECT idx, bpm, time, email, tag
-            FROM bpmdata
-            WHERE time > (SELECT max(time) - INTERVAL '24' HOUR FROM bpmdata) AND email='pyh5523' AND bpm <> 0 
-            ORDER BY time`
-        );
-
-        const df = new pandas.DataFrame(result.rows, result.metaData.map(meta => meta.name.toUpperCase()));
-        return df;
-    } catch (err) {
-        console.error(err);
-    } finally {
-        if (connection) {
-            try {
-                await connection.close();
-            } catch (err) {
-                console.error(err);
-            }
-        }
-    }
-}
-
-// RR 간격 계산
 function calculateRRIntervals(data) {
     const rrIntervals = data.get('BPM').toArray().map(bpm => (60.0 / bpm) * 1000);
     return rrIntervals;
 }
 
-// HRV 분석을 통해 부정맥 탐지
 function detectArrhythmiaWithHRV(rrIntervals, rmssdThreshold, sdnnThreshold) {
     if (rrIntervals.length < 2) {
         return [false, null, null];
@@ -65,7 +26,6 @@ function detectArrhythmiaWithHRV(rrIntervals, rmssdThreshold, sdnnThreshold) {
     return [isArrhythmia, rmssd, sdnn];
 }
 
-// 비정상 심박수 빈도 및 지속 시간 분석
 function analyzeAbnormalHR(data, lowerThreshold, upperThreshold) {
     const abnormalPeriods = data.filter(row => row.get('BPM') < lowerThreshold || row.get('BPM') > upperThreshold);
     let totalAbnormalTime = 0;
@@ -81,7 +41,6 @@ function analyzeAbnormalHR(data, lowerThreshold, upperThreshold) {
     return [numAbnormalPeriods, totalAbnormalTime, abnormalPeriods];
 }
 
-// 비정상 심박수 패턴 분석
 function evaluateAbnormalPatterns(abnormalPeriods) {
     if (abnormalPeriods.length < 2) {
         return false;
@@ -98,9 +57,8 @@ function evaluateAbnormalPatterns(abnormalPeriods) {
     return abnormalPattern;
 }
 
-// 메인 엔드포인트
-app.get('/analyze-heart-rate', async (req, res) => {
-    const heartRateData = await fetchHeartRateData();
+router.get('/analyze-heart-rate', async (req, res) => {
+    const heartRateData = await oracleDB.fetchHeartRateData();
 
     if (heartRateData.length < 5000) {
         res.json({ message: "Your heart rate is not high enough to detect an arrhythmia." });
