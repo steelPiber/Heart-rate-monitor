@@ -7,6 +7,7 @@ const { router: googleAuthRouter } = require("./google_authController.js");
 const bpmRouter = require('./bpm.js'); // bpm 라우터 모듈 불러오기
 const { executeQuery, getUserEmailFromToken } = require('./utility.js'); // 유틸리티 함수들 사용
 const hrvRouter = require('./hrv.js');
+const chartRouter = require('./chart.js');
 const app = express();
 
 app.use(express.json());
@@ -14,6 +15,7 @@ app.use(cookieParser());
 app.use(googleAuthRouter);
 app.use(bpmRouter); // bpm 라우터 사용
 app.use(hrvRouter);
+app.use(chartRouter);
 
 // 정적 파일 미들웨어를 사용하여 CSS, 이미지, JS 등의 정적 파일 제공
 app.use(express.static(path.join(__dirname, '/dashboard')));
@@ -52,74 +54,6 @@ app.get('/min1', (req, res) => {
 });
 app.get('/hourly', (req, res) => {
   res.sendFile(__dirname + '/hourlychart.html');
-});
-
-// Hourly chart handler
-app.get('/hourly-chart', async (req, res) => {
-  try {
-    const userEmail = await getUserEmailFromToken(req);
-    const query = oracleDB.everyHourDuringTheDayQuery();
-    const result = await executeQuery(query, { Email: userEmail });
-
-    const data = result.rows.map(row => {
-      const date = row[0].slice(5, 16); // "2024-" 부분을 제거하고 월 일만 추출
-      const [month, day, hour] = date.split(' ');
-      const formattedDate = `${month} ${day}`;
-      return [formattedDate, row[1]];
-    });
-    
-    const responseData = {
-      userEmail: userEmail,
-      data: data
-    };
-    
-    res.json(responseData);
-  } catch (err) {
-    res.status(500).send('Error retrieving data');
-  }
-});
-
-// Weekly chart handler
-app.get('/weekly-chart', async (req, res) => {
-  try {
-    const userEmail = await getUserEmailFromToken(req);
-    const query = oracleDB.everySevenHourDuringTheWeekQuery();
-    const result = await executeQuery(query, { Email: userEmail });
-    const data = result.rows.map(row => {
-      const date = row[0].slice(5, 16); // "2024-" 부분을 제거하고 월 일만 추출
-      const [month, day, hour] = date.split(' ');
-      const formattedDate = `${month} ${day}`;
-      return [formattedDate, row[1]];
-    });
-
-    const responseData = {
-      userEmail: userEmail,
-      data: data
-    };
-    
-    res.json(responseData);
-  } catch (err) {
-    res.status(500).send('Error retrieving data');
-  }
-});
-
-
-// Monthly chart handler
-app.get('/monthly-chart', async (req, res) => {
-  try {
-    const userEmail = await getUserEmailFromToken(req);
-    const query = oracleDB.everyDayDuringTheMonthQuery();
-    const result = await executeQuery(query, { Email: userEmail });
-    const data = result.rows.map(row => [row[0], row[1]]);
-    const responseData = {
-      userEmail: userEmail,
-      data: data
-    };
-    
-    res.json(responseData);
-  } catch (err) {
-    res.status(500).send('Error retrieving data');
-  }
 });
 
 
