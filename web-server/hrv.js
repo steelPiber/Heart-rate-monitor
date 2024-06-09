@@ -89,7 +89,7 @@ const { calculateRRIntervals, detectArrhythmiaWithHRV, analyzeAbnormalHR, evalua
 const app = express();
 
 router.get('/analyze-heart-rate', async (req, res) => {
-    const heartRateData = await fetchHeartRateData();
+    const heartRateData = await oracleDB.fetchHeartRateData();
 
     if (heartRateData.length < 5000) {
         res.json({ message: "Your heart rate is not high enough to detect an arrhythmia." });
