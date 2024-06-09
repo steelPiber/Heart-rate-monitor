@@ -166,7 +166,7 @@
                     return response.json();
                 })
                 .then(data => {
-                    var serverTag = data.tag; // 서버에서 받은 태그 값
+                    var serverTag = data; // 서버에서 받은 태그 값
 
                     // 이미지 요소 선택
                     var imgElement = document.getElementById("dynamicImage");
