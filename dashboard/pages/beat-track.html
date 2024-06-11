@@ -8,6 +8,17 @@
     <title>Heart Dashboard</title>
 </head>
 <body>
+     <!--PC 네비바-->
+   <nav class="nav-pc">
+        <div class="hamburger-pc" id="hamburger-pc">☰</div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="./dashboard.html"><img src="../assets/img/bottom_icon03-w.png"><span>메인보드</span></a></li>
+            <li><a href="./beat-track.html"><img src="../assets/img/bottom_icon02-w.png"><span>트레이닝</span></a></li>
+            <li><a href="./training-record.html"><img src="../assets/img/bottom_icon04-w.png"><span>트레이닝 기록</span></a></li>
+        </ul>
+        <div class="nav-logout"><a href="/logout"></a><img src="../assets/img/logout-w.png"><span>로그아웃</span></div>
+    </nav>
+    <div class="overlay" id="overlay"></div>
     <!--모바일 네비바-->
     <div class="bar">Heart Rate Monitor</div>
     <div class="hamburger-mob" id="hamburger-mob">☰</div> 
@@ -17,21 +28,70 @@
         <a href="./beat-track.html">트레이닝</a>
         <a href="./training-record.html">트레이닝 기록</a>
     </nav>
+
+    <!--pc 레이아웃-->
+    <div class="wrap-cont-pc">
+        <div class="first-row">
+            <div class="bt-first-container">
+                <div class="quest-announce"></div>
+                <div class="target-container">
+                    <div class="target"></div>
+                    <span class="target-desc">현재 휴식치</span>
+                </div>
+                <div class="target-container">
+                    <div class="target"></div>
+                    <span class="target-desc">목표 휴식치</span>
+                </div>
+            </div>
+        </div>
+        <div class="second-row">
+            <div class="bt-heart-rate-container">
+                <div class="container-title">구간 심박수</div>
+            </div>
+            <div class="bt-target-zone-container">
+                <div class="container-title"> 심박수 운동 영역
+                    <div class="container-title-img">
+                        <img src="../assets/img/support.png" alt="">
+                        <p class="description">
+                            최대 심박수 기준으로 기록됨<br>
+                            maximum:&emsp;    90-100%<br>
+                            hard:&emsp;&emsp;&ensp;&ensp;&ensp;       80-90%<br>
+                            moderate:&emsp;   70-80%<br>
+                            light:&emsp;&emsp;&ensp;&ensp;&ensp;      60-70%<br>
+                            warm up:&emsp;&ensp;    50-60%<br>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="third-row">
+            <div class="map-container">
+                <div class="workout-result-container">
+                    <span class="wr-title">운동 결과</span>
+                    <div class="wr-right"><div>0 km</div><span>이동 거리</span></div>
+                    <div class="wr-left"><div>0 min</div><span>운동 시간</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--pc 레이아웃-->
+
     <!--모바일 레이아웃-->
     <div class="wrap-cont">
         <div class="advice-container">
             <h3>적정 운동량에 도달하지 못했습니다!</h3>
             <div class="steps-container">
+                <!--걸음수 빼고 목표치 집어넣으셈-->
                 <div class="steps">걸음 수</div>
                 <div class="steps" id="steps">0</div>
             </div>
         </div>
         <div class="chart-container">
-            <div class="container-title">운동 심박수</div>
+            <div class="container-title">구간 심박수</div>
             <canvas id="workout-graph"></canvas>
         </div>
         <div class="chart-container">
-            <div class="container-title">적정 운동량
+            <div class="container-title">심박수 운동 영역
                 <div class="container-title-img">
                     <img src="../assets/img/support.png" alt="">
                     <p class="description">
@@ -58,13 +118,32 @@
             </div>
         </div>
     </div>
+    
+    <div class="bottom_icon">
+        <ul>
+            <li>
+                <a href="../index.html"><img src="../assets/img/bottom_icon01.png"></a></li>
+            <li>
+                <a href="./beat-track.html"><img src="../assets/img/bottom_icon02.png"></a></li>            
+            <li>
+                <a href="./dashboard.html"><img src="../assets/img/bottom_icon03.png"></a></li>
+            <li>
+                <a href="./training-record.html"><img src="../assets/img/bottom_icon04.png"></a></li>
+            <li>
+                <a href="./sitemap.html"><img src="../assets/img/bottom_icon05.png"></a></li>
+        </ul>
+    </div>
+    
 </body>
+<!--플러그인 스크립트들-->
 <script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
 <script src="../assets/js/core/popper.min.js"></script>
 <script src="../assets/js/core/bootstrap.min.js"></script>
 <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
 <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
 <script src="../assets/js/plugins/chartjs.min.js"></script>
+<!--구현한 스크립트들-->
+<script src="../assets/js/chartsBT.js"></script>
 
 <script> //모바일네비바 펼치기스크립트
     document.getElementById('hamburger-mob').addEventListener('click', function() {
@@ -72,231 +151,38 @@
     });
 </script>
 
-<script> //운동심박수 차트 그리기 스크립트
-       // 캔버스 요소와 2D 컨텍스트 가져오기
-       var canvas = document.getElementById('workout-graph');
-       var ctx = canvas.getContext('2d');
-       //차트 생성 함수
-       function workoutChart(url) {
-           let avgBPMs;
-           const hourLabels = ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5', 'Label 6', 'Label 7', 'Label 8'];
-           avgBPMs = [90, 75, 90, 98, 80, 105, 110, 115];
-           /*fetch(url)     //서버에서 데이터 가져오는 코드
-               .then(response => response.json())
-               .then(data => {
-                   const hourLabels = data.map(item => item[0]);
-                   const avgBPMs = data.map(item => item[1]);*/
+<script> //pc 버전 메뉴바 펼치기 스크립트
+    document.addEventListener('DOMContentLoaded', function () {
+        const hamburger = document.getElementById('hamburger-pc');
+        const overlay = document.getElementById('overlay');
+        const navPc = document.querySelector('.nav-pc');
+        const navItems = document.querySelectorAll('.nav-links li span, .nav-logout span');
 
-                   var canvas = document.getElementById('workout-graph');
-                   var ctx = canvas.getContext('2d');
+        hamburger.addEventListener('click', function () {
+            if (navPc.style.width === '250px') {
+                navPc.style.width = '80px';
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 300); // 0.3s transition
+                navItems.forEach(item => item.style.display = 'none');
+            } else {
+                navPc.style.width = '250px';
+                overlay.style.display = 'block';
+                setTimeout(() => {
+                    overlay.style.opacity = '1';
+                }, 10);
+                navItems.forEach(item => item.style.display = 'inline');
+            }
+        });
 
-                   new Chart(ctx, {
-                       type: "line",
-                       data: {
-                           labels: hourLabels,
-                           datasets: [{
-                               label: "BPM 박동수",
-                               tension: 0.4,
-                               borderWidth: 0,
-                               pointRadius: 0,
-                               borderColor: "#F5675D",
-                               borderWidth: 3,
-                               fill: true,
-                               data: avgBPMs,
-                               maxBarThickness: 6
-                           }],
-                       },
-                       options: {
-                           responsive: true,
-                           maintainAspectRatio: false,
-                           plugins: {
-                               legend: {
-                                   display: false,
-                               }
-                           },
-                           interaction: {
-                               intersect: false,
-                               mode: 'index',
-                           },
-                           scales: {
-                               y: {
-                                   grid: {
-                                       drawBorder: false,
-                                       display: true,
-                                       drawOnChartArea: true,
-                                       drawTicks: false,
-                                       borderDash: [5, 5]
-                                   },
-                                   ticks: {
-                                       display: true,
-                                       padding: 10,
-                                       color: '#fbfbfb',
-                                       font: {
-                                           size: 11,
-                                           family: "Open Sans",
-                                           style: 'normal',
-                                           lineHeight: 2
-                                       },
-                                   }
-                               },
-                               x: {
-                                   grid: {
-                                       drawBorder: false,
-                                       display: false,
-                                       drawOnChartArea: false,
-                                       drawTicks: false,
-                                       borderDash: [5, 5]
-                                   },
-                                   ticks: {
-                                       display: true,
-                                       color: '#ccc',
-                                       padding: 20,
-                                       font: {
-                                           size: 11,
-                                           family: "Open Sans",
-                                           style: 'normal',
-                                           lineHeight: 2
-                                       },
-                                   }
-                               },
-                           },
-                       },
-                   });
-               }/*)
-               .catch(error => {
-                   console.error('Error fetching chart data:', error);
-               });
-       }*/
-
-       workoutChart();
-   
-</script>
-
-<script> //적정운동량 차트 그리기 스크립트
-    var canvas = document.getElementById('target-zone');
-    var ctx = canvas.getContext('2d');
-    //차트 생성 함수
-    function targetZoneChart(url) {
-        let avgBPMs;
-        const labels = ['Maximum','Hard','Moderate','Light','Warm up'];
-        avgBPMs = [10,20,40,70,100];
-
-        const backgroundColors = [
-            '#F3463A','#FF695F','#FF8880','#FF9E97','#FFBEB9'
-        ];
-        const yLabelColors = [
-            '#F3463A','#FF695F','#FF8880','#FF9E97','#FFBEB9'
-        ];
-        /*fetch(url)  //서버에서 데이터 가져오는 코드
-            .then(response => response.json())
-            .then(data => {
-                const hourLabels = data.map(item => item[0]);
-                const avgBPMs = data.map(item => item[1]);
-
-                var canvas = document.getElementById('target-zone');
-                var ctx = canvas.getContext('2d');*/
-
-                new Chart(ctx, {
-                    type: "bar",
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: "",
-                            tension: 0.4,
-                            borderWidth: 0,
-                            pointRadius: 0,
-                            fill: true,
-                            data: avgBPMs,
-                            backgroundColor: backgroundColors,
-                            barThickness: 46
-                        }],
-                    },
-                    options: {
-                        indexAxis: 'y',
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false,
-                            }
-                        },
-                        interaction: {
-                            intersect: false,
-                            mode: 'index',
-                        },
-                        scales: {
-                            y: {
-                                grid: {
-                                    drawBorder: false,
-                                    display: false,
-                                    drawOnChartArea: true,
-                                    drawTicks: false,
-                                    borderDash: [5, 5]
-                                },
-                                ticks: {
-                                    display: true,
-                                    padding: 10,
-                                    color: function(context){
-                                        return yLabelColors[context.index] || '#000';
-                                    },
-                                    font: {
-                                        size: 11,
-                                        family: "Open Sans",
-                                        style: 'normal',
-                                        lineHeight: 2
-                                    },
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    drawBorder: false,
-                                    display: true,
-                                    drawOnChartArea: true,
-                                    drawTicks: false,
-                                    borderDash: [5, 5]
-                                },
-                                ticks: {
-                                    display: true,
-                                    color: '#fbfbfb',
-                                    padding: 20,
-                                    font: {
-                                        size: 11,
-                                        family: "Open Sans",
-                                        style: 'normal',
-                                        lineHeight: 2
-                                    },
-                                }
-                            },
-                        },
-                    },
-                    plugins: [{
-                        afterDraw: chart => {
-                            const yScale = chart.scales.y;
-                            const tickCount = yScale.ticks.length;
-                            const tickWidth = yScale.width / tickCount;
-
-
-                            chart.ctx.save();
-                            chart.ctx.fillStyle = '#000';
-                            chart.ctx.textAlign = 'right';
-                            chart.ctx.textBaseline = 'middle';
-
-                            yScale.ticks.forEach((tick, index) => {
-                                const xPos = yScale.left - 10;
-                                const yPos = yScale.getPixelForTick(index);
-                                chart.ctx.fillText(tick.label, xPos, yPos);
-                            });
-
-                            chart.ctx.restore();
-                        }
-                    }]
-                });
-            }/*)
-            .catch(error => {
-                console.error('Error fetching chart data:', error);
-            });
-    }*/
-
-    targetZoneChart();
-
+        overlay.addEventListener('click', function () {
+            navPc.style.width = '80px';
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300); // 0.3s transition
+            navItems.forEach(item => item.style.display = 'none');
+        });
+    });
 </script>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu with Overlay</title>
+    <style>
+        .nav-pc {
+            position: fixed;
+            background-color: #37363d;
+            z-index: 2; /* nav-pc의 z-index 값을 2로 설정하여 overlay보다 위에 위치 */
+            height: 100%;
+            width: 80px;
+            transition: width 0.3s;
+            overflow: hidden;
+        }
+        .hamburger-pc {
+            position: absolute;
+            top: 0;
+            left: 12px;
+            cursor: pointer;
+            font-size: 35px;
+            color: white;
+            padding: 6px;
+            border-radius: 5px;
+            z-index: 3; /* 햄버거 버튼의 z-index 값을 3으로 설정하여 메뉴바 위에 위치 */
+        }
+        .nav-links {
+            margin: 80px 14px;
+            margin-right: 15px;
+            list-style: none;
+            padding: 0;
+        }
+        .nav-links li {
+            margin: 25px 0;
+            padding: 4px;
+        }
+        .nav-links li:hover {
+            background-color: #F5675D;
+            border-radius: 10px;
+        }
+        .nav-links li img {
+            width: 32px;
+            vertical-align: middle;
+        }
+        .nav-links li span {
+            display: none; /* Hide text initially */
+            margin-left: 10px;
+            color: white;
+        }
+        .nav-logout {
+            position: absolute;
+            cursor: pointer;
+            bottom: 20px;
+            margin-left: 18px;
+        }
+        .nav-logout img {
+            width: 32px;
+            vertical-align: middle;
+        }
+        .nav-logout span {
+            display: none; /* Hide text initially */
+            margin-left: 10px;
+            color: white;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1; /* overlay의 z-index 값을 1로 설정 */
+            display: none; /* Hide overlay initially */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-pc">
+        <div class="hamburger-pc" id="hamburger-pc">☰</div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="./dashboard.html"><img src="../assets/img/bottom_icon03-w.png"><span>메인보드</span></a></li>
+            <li><a href="./beat-track.html"><img src="../assets/img/bottom_icon02-w.png"><span>트레이닝</span></a></li>
+            <li><a href="./training-record.html"><img src="../assets/img/bottom_icon04-w.png"><span>트레이닝 기록</span></a></li>
+        </ul>
+        <div class="nav-logout"><a href="/logout"></a><img src="../assets/img/logout-w.png"><span>로그아웃</span></div>
+    </nav>
+    <div class="overlay" id="overlay"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const hamburger = document.getElementById('hamburger-pc');
+            const overlay = document.getElementById('overlay');
+            const navPc = document.querySelector('.nav-pc');
+            const navItems = document.querySelectorAll('.nav-links li span, .nav-logout span');
+
+            hamburger.addEventListener('click', function () {
+                if (navPc.style.width === '250px') {
+                    navPc.style.width = '80px';
+                    overlay.style.opacity = '0';
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                    }, 300); // 0.3s transition
+                    navItems.forEach(item => item.style.display = 'none');
+                } else {
+                    navPc.style.width = '250px';
+                    overlay.style.display = 'block';
+                    setTimeout(() => {
+                        overlay.style.opacity = '1';
+                    }, 10);
+                    navItems.forEach(item => item.style.display = 'inline');
+                }
+            });
+
+            overlay.addEventListener('click', function () {
+                navPc.style.width = '80px';
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 300); // 0.3s transition
+                navItems.forEach(item => item.style.display = 'none');
+            });
+        });
+    </script>
+</body>
+</html>
