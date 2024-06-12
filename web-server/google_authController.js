@@ -6,6 +6,7 @@ const static = require('serve-static');
 const path = require('path');
 const oracleDB = require('./oracledb.js');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
@@ -77,7 +78,7 @@ router.get("/login", async (req, res) => {
         email: userEmail,
         accessToken: accessToken
       };
-
+      res.cookie('accessToken', accessToken);
       res.redirect(`${REDIRECT_URL}/${userEmailWithoutDomain}?access_token=${accessToken}`);
       await oracleDB.selectUserlog(userEmailWithoutDomain);
     } catch (error) {
