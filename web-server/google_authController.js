@@ -8,6 +8,7 @@ const oracleDB = require('./oracledb.js');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
+router.use(cookieParser());
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 router.use(session({
