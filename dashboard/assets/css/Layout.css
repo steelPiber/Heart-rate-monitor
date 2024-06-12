@@ -129,7 +129,7 @@ a{
 }
 
 .rt-heart-board {
-    flex-grow: 4.5;
+    flex-grow: 4;
     height: 200px;
     background-color: #FFA29B;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -138,8 +138,33 @@ a{
 .rt-heart-board img {
     width: 100px;
 }
+.heart-rate-container-big{
+    
+}
+.real-time{
+    font-size: 45px;
+}
+.heart-rate {
+    position: absolute;
+    margin-left: 30px;
+}
+.heart-rate:first-child {
+    top: 0;
+    left: 0;
+    font-size: 18px;
+    color: #FFFFFF;
+}
+.heart-rate:nth-child(2){
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
+}
 .average-heart-board {
-    flex-grow: 5.5;
+    flex-grow: 6;
     height: 200px;
     background-color: #FFFFFF;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -152,7 +177,7 @@ a{
 /*아이콘 배치 컨테이너*/
 .status-container{
     position: absolute;
-    left: 39%;
+    left: 40%;
     transform: translateX(-40%);
     width: 150px;
     height: 150px;
@@ -217,10 +242,15 @@ a{
 
 .donut-chart-container{
     flex-grow: 4;
+    width: 40%;
     height: 300px;
     background-color: #FFFFFF;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+}
+.donut-chart-wrap{
+    width: 100%;
+    height: 100%;
 }
 .bar-chart-container{
     flex-grow: 6;
@@ -228,6 +258,10 @@ a{
     background-color: #FFFFFF;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+}
+.bar-chart-wrap{
+    width: 400px;
+    height: 100%;
 }
 
 .pc-chart-container{
@@ -281,7 +315,7 @@ a{
     background-color: transparent;
     text-align: center;
     color: #FFFFFF;
-    font-size: 28px;
+    font-size: 26px;
     font-weight: bold;
 }
 
@@ -309,17 +343,27 @@ a{
 }
 .bt-heart-rate-container{
     flex-grow: 6;
-    height: 300px;
+    width: 60%;
+    height: 350px;
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
 }
+.workout-graph-wrap{
+    width: 100%;
+    height: 100%;
+}
 .bt-target-zone-container{
     flex-grow: 4;
-    height: 300px;
+    width: 40%;
+    height: 350px;
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+}
+.target-zone-wrap{
+    width: 100%;
+    height: 100%;
 }
 .map-container {
     width: 100%;
@@ -368,7 +412,14 @@ a{
 /*PC 버전 비트트랙 레이아웃*/
 
 
+/*PC 버전 트레이닝 기록 레이아웃*/
+.training-record-container{
 
+} 
+.calendar-container{
+
+}
+/*PC 버전 트레이닝 기록 레이아웃*/ 
 
 
 
@@ -503,34 +554,7 @@ a{
     margin-top: 30px;
     margin-right: 15px;
 }
-.heart-rate-container-big{
-    position: relative;
-    width: 220px; 
-    height: 130px;
-    margin-top: 60px;
-}
-.real-time{
-    font-size: 90px;
-}
-.heart-rate {
-    position: absolute;
-    margin-left: 30px;
-}
-.heart-rate:first-child {
-    top: 0;
-    left: 0;
-    font-size: 18px;
-    color: #FFFFFF;
-}
-.heart-rate:nth-child(2){
-    top: 55%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 
-    font-size: 55px;
-    font-weight: bold;
-    color: white;
-}
 /*.heart-rate:last-child{   //심박수퍼센트
     bottom: 0;
     right: 0;

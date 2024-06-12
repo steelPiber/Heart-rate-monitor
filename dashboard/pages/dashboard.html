@@ -59,58 +59,46 @@
                     <div class="heart-rate-container">
                     <div class="heart-rate">1분 평균</div>
                     <div class="heart-rate">
-                        <!--고쳐야되는부분-->
                         <div class="minbpmContainer">0</div></div></div>
-                        <!--고쳐야되는부분-->
                 
                     <div class="heart-rate-container">
                     <div class="heart-rate">1시간 평균</div>
                     <div class="heart-rate">
-                        <!--고쳐야되는부분-->
                         <div class="hourbpmContainer">0</div></div></div>
-                        <!--고쳐야되는부분-->
             
                     <div class="heart-rate-container">
                     <div class="heart-rate">하루 평균</div>
                     <div class="heart-rate">
-                        <!--고쳐야되는부분-->
                         <div class="daybpmContainer">0</div></div></div>
-                        <!--고쳐야되는부분-->
     
                     <div class="heart-rate-container">
                     <div class="heart-rate">주 평균</div>
                     <div class="heart-rate">
-                        <!--고쳐야되는부분-->
                         <div class="weekbpmContainer">0</div></div></div>
-                        <!--고쳐야되는부분-->
     
                     <div class="heart-rate-container">
                     <div class="heart-rate">한 달 평균</div>
                     <div class="heart-rate">
-                        <!--고쳐야되는부분-->
                         <div class="monthbpmContainer">0</div></div></div>
-                        <!--고쳐야되는부분-->
     
                     <div class="heart-rate-container">
                     <div class="heart-rate">연 평균</div>
                     <div class="heart-rate">
-                        <!--고쳐야되는부분-->
                         <div class="yearbpmContainer">0</div></div></div>
-                        <!--고쳐야되는부분-->
                 </div>
             </div>
         </div>
         <div class="second-row">
             <div class="donut-chart-container">
-                <div class="container-title">안정활동휴식</div>
+                <div class="container-title">하루 활동 통계</div>
                 <div class="donut-chart-wrap">
-                    <canvas class="donut-graph"></canvas>
+                    <canvas class="donut-graph" width="300" height="300"></canvas>
                 </div>
             </div>
-            <div class="bar-chart-container">
-                <div class="container-title">안정활동휴식</div>
-                <div class="bar-chart-wrap" data-simplebar style="overflow-x: auto; overflow-y:hidden; white-space:nowrap;" >
-                    <canvas class="bar-graph" style="padding-bottom: 20px;"></canvas>
+            <div class="bar-chart-container"  data-simplebar style="overflow-x: auto; overflow-y:hidden; white-space:nowrap;">
+                <div class="container-title">시간별 활동 통계</div>
+                <div class="bar-chart-wrap" >
+                    <canvas class="bar-graph" width="1000" height="300" style="padding-bottom: 20px;"></canvas>
                 </div>
             </div>
         </div>
@@ -131,12 +119,10 @@
 
     <!--모바일 전용 레이아웃-->
     <div class="wrap-cont">
-        <!--고쳐야되는부분-->
         <h1>(로그인사용자) <div class="status" style="margin-bottom: 16px; margin-top:16px;">
             <img src="../assets/img/normal.png" class="dynamicImage">
             <span class="status-text"></span>
         </div></h1>        
-        <!--고쳐야되는부분-->
         <div class="dash-board">
             <div class="heart-board">         
                 <ul>
@@ -153,44 +139,32 @@
                 <div class="heart-rate-container">
                 <div class="heart-rate">1분 평균</div>
                 <div class="heart-rate">
-                    <!--고쳐야되는부분-->
                     <div class="minbpmContainer">0</div></div></div>
-                    <!--고쳐야되는부분-->
             
                 <div class="heart-rate-container">
                 <div class="heart-rate">1시간 평균</div>
                 <div class="heart-rate">
-                    <!--고쳐야되는부분-->
                     <div class="hourbpmContainer">0</div></div></div>
-                    <!--고쳐야되는부분-->
         
                 <div class="heart-rate-container">
                 <div class="heart-rate">하루 평균</div>
                 <div class="heart-rate">
-                    <!--고쳐야되는부분-->
                     <div class="daybpmContainer">0</div></div></div>
-                    <!--고쳐야되는부분-->
 
                 <div class="heart-rate-container">
                 <div class="heart-rate">주 평균</div>
                 <div class="heart-rate">
-                    <!--고쳐야되는부분-->
                     <div class="weekbpmContainer">0</div></div></div>
-                    <!--고쳐야되는부분-->
 
                 <div class="heart-rate-container">
                 <div class="heart-rate">한 달 평균</div>
                 <div class="heart-rate">
-                    <!--고쳐야되는부분-->
                     <div class="monthbpmContainer">0</div></div></div>
-                    <!--고쳐야되는부분-->
 
                 <div class="heart-rate-container">
                 <div class="heart-rate">연 평균</div>
                 <div class="heart-rate">
-                    <!--고쳐야되는부분-->
                     <div class="yearbpmContainer">0</div></div></div>
-                    <!--고쳐야되는부분-->
                  
     
             </div>
@@ -206,22 +180,16 @@
                 <li class="button"><a href="#">Monthly</a></li>
             </ul>
                 
-            <!--고쳐야되는부분-->
-            <canvas class="graph" width="1000" height="400"></canvas>
-            <!--고쳐야되는부분-->
+            <canvas class="graph"></canvas>
 
         </div>
         <div class="chart-container" data-simplebar style="overflow-x: auto; overflow-y:hidden; white-space:nowrap;" >
             <div class="container-title" style="padding-top: 0;">안정활동휴식</div>
-            <!--고쳐야되는부분-->
             <canvas class="bar-graph" width="1000" height="350" style="padding-bottom: 20px;"></canvas>
-            <!--고쳐야되는부분-->
         </div>
         <div class="chart-container">
             <div class="container-title">안정활동휴식 </div>
-            <!--고쳐야되는부분-->
-            <canvas class="donut-graph" width="1000" height="350"></canvas>
-            <!--고쳐야되는부분-->
+            <canvas class="donut-graph"></canvas>
             <img id="centerIcon" src="" alt="Icon" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
         </div>
 
@@ -323,7 +291,7 @@
                         } else if (serverTag === "normal") {
                             imgElement.src = "../assets/img/normal.png";
                         } else if (serverTag === "active") {
-                            imgElement.src = "../assets/img/workout.png";
+                            imgElement.src = "../assets/img/active.png";
                         }
                     });
                 })

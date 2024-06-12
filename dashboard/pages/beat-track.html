@@ -52,7 +52,9 @@
         <div class="second-row">
             <div class="bt-heart-rate-container">
                 <div class="container-title">구간 심박수</div>
-                <canvas class="workout-graph"></canvas>
+                <div class="workout-graph-wrap">
+                    <canvas class="workout-graph"></canvas>
+                </div>
             </div>
             <div class="bt-target-zone-container">
                 <div class="container-title"> 심박수 운동 영역
@@ -68,7 +70,9 @@
                         </p>
                     </div>
                 </div>
-                <canvas class="target-zone"></canvas>
+                <div class="target-zone-wrap">
+                    <canvas class="target-zone"></canvas>
+                </div>
             </div>
         </div>
         <div class="third-row">
@@ -90,12 +94,10 @@
         <div class="advice-container">
             <h3>적정 운동량에 도달하지 못했습니다!</h3>
             <div class="steps-container">
-                <!--걸음수 빼고 목표치 집어넣으셈-->
                 <div class="steps">현재 휴식치</div>
                 <div class="steps" class="rest-current">50%</div>
             </div>
             <div class="steps-container">
-                <!--걸음수 빼고 목표치 집어넣으셈-->
                 <div class="steps">목표 휴식치</div>
                 <div class="steps" class="rest-goal">50%</div>
             </div>
