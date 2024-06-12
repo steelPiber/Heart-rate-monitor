@@ -5,12 +5,12 @@ console.log(`0.1 : oracledb.js 모듈 분리`);
 // oracledb에 모듈 추가
 const oracledb = require('oracledb');
 //const nodemailer = require('./mail_auth.js');
-const pandas = require('pandas-js');
+//const pandas = require('pandas-js');
 // Oracle DB 연결 구성
 const dbConfig = {
   user: 'piber',
   password: 'wjsansrk',
-  connectString: '202.31.243.44:1521/ORA21APEX'
+  connectString: '202.31.246.30:1521/ORA21APEX'
 };
 
 //Oracle DB 연결확인
@@ -79,7 +79,7 @@ async function selectUserErrlog(paramEmail){
 }
 
 // DB에서 최근 24시간 동안의 심박수 데이터 가져오기
-async function fetchHeartRateData() {
+/*async function fetchHeartRateData() {
   let connection;
 
   try {
@@ -105,7 +105,7 @@ async function fetchHeartRateData() {
       }
     }
   }
-}
+}*/
 
 // 실시간 삼박수
 function realtimeQuery() {
@@ -265,7 +265,7 @@ module.exports = {
   insertBPMData,
   selectUserlog,
   selectUserErrlog,
-  fetchHeartRateData,
+  //fetchHeartRateData,
   realtimeQuery,
   minQuery,
   hourQuery,
