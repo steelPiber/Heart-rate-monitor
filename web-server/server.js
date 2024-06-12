@@ -49,6 +49,8 @@ app.get('/login/:userEmailWithoutDomain', (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
 app.get('/training-record', (req, res) => {
+  const accessToken = req.cookies.accessToken;
+  
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'training-record.html'));
 });
 
