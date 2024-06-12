@@ -10,7 +10,7 @@ const oracledb = require('oracledb');
 const dbConfig = {
   user: 'piber',
   password: 'wjsansrk',
-  connectString: '202.31.246.31:1521/ORA21APEX'
+  connectString: '202.31.246.30:1521/ORA21APEX'
 };
 
 //Oracle DB 연결확인
