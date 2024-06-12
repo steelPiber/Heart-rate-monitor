@@ -34,18 +34,11 @@ oracleDB.connectToOracleDB()
 
 // Serve HTML page at port 8081
 app.get('/', (req, res) => {
+  const accessToken = req.cookies.accessToken;
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
 
-app.get('/login/:userEmailWithoutDomain', (req, res) => {
-  const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
-  const accessToken = req.query.access_token;
-  console.log('로그인 토큰', accessToken);
-  if (!accessToken) {
-    res.status(400).send('Access token is missing');
-    return;
-  }
-  res.cookie('accessToken', accessToken, { httpOnly: true, secure: true });
+app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
 app.get('/training-record', (req, res) => {
