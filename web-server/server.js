@@ -41,6 +41,9 @@ app.get('/', (req, res) => {
 
 app.get('/dashboard', (req, res) => {
   const accessToken = req.cookies.accessToken;
+  if (!accessToken) {
+    return res.redirect('/auth/google');
+  }
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
 app.get('/training-record', (req, res) => {
