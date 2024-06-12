@@ -79,7 +79,11 @@ router.get("/login", async (req, res) => {
         email: userEmail,
         accessToken: accessToken
       };
-      res.cookie('accessToken', accessToken);
+      res.cookie('accessToken', accessToken, { 
+        path: '/', 
+        httpOnly: true, 
+        secure: true 
+      });
       res.redirect(`/dashboard`);
       await oracleDB.selectUserlog(userEmailWithoutDomain);
     } catch (error) {
