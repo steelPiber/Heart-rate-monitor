@@ -34,16 +34,19 @@ oracleDB.connectToOracleDB()
 
 // Serve HTML page at port 8081
 app.get('/', (req, res) => {
-  const accessToken = req.cookies.accessToken;
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
 
 app.get('/dashboard', (req, res) => {
+  const accessToken = req.cookies.accessToken;
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
 app.get('/training-record', (req, res) => {
   const accessToken = req.cookies.accessToken;
-  
+  res.sendFile(path.join(__dirname, 'dashboard/pages', 'training-record.html'));
+});
+app.get('/beat-track', (req, res) => {
+  const accessToken = req.cookies.accessToken;
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'training-record.html'));
 });
 
