@@ -31,27 +31,97 @@
     <!--pc 전용 레이아웃-->
     <div class="wrap-cont-pc">
         <div class="first-row">
-            <div class="rt-heart-board"></div>
+            <div class="rt-heart-board">
+                <div class="container-title"> 실시간 </div>
+                <ul>
+                    <li><img src="../assets/img/heart-shape.png" alt=""></li>
+                    <li><div class="heart-rate-container-big">
+                        <div class="heart-rate">Real Time</div>
+                        <div class="heart-rate"><span class="real-time">
+                            <div class="bpmValue">0</div></span></div>
+                    </li>
+                </ul>
+            </div>
             <div class="status-container">
                 <div class="outer-circle"></div>
                 <div class="inner-circle"></div>
-                <div class="status-icon"><img src="../assets/img/sleep.png" alt=""></div>
+                <div class="status-icon">
+                    <img src="../assets/img/sleep.png"  class="dynamicImage">
+                    <span class="status-text">sleep</span>
+                </div>
             </div>
-            <div class="average-heart-board"></div>
+            <div class="average-heart-board">
+                <div class="container-title">시간대별 평균</div>
+                <div class="heart-board-wrap">
+                    <div class="heart-rate-container">
+                    <div class="heart-rate">1분 평균</div>
+                    <div class="heart-rate">
+                        <!--고쳐야되는부분-->
+                        <div class="minbpmContainer">0</div></div></div>
+                        <!--고쳐야되는부분-->
+                
+                    <div class="heart-rate-container">
+                    <div class="heart-rate">1시간 평균</div>
+                    <div class="heart-rate">
+                        <!--고쳐야되는부분-->
+                        <div class="hourbpmContainer">0</div></div></div>
+                        <!--고쳐야되는부분-->
+            
+                    <div class="heart-rate-container">
+                    <div class="heart-rate">하루 평균</div>
+                    <div class="heart-rate">
+                        <!--고쳐야되는부분-->
+                        <div class="daybpmContainer">0</div></div></div>
+                        <!--고쳐야되는부분-->
+    
+                    <div class="heart-rate-container">
+                    <div class="heart-rate">주 평균</div>
+                    <div class="heart-rate">
+                        <!--고쳐야되는부분-->
+                        <div class="weekbpmContainer">0</div></div></div>
+                        <!--고쳐야되는부분-->
+    
+                    <div class="heart-rate-container">
+                    <div class="heart-rate">한 달 평균</div>
+                    <div class="heart-rate">
+                        <!--고쳐야되는부분-->
+                        <div class="monthbpmContainer">0</div></div></div>
+                        <!--고쳐야되는부분-->
+    
+                    <div class="heart-rate-container">
+                    <div class="heart-rate">연 평균</div>
+                    <div class="heart-rate">
+                        <!--고쳐야되는부분-->
+                        <div class="yearbpmContainer">0</div></div></div>
+                        <!--고쳐야되는부분-->
+                </div>
+            </div>
         </div>
         <div class="second-row">
             <div class="donut-chart-container">
-                <div class="container-title"></div>
-                <div class="donut-chart-wrap"></div>
+                <div class="container-title">안정활동휴식</div>
+                <div class="donut-chart-wrap">
+                    <canvas class="donut-graph"></canvas>
+                </div>
             </div>
             <div class="bar-chart-container">
-                <div class="container-title"></div>
-                <div class="bar-chart-wrap"></div>
+                <div class="container-title">안정활동휴식</div>
+                <div class="bar-chart-wrap" data-simplebar style="overflow-x: auto; overflow-y:hidden; white-space:nowrap;" >
+                    <canvas class="bar-graph" style="padding-bottom: 20px;"></canvas>
+                </div>
             </div>
         </div>
         <div class="third-row">
             <div class="pc-chart-container">
-                <div class=""></div>
+                <div class="container-title">심박수 평균</div>
+                <ul class="button-container">
+                    <li class="button active"><a href="#">Daily</a></li>
+                    <li class="button"><a href="#">Weekly</a></li>
+                    <li class="button"><a href="#">Monthly</a></li>
+                </ul>
+                <div class="pc-chart-wrap">
+                    <canvas class="graph" ></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -59,7 +129,10 @@
     <!--모바일 전용 레이아웃-->
     <div class="wrap-cont">
         <!--고쳐야되는부분-->
-        <h1>(로그인사용자) <div class="status"><img src="../assets/img/normal.png" id="dynamicImage"></div></h1>
+        <h1>(로그인사용자) <div class="status">
+            <img src="../assets/img/normal.png" class="dynamicImage">
+            <span class="status-text"></span>
+        </div></h1>        
         <!--고쳐야되는부분-->
         <div class="dash-board">
             <div class="heart-board">         
@@ -68,7 +141,7 @@
                     <li><div class="heart-rate-container-big">
                         <div class="heart-rate">Real Time</div>
                         <div class="heart-rate"><span class="real-time">
-                            <div id="bpmValue">0</div></span></div>
+                            <div class="bpmValue">0</div></span></div>
                     </li>
                 </ul>
             </div>
@@ -78,42 +151,42 @@
                 <div class="heart-rate">1분 평균</div>
                 <div class="heart-rate">
                     <!--고쳐야되는부분-->
-                    <div id="minbpmContainer">0</div></div></div>
+                    <div class="minbpmContainer">0</div></div></div>
                     <!--고쳐야되는부분-->
             
                 <div class="heart-rate-container">
                 <div class="heart-rate">1시간 평균</div>
                 <div class="heart-rate">
                     <!--고쳐야되는부분-->
-                    <div id="hourbpmContainer"> 0</div></div></div>
+                    <div class="hourbpmContainer">0</div></div></div>
                     <!--고쳐야되는부분-->
         
                 <div class="heart-rate-container">
                 <div class="heart-rate">하루 평균</div>
                 <div class="heart-rate">
                     <!--고쳐야되는부분-->
-                    <div id="daybpmContainer"> 0</div></div></div>
+                    <div class="daybpmContainer">0</div></div></div>
                     <!--고쳐야되는부분-->
 
                 <div class="heart-rate-container">
                 <div class="heart-rate">주 평균</div>
                 <div class="heart-rate">
                     <!--고쳐야되는부분-->
-                    <div id="weekbpmContainer"> 0</div></div></div>
+                    <div class="weekbpmContainer">0</div></div></div>
                     <!--고쳐야되는부분-->
 
                 <div class="heart-rate-container">
                 <div class="heart-rate">한 달 평균</div>
                 <div class="heart-rate">
                     <!--고쳐야되는부분-->
-                    <div id="monthbpmContainer"> 0</div></div></div>
+                    <div class="monthbpmContainer">0</div></div></div>
                     <!--고쳐야되는부분-->
 
                 <div class="heart-rate-container">
                 <div class="heart-rate">연 평균</div>
                 <div class="heart-rate">
                     <!--고쳐야되는부분-->
-                    <div id="yearbpmContainer"> 0</div></div></div>
+                    <div class="yearbpmContainer">0</div></div></div>
                     <!--고쳐야되는부분-->
                  
     
@@ -131,20 +204,20 @@
             </ul>
                 
             <!--고쳐야되는부분-->
-            <canvas id="graph" width="1000" height="400"></canvas>
+            <canvas class="graph" width="1000" height="400"></canvas>
             <!--고쳐야되는부분-->
 
         </div>
         <div class="chart-container" data-simplebar style="overflow-x: auto; overflow-y:hidden; white-space:nowrap;" >
             <div class="container-title" style="padding-top: 0;">안정활동휴식</div>
             <!--고쳐야되는부분-->
-            <canvas id="bar-graph" width="1000" height="350" style="padding-bottom: 20px;"></canvas>
+            <canvas class="bar-graph" width="1000" height="350" style="padding-bottom: 20px;"></canvas>
             <!--고쳐야되는부분-->
         </div>
         <div class="chart-container">
             <div class="container-title">안정활동휴식 </div>
             <!--고쳐야되는부분-->
-            <canvas id="donut-graph" width="1000" height="350"></canvas>
+            <canvas class="donut-graph" width="1000" height="350"></canvas>
             <!--고쳐야되는부분-->
             <img id="centerIcon" src="" alt="Icon" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
         </div>
@@ -232,40 +305,81 @@
                 })
                 .then(data => {
                     var serverTag = data.tag; // 서버에서 받은 태그 값
-
+        
                     // 이미지 요소 선택
-                    //고쳐야되는부분
-                    var imgElement = document.getElementById("dynamicImage");
-                    //고쳐야되는부분
-
-                    // 태그 값이 'workout'인지 확인하고 이미지 src 변경
-                    if (serverTag === "exercise") {
-                        imgElement.src = "../assets/img/workout.png";
-                    }
-                    else if (serverTag === "rest") {
-                        imgElement.src = "../assets/img/rest.png";
-                    }
-                    else if (serverTag === "sleep") {
-                        imgElement.src = "../assets/img/sleep.png";
-                    }
-                    else if (serverTag === "normal") {
-                        imgElement.src = "../assets/img/normal.png";
-                    }
-                    else if (serverTag === "active") {
-                        imgElement.src = "../assets/img/workout.png"
-                    }
+                    var imgElements = document.querySelectorAll(".dynamicImage");
+        
+                    // 태그 값에 따라 이미지 src 변경
+                    imgElements.forEach(imgElement => {
+                        if (serverTag === "exercise") {
+                            imgElement.src = "../assets/img/workout.png";
+                        } else if (serverTag === "rest") {
+                            imgElement.src = "../assets/img/rest.png";
+                        } else if (serverTag === "sleep") {
+                            imgElement.src = "../assets/img/sleep.png";
+                        } else if (serverTag === "normal") {
+                            imgElement.src = "../assets/img/normal.png";
+                        } else if (serverTag === "active") {
+                            imgElement.src = "../assets/img/workout.png";
+                        }
+                    });
                 })
                 .catch(error => {
                     console.error('Error fetching status data:', error);
-                    //고쳐야되는부분
-                    var imgElement = document.getElementById("dynamicImage");
-                    //고쳐야되는부분
-                    imgElement.src = "../assets/img/loading.gif";
+                    // 에러 발생 시 로딩 이미지로 대체
+                    var imgElements = document.querySelectorAll(".dynamicImage");
+                    imgElements.forEach(imgElement => {
+                        imgElement.src = "../assets/img/loading.gif";
+                    });
                 });
-        };
+        }
         
-        setInterval(fetchDynamicIconData,1000);
+        setInterval(fetchDynamicIconData, 1000);
+        document.addEventListener('DOMContentLoaded', fetchDynamicIconData);        
+    </script>
+
+    <script>//태그값 변경시 텍스트 변경 스크립트
+        function fetchDynamicIconData() {
+            fetch('/status')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    var serverTag = data.tag; // 서버에서 받은 태그 값
+        
+                    // 상태 텍스트 요소 선택
+                    var statusTextElements = document.querySelectorAll(".status-text");
+        
+                    // 태그 값에 따라 상태 텍스트 변경
+                    statusTextElements.forEach(textElement => {
+                        if (serverTag === "exercise") {
+                            textElement.textContent = "Exercise";
+                        } else if (serverTag === "rest") {
+                            textElement.textContent = "Rest";
+                        } else if (serverTag === "sleep") {
+                            textElement.textContent = "Sleep";
+                        } else if (serverTag === "normal") {
+                            textElement.textContent = "Normal";
+                        } else if (serverTag === "active") {
+                            textElement.textContent = "Active";
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching status data:', error);
+                    var statusTextElements = document.querySelectorAll(".status-text");
+                    statusTextElements.forEach(textElement => {
+                        textElement.textContent = "Loading...";
+                    });
+                });
+        }
+        
+        // 페이지 로드 시 및 매초 데이터 갱신
         document.addEventListener('DOMContentLoaded', fetchDynamicIconData);
+        setInterval(fetchDynamicIconData, 1000);
     </script>
 
 

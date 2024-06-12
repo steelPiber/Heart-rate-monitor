@@ -33,20 +33,23 @@
     <div class="wrap-cont-pc">
         <div class="first-row">
             <div class="bt-first-container">
-                <div class="quest-announce"></div>
-                <div class="target-container">
-                    <div class="target"></div>
-                    <span class="target-desc">현재 휴식치</span>
-                </div>
-                <div class="target-container">
-                    <div class="target"></div>
-                    <span class="target-desc">목표 휴식치</span>
+                <div class="quest-announce">적정 운동량에 도달하지 못했습니다!</div>
+                <div class="target-content">
+                    <div class="target-container">
+                        <div class="target">50%</div>
+                        <span class="target-desc">현재 휴식치</span>
+                    </div>
+                    <div class="target-container">
+                        <div class="target">50%</div>
+                        <span class="target-desc">목표 휴식치</span>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="second-row">
             <div class="bt-heart-rate-container">
                 <div class="container-title">구간 심박수</div>
+                <canvas class="workout-graph"></canvas>
             </div>
             <div class="bt-target-zone-container">
                 <div class="container-title"> 심박수 운동 영역
@@ -62,14 +65,17 @@
                         </p>
                     </div>
                 </div>
+                <canvas class="target-zone"></canvas>
             </div>
         </div>
         <div class="third-row">
             <div class="map-container">
                 <div class="workout-result-container">
                     <span class="wr-title">운동 결과</span>
-                    <div class="wr-right"><div>0 km</div><span>이동 거리</span></div>
-                    <div class="wr-left"><div>0 min</div><span>운동 시간</span></div>
+                    <div class="wr-content">
+                        <div class="wr-right"><div>0 km</div><span>이동 거리</span></div>
+                        <div class="wr-left"><div>0 min</div><span>운동 시간</span></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -82,13 +88,18 @@
             <h3>적정 운동량에 도달하지 못했습니다!</h3>
             <div class="steps-container">
                 <!--걸음수 빼고 목표치 집어넣으셈-->
-                <div class="steps">걸음 수</div>
-                <div class="steps" id="steps">0</div>
+                <div class="steps">현재 휴식치</div>
+                <div class="steps" class="rest-current">50%</div>
+            </div>
+            <div class="steps-container">
+                <!--걸음수 빼고 목표치 집어넣으셈-->
+                <div class="steps">목표 휴식치</div>
+                <div class="steps" class="rest-goal">50%</div>
             </div>
         </div>
         <div class="chart-container">
             <div class="container-title">구간 심박수</div>
-            <canvas id="workout-graph"></canvas>
+            <canvas class="workout-graph"></canvas>
         </div>
         <div class="chart-container">
             <div class="container-title">심박수 운동 영역
@@ -104,7 +115,7 @@
                     </p>
                 </div>
             </div>
-            <canvas id="target-zone"></canvas>
+            <canvas class="target-zone"></canvas>
         </div>
         <div class="map-container">
 
