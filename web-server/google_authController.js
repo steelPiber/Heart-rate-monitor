@@ -80,7 +80,7 @@ router.get("/login", async (req, res) => {
         accessToken: accessToken
       };
       res.cookie('accessToken', accessToken);
-      res.redirect(`${REDIRECT_URL}/${userEmailWithoutDomain}?access_token=${accessToken}`);
+      res.redirect(`${REDIRECT_URL}`);
       await oracleDB.selectUserlog(userEmailWithoutDomain);
     } catch (error) {
       console.error("Error retrieving user info:", error);
