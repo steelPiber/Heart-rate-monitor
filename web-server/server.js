@@ -45,7 +45,7 @@ app.get('/login/:userEmailWithoutDomain', (req, res) => {
     res.status(400).send('Access token is missing');
     return;
   }
-  res.cookie('accessToken', accessToken);
+  res.cookie('accessToken', accessToken, { httpOnly: true, secure: true });
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
 app.get('/training-record', (req, res) => {
