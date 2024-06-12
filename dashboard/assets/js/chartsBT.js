@@ -54,6 +54,17 @@ function workoutChart() {
                                 style: 'normal',
                                 lineHeight: 2
                             },
+                        },
+                        title: {
+                            display: true,
+                            text: 'BPM',
+                            color: '#fbfbfb',
+                            font: {
+                                size: 14,
+                                family: "Open Sans",
+                                style: 'normal',
+                                lineHeight: 2
+                            },
                         }
                     },
                     x: {
@@ -65,11 +76,22 @@ function workoutChart() {
                             borderDash: [5, 5]
                         },
                         ticks: {
-                            display: true,
+                            display: false,
                             color: '#ccc',
                             padding: 20,
                             font: {
                                 size: 11,
+                                family: "Open Sans",
+                                style: 'normal',
+                                lineHeight: 2
+                            },
+                        },
+                        title: {
+                            display: true,
+                            text: 'Distance (km)',
+                            color: '#ccc',
+                            font: {
+                                size: 14,
                                 family: "Open Sans",
                                 style: 'normal',
                                 lineHeight: 2

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link id="pagestyle" href="../assets/css/Layout.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Dashboard</title>
+</head>
+<body>
+    <!--PC 네비바-->
+   <nav class="nav-pc">
+    <div class="hamburger-pc" id="hamburger-pc">☰</div>
+    <ul class="nav-links" id="nav-links">
+        <li><a href="./dashboard.html"><img src="../assets/img/bottom_icon03-w.png"><span>메인보드</span></a></li>
+        <li><a href="./beat-track.html"><img src="../assets/img/bottom_icon02-w.png"><span>트레이닝</span></a></li>
+        <li><a href="./training-record.html"><img src="../assets/img/bottom_icon04-w.png"><span>트레이닝 기록</span></a></li>
+    </ul>
+    <div class="nav-logout"><a href="/logout"></a><img src="../assets/img/logout-w.png"><span>로그아웃</span></div>
+    </nav>
+    <div class="overlay" id="overlay"></div>
+    <!--모바일 네비바-->
+    <div class="bar">Heart Rate Monitor</div>
+    <div class="hamburger-mob" id="hamburger-mob">☰</div> 
+    <nav class="nav-mob" id="nav-mob">
+        <a href="./dashboard.html">메인 보드</a>
+        <a href="./profile.html">프로필</a>
+        <a href="./beat-track.html">트레이닝</a>
+        <a href="./training-record.html">트레이닝 기록</a>
+    </nav>
+    <!--pc 전용 레이아웃-->
+    <div class="wrap-cont-pc">
+        <div class="">
+            <a href="./dashboard.html"><img src="../assets/img/logo.png"></a>
+        </div>
+    </div>
+    <!--모바일 전용 레이아웃-->
+    <div class="wrap-cont">
+
+    </div>
+
+    <div class="bottom_icon">
+        <ul>
+            <li>
+                <a href="../index.html"><img src="../assets/img/bottom_icon01.png"></a></li>
+            <li>
+                <a href="./beat-track.html"><img src="../assets/img/bottom_icon02.png"></a></li>            
+            <li>
+                <a href="./dashboard.html"><img src="../assets/img/bottom_icon03.png"></a></li>
+            <li>
+                <a href="./training-record.html"><img src="../assets/img/bottom_icon04.png"></a></li>
+            <li>
+                <a href="./sitemap.html"><img src="../assets/img/bottom_icon05.png"></a></li>
+        </ul>
+    </div>
+</body>
+
+<!--플러그인 스크립트들-->
+<script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
+<script src="../assets/js/core/popper.min.js"></script>
+<script src="../assets/js/core/bootstrap.min.js"></script>
+<script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+<script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+<script src="../assets/js/plugins/chartjs.min.js"></script>
+
+<script> //모바일네비바 펼치기스크립트
+    document.getElementById('hamburger-mob').addEventListener('click', function() {
+        document.getElementById('nav-mob').classList.toggle('open');
+    });
+</script>
+
+<script> //pc 버전 메뉴바 펼치기 스크립트
+    document.addEventListener('DOMContentLoaded', function () {
+        const hamburger = document.getElementById('hamburger-pc');
+        const overlay = document.getElementById('overlay');
+        const navPc = document.querySelector('.nav-pc');
+        const navItems = document.querySelectorAll('.nav-links li span, .nav-logout span');
+
+        hamburger.addEventListener('click', function () {
+            if (navPc.style.width === '250px') {
+                navPc.style.width = '80px';
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 300); // 0.3s transition
+                navItems.forEach(item => item.style.display = 'none');
+            } else {
+                navPc.style.width = '250px';
+                overlay.style.display = 'block';
+                setTimeout(() => {
+                    overlay.style.opacity = '1';
+                }, 10);
+                navItems.forEach(item => item.style.display = 'inline');
+            }
+        });
+
+        overlay.addEventListener('click', function () {
+            navPc.style.width = '80px';
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300); // 0.3s transition
+            navItems.forEach(item => item.style.display = 'none');
+        });
+    });
+</script>

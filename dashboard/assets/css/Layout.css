@@ -19,6 +19,13 @@ a{
     color: inherit;
 }
 
+.container-title{
+        
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #F5675D;
+}
+
 .container-title-img{
     position: relative;
     float: right;
@@ -128,6 +135,9 @@ a{
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
 }
+.rt-heart-board img {
+    width: 100px;
+}
 .average-heart-board {
     flex-grow: 5.5;
     height: 200px;
@@ -135,7 +145,10 @@ a{
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
 }
-
+.heart-board-wrap{
+    width: 100%;
+    height: 95%;
+}
 /*아이콘 배치 컨테이너*/
 .status-container{
     position: absolute;
