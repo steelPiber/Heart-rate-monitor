@@ -6,7 +6,6 @@ const oracleDB = require('./oracledb.js');
 const { router: googleAuthRouter } = require("./google_authController.js");
 const bpmRouter = require('./bpm.js'); // bpm 라우터 모듈 불러오기
 const { executeQuery, getUserEmailFromToken } = require('./utility.js'); // 유틸리티 함수들 사용
-//const hrvRouter = require('./hrv.js');
 const chartRouter = require('./chart.js');
 const app = express();
 
@@ -15,7 +14,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(googleAuthRouter);
 app.use(bpmRouter); // bpm 라우터 사용
-//app.use(hrvRouter);
 app.use(chartRouter);
 
 // 정적 파일 미들웨어를 사용하여 CSS, 이미지, JS 등의 정적 파일 제공
@@ -39,19 +37,21 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
 
-app.get('/login/:userEmailWithoutDomain', (req, res) => {
+app.get('/dashboard', (req, res) => {
   const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
-  if (!accessToken) {
-    return res.redirect('/auth/google');
-  }
+  const accessToken = req.cookies.accessToken;
+  console.log('dashboard : ', accessToken);
+
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
 app.get('/training-record', (req, res) => {
   const accessToken = req.cookies.accessToken;
+  console.log('train : ', accessToken);
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'training-record.html'));
 });
 app.get('/beat-track', (req, res) => {
   const accessToken = req.cookies.accessToken;
+  console.log('beat-track : ', accessToken);
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'training-record.html'));
 });
 
