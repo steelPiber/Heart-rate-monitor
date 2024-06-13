@@ -109,8 +109,8 @@ router.get('/DetectionOfBradycardiaAndTachycardia', async (req, res) => {
     try {
         const heartRateData = await oracleDB.fetchHeartRateData();
         
-        const bradycardiaPeriods = [];
-        const tachycardiaPeriods = [];
+        let hasBradycardiaPeriods = false;
+        let hasTachycardiaPeriods = false;
         let currentPeriod = null;
         let lastActiveTime = null;
         let lastExerciseTime = null;
@@ -118,49 +118,61 @@ router.get('/DetectionOfBradycardiaAndTachycardia', async (req, res) => {
 
         heartRateData.forEach(row => {
             const time = moment(row.time);
+            const bpm = row.bpm;
+            const tag = row.tag.toLowerCase();
+
+            console.log(`Processing row: time=${time.format('YYYY-MM-DD HH:mm:ss')}, bpm=${bpm}, tag=${tag}`);
 
             // Exclude data within the cooldown period after exercise or active tags
-            if (lastExerciseTime && time.diff(lastExerciseTime, 'seconds') < cooldownPeriod) return;
-            if (lastActiveTime && time.diff(lastActiveTime, 'seconds') < cooldownPeriod) return;
+            if (lastExerciseTime && time.diff(lastExerciseTime, 'seconds') < cooldownPeriod) {
+                console.log(`Skipping due to cooldown after exercise: ${time.format('YYYY-MM-DD HH:mm:ss')}`);
+                return;
+            }
+            if (lastActiveTime && time.diff(lastActiveTime, 'seconds') < cooldownPeriod) {
+                console.log(`Skipping due to cooldown after active: ${time.format('YYYY-MM-DD HH:mm:ss')}`);
+                return;
+            }
 
-            if (row.tag === 'exercise') {
+            if (tag === 'exercise') {
                 lastExerciseTime = time;
+                console.log(`Setting last exercise time: ${time.format('YYYY-MM-DD HH:mm:ss')}`);
                 return;
             }
-            if (row.tag === 'active') {
+            if (tag === 'active') {
                 lastActiveTime = time;
+                console.log(`Setting last active time: ${time.format('YYYY-MM-DD HH:mm:ss')}`);
                 return;
             }
 
-            if (row.tag !== 'rest') return;
+            if (tag !== 'rest') return;
 
-            if (row.bpm > 100) {
-                console.log(`High BPM detected at ${time}: ${row.bpm} BPM`);
+            if (bpm > 100) {
+                console.log(`High BPM detected at ${time.format('YYYY-MM-DD HH:mm:ss')}: ${bpm} BPM`);
                 return;
             }
 
-            if (row.bpm <= 60) {
+            if (bpm <= 60) {
                 if (currentPeriod && currentPeriod.type === 'bradycardia') {
                     currentPeriod.end = time;
                 } else {
                     if (currentPeriod && currentPeriod.end.diff(currentPeriod.start, 'seconds') >= 30) {
                         if (currentPeriod.type === 'tachycardia') {
-                            tachycardiaPeriods.push(currentPeriod);
+                            hasTachycardiaPeriods = true;
                         } else {
-                            bradycardiaPeriods.push(currentPeriod);
+                            hasBradycardiaPeriods = true;
                         }
                     }
                     currentPeriod = { start: time, end: time, type: 'bradycardia' };
                 }
-            } else if (row.bpm >= 100) {
+            } else if (bpm >= 100) {
                 if (currentPeriod && currentPeriod.type === 'tachycardia') {
                     currentPeriod.end = time;
                 } else {
                     if (currentPeriod && currentPeriod.end.diff(currentPeriod.start, 'seconds') >= 30) {
                         if (currentPeriod.type === 'bradycardia') {
-                            bradycardiaPeriods.push(currentPeriod);
+                            hasBradycardiaPeriods = true;
                         } else {
-                            tachycardiaPeriods.push(currentPeriod);
+                            hasTachycardiaPeriods = true;
                         }
                     }
                     currentPeriod = { start: time, end: time, type: 'tachycardia' };
@@ -168,9 +180,9 @@ router.get('/DetectionOfBradycardiaAndTachycardia', async (req, res) => {
             } else {
                 if (currentPeriod && currentPeriod.end.diff(currentPeriod.start, 'seconds') >= 30) {
                     if (currentPeriod.type === 'bradycardia') {
-                        bradycardiaPeriods.push(currentPeriod);
+                        hasBradycardiaPeriods = true;
                     } else if (currentPeriod.type === 'tachycardia') {
-                        tachycardiaPeriods.push(currentPeriod);
+                        hasTachycardiaPeriods = true;
                     }
                 }
                 currentPeriod = null;
@@ -180,23 +192,15 @@ router.get('/DetectionOfBradycardiaAndTachycardia', async (req, res) => {
         // Handle the last period
         if (currentPeriod && currentPeriod.end.diff(currentPeriod.start, 'seconds') >= 30) {
             if (currentPeriod.type === 'bradycardia') {
-                bradycardiaPeriods.push(currentPeriod);
+                hasBradycardiaPeriods = true;
             } else if (currentPeriod.type === 'tachycardia') {
-                tachycardiaPeriods.push(currentPeriod);
+                hasTachycardiaPeriods = true;
             }
         }
 
         res.json({
-            bradycardiaPeriods: bradycardiaPeriods.map(period => ({
-                start: period.start.format('YYYY-MM-DD HH:mm:ss'),
-                end: period.end.format('YYYY-MM-DD HH:mm:ss'),
-                duration: period.end.diff(period.start, 'seconds')
-            })),
-            tachycardiaPeriods: tachycardiaPeriods.map(period => ({
-                start: period.start.format('YYYY-MM-DD HH:mm:ss'),
-                end: period.end.format('YYYY-MM-DD HH:mm:ss'),
-                duration: period.end.diff(period.start, 'seconds')
-            }))
+            bradycardiaPeriods: hasBradycardiaPeriods,
+            tachycardiaPeriods: hasTachycardiaPeriods
         });
     } catch (error) {
         console.error("Error occurred while detecting bradycardia and tachycardia:", error);
