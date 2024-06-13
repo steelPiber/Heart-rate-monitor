@@ -62,6 +62,7 @@ function evaluateAbnormalPatterns(abnormalPeriods) {
     return differences.some(diff => diff > threshold);
 }
 
+// 기존 엔드포인트 (DetectionOfArrhythmia)
 router.get('/DetectionOfArrhythmia', async (req, res) => {
     try {
         const heartRateData = await oracleDB.fetchHeartRateData();
@@ -100,11 +101,12 @@ router.get('/DetectionOfArrhythmia', async (req, res) => {
             res.json({ message: "Error: 'TAG' column not found in the data." });
         }
     } catch (error) {
-        console.error(error);
+        console.error("Error during arrhythmia detection:", error);
         res.status(500).json({ message: "Internal server error." });
     }
 });
 
+// 새로운 엔드포인트 (DetectionOfBradycardiaAndTachycardia)
 router.get('/DetectionOfBradycardiaAndTachycardia', async (req, res) => {
     try {
         const heartRateData = await oracleDB.fetchHeartRateData();
@@ -117,9 +119,9 @@ router.get('/DetectionOfBradycardiaAndTachycardia', async (req, res) => {
         const cooldownPeriod = 1200; // 20 minutes in seconds
 
         heartRateData.forEach(row => {
-            const time = moment(row.time);
-            const bpm = row.bpm;
-            const tag = row.tag.toLowerCase();
+            const time = moment(row.TIME);
+            const bpm = row.BPM;
+            const tag = row.TAG.toLowerCase();
 
             console.log(`Processing row: time=${time.format('YYYY-MM-DD HH:mm:ss')}, bpm=${bpm}, tag=${tag}`);
 
