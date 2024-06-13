@@ -81,8 +81,7 @@ router.get('/donut', async (req, res) => {
     if (!result) {
       // 쿼리 결과가 없는 경우, 빈 배열을 반환하도록 처리
       res.json([]);
-      return;
-    }
+    } else {
 
     // normal과 sleep이 쿼리 결과에 없는 경우 0으로 설정
     const processedData = result.rows.map(row => ({
@@ -95,6 +94,7 @@ router.get('/donut', async (req, res) => {
 
     // 클라이언트에게 JSON 형식으로 데이터 반환
     res.json(processedData);
+    }
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ error: 'Internal Server Error' });
