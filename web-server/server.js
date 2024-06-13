@@ -49,6 +49,18 @@ app.get('/login/:userEmailWithoutDomain', (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
 
+app.get('/beat-track', (req, res) => {
+  const token = req.cookies.accessToken;
+  console.log('token: ', token);
+  res.sendFile(path.join(__dirname, 'dashboard/pages', 'beat-track.html'));
+});
+
+app.get('/training-record', (req, res) => {
+  const token = req.cookies.accessToken;
+  console.log('token: ', token);
+  res.sendFile(path.join(__dirname, 'dashboard/pages', 'training-record.html'));
+});
+
 app.get('/min1', (req, res) => {
   res.sendFile(__dirname + '/min1.html');
 });
