@@ -48,6 +48,11 @@ app.get('/login/:userEmailWithoutDomain', (req, res) => {
   res.cookie('accessToken', accessToken);
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
+app.get('/dashboard', (req, res) => {
+  const token = req.cookies.accessToken;
+  console.log('token: ', token);
+  res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
+});
 
 app.get('/beat-track', (req, res) => {
   const token = req.cookies.accessToken;
