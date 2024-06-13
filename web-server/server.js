@@ -6,6 +6,7 @@ const oracleDB = require('./oracledb.js');
 const { router: googleAuthRouter } = require("./google_authController.js");
 const bpmRouter = require('./bpm.js'); // bpm 라우터 모듈 불러오기
 const { executeQuery, getUserEmailFromToken } = require('./utility.js'); // 유틸리티 함수들 사용
+//const hrvRouter = require('./hrv.js');
 const chartRouter = require('./chart.js');
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(googleAuthRouter);
 app.use(bpmRouter); // bpm 라우터 사용
+//app.use(hrvRouter);
 app.use(chartRouter);
 
 // 정적 파일 미들웨어를 사용하여 CSS, 이미지, JS 등의 정적 파일 제공
@@ -20,7 +22,6 @@ app.use(express.static(path.join(__dirname, '/dashboard')));
 const server = http.createServer(app);
 const PORT_HTTP = 8081;
 const PORT = 13389;
-const EX_PORT = 3001;
 
 // Oracle DB 연결 확인
 oracleDB.connectToOracleDB()
@@ -36,22 +37,16 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
 
-app.get('/dashboard', (req, res) => {
+app.get('/login/:userEmailWithoutDomain', (req, res) => {
   const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
-  const accessToken = req.cookies.accessToken;
-  console.log('dashboard : ', accessToken);
-
+  const accessToken = req.query.access_token;
+  console.log('로그인 토큰', accessToken);
+  if (!accessToken) {
+    res.status(400).send('Access token is missing');
+    return;
+  }
+  res.cookie('accessToken', accessToken);
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
-});
-app.get('/training-record', (req, res) => {
-  const accessToken = req.cookies.accessToken;
-  console.log('train : ', accessToken);
-  res.sendFile(path.join(__dirname, 'dashboard/pages', 'training-record.html'));
-});
-app.get('/beat-track', (req, res) => {
-  const accessToken = req.cookies.accessToken;
-  console.log('beat-track : ', accessToken);
-  res.sendFile(path.join(__dirname, 'dashboard/pages', 'training-record.html'));
 });
 
 app.get('/min1', (req, res) => {
