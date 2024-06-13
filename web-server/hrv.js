@@ -90,21 +90,9 @@ router.get('/analyze-heart-rate', async (req, res) => {
                     const [numAbnormalPeriods, totalAbnormalTime, abnormalData] = analyzeAbnormalHR(tagData, lowerBPM, upperBPM);
                     const abnormalPatterns = evaluateAbnormalPatterns(abnormalData);
                     const isArrhythmiaDetected = arrhythmia && (numAbnormalPeriods > 10 && totalAbnormalTime > 600) && abnormalPatterns;
-                    results.push({
-                        tag,
-                        arrhythmia,
-                        rmssd,
-                        sdnn,
-                        numAbnormalPeriods,
-                        totalAbnormalTime,
-                        abnormalPatterns,
-                        isArrhythmiaDetected
-                    });
+                    results.push([tag, isArrhythmiaDetected]);
                 } else {
-                    results.push({
-                        tag,
-                        message: `No data available for tag: ${tag}`
-                    });
+                    results.push([tag, false]);
                 }
             }
             res.json(results);
