@@ -6,9 +6,7 @@ const static = require('serve-static');
 const path = require('path');
 const oracleDB = require('./oracledb.js');
 const session = require('express-session');
-const cookieParser = require('cookie-parser');
 
-router.use(cookieParser());
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 router.use(session({
@@ -27,7 +25,7 @@ require("dotenv").config();
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const AUTHORIZE_URI = "https://accounts.google.com/o/oauth2/v2/auth";
-const REDIRECT_URL = "https://heartrate.ddns.net/dashboard"; // 수정된 부분
+const REDIRECT_URL = "https://heartrate.ddns.net/login"; // 수정된 부분
 const RESPONSE_TYPE = "code";
 const SCOPE = "openid%20profile%20email";
 const ACCESS_TYPE = "offline";
@@ -79,12 +77,8 @@ router.get("/login", async (req, res) => {
         email: userEmail,
         accessToken: accessToken
       };
-      res.cookie('accessToken', accessToken, { 
-        path: '/', 
-        httpOnly: true, 
-        secure: true 
-      });
-      res.redirect('${REDIRECT_URL}');
+
+      res.redirect(`${REDIRECT_URL}/${userEmailWithoutDomain}?access_token=${accessToken}`);
       await oracleDB.selectUserlog(userEmailWithoutDomain);
     } catch (error) {
       console.error("Error retrieving user info:", error);
