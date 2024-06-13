@@ -62,7 +62,7 @@ function evaluateAbnormalPatterns(abnormalPeriods) {
     return differences.some(diff => diff > threshold);
 }
 
-router.get('/analyze-heart-rate', async (req, res) => {
+router.get('/DetectionOfArrhythmia', async (req, res) => {
     try {
         const heartRateData = await oracleDB.fetchHeartRateData();
         if (heartRateData.length < 5000) {
@@ -101,6 +101,105 @@ router.get('/analyze-heart-rate', async (req, res) => {
         }
     } catch (error) {
         console.error(error);
+        res.status(500).json({ message: "Internal server error." });
+    }
+});
+
+router.get('/DetectionOfBradycardiaAndTachycardia', async (req, res) => {
+    try {
+        const heartRateData = await oracleDB.fetchHeartRateData();
+        
+        const bradycardiaPeriods = [];
+        const tachycardiaPeriods = [];
+        let currentPeriod = null;
+        let lastActiveTime = null;
+        let lastExerciseTime = null;
+        const cooldownPeriod = 1200; // 20 minutes in seconds
+
+        heartRateData.forEach(row => {
+            const time = moment(row.time);
+
+            // Exclude data within the cooldown period after exercise or active tags
+            if (lastExerciseTime && time.diff(lastExerciseTime, 'seconds') < cooldownPeriod) return;
+            if (lastActiveTime && time.diff(lastActiveTime, 'seconds') < cooldownPeriod) return;
+
+            if (row.tag === 'exercise') {
+                lastExerciseTime = time;
+                return;
+            }
+            if (row.tag === 'active') {
+                lastActiveTime = time;
+                return;
+            }
+
+            if (row.tag !== 'rest') return;
+
+            if (row.bpm > 100) {
+                console.log(`High BPM detected at ${time}: ${row.bpm} BPM`);
+                return;
+            }
+
+            if (row.bpm <= 60) {
+                if (currentPeriod && currentPeriod.type === 'bradycardia') {
+                    currentPeriod.end = time;
+                } else {
+                    if (currentPeriod && currentPeriod.end.diff(currentPeriod.start, 'seconds') >= 30) {
+                        if (currentPeriod.type === 'tachycardia') {
+                            tachycardiaPeriods.push(currentPeriod);
+                        } else {
+                            bradycardiaPeriods.push(currentPeriod);
+                        }
+                    }
+                    currentPeriod = { start: time, end: time, type: 'bradycardia' };
+                }
+            } else if (row.bpm >= 100) {
+                if (currentPeriod && currentPeriod.type === 'tachycardia') {
+                    currentPeriod.end = time;
+                } else {
+                    if (currentPeriod && currentPeriod.end.diff(currentPeriod.start, 'seconds') >= 30) {
+                        if (currentPeriod.type === 'bradycardia') {
+                            bradycardiaPeriods.push(currentPeriod);
+                        } else {
+                            tachycardiaPeriods.push(currentPeriod);
+                        }
+                    }
+                    currentPeriod = { start: time, end: time, type: 'tachycardia' };
+                }
+            } else {
+                if (currentPeriod && currentPeriod.end.diff(currentPeriod.start, 'seconds') >= 30) {
+                    if (currentPeriod.type === 'bradycardia') {
+                        bradycardiaPeriods.push(currentPeriod);
+                    } else if (currentPeriod.type === 'tachycardia') {
+                        tachycardiaPeriods.push(currentPeriod);
+                    }
+                }
+                currentPeriod = null;
+            }
+        });
+
+        // Handle the last period
+        if (currentPeriod && currentPeriod.end.diff(currentPeriod.start, 'seconds') >= 30) {
+            if (currentPeriod.type === 'bradycardia') {
+                bradycardiaPeriods.push(currentPeriod);
+            } else if (currentPeriod.type === 'tachycardia') {
+                tachycardiaPeriods.push(currentPeriod);
+            }
+        }
+
+        res.json({
+            bradycardiaPeriods: bradycardiaPeriods.map(period => ({
+                start: period.start.format('YYYY-MM-DD HH:mm:ss'),
+                end: period.end.format('YYYY-MM-DD HH:mm:ss'),
+                duration: period.end.diff(period.start, 'seconds')
+            })),
+            tachycardiaPeriods: tachycardiaPeriods.map(period => ({
+                start: period.start.format('YYYY-MM-DD HH:mm:ss'),
+                end: period.end.format('YYYY-MM-DD HH:mm:ss'),
+                duration: period.end.diff(period.start, 'seconds')
+            }))
+        });
+    } catch (error) {
+        console.error("Error occurred while detecting bradycardia and tachycardia:", error);
         res.status(500).json({ message: "Internal server error." });
     }
 });
