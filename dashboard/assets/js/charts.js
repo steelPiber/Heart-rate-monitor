@@ -51,14 +51,11 @@ fetch('/hourly-chart')
 
 // 대시보드 활동수면안정평상운동 그래프 (도넛)
 function donutChart(url) {
-    let dailyTag;
-    const hourLabels = ['활동', '수면', '안정', '평상', '운동'];
-    dailyTag = [90, 75, 90, 98, 37];
-    /*fetch(url) 
+    fetch(url) 
         .then(response => response.json())
         .then(data => {
             const hourLabels = data.map(item => item[0]);
-            const dailyTag = data.map(item => item[1]);*/
+            const dailyTag = data.map(item => item[1]);
 
             // 모든 해당 클래스의 캔버스를 선택
             const canvases = document.querySelectorAll('.donut-graph');
@@ -163,10 +160,10 @@ function donutChart(url) {
                     },
                 });
             });
-        /*)
+        )
         .catch(error => {
             console.error('Error fetching chart data:', error);
-        });*/
+        });
 }
 
 donutChart();
