@@ -71,13 +71,19 @@ router.get('/monthly-chart', async (req, res) => {
   }
 });
 
-
 router.get('/donut', async (req, res) => {
   try {
+    console.log('reqToken: ', req.cookies.accessToken);
     const userEmail = await getUserEmailFromToken(req);
     const query = oracleDB.daily_donut_chart();
     const result = await executeQuery(query, { Email: userEmail });
-    
+
+    if (!result) {
+      // 쿼리 결과가 없는 경우, 빈 배열을 반환하도록 처리
+      res.json([]);
+      return;
+    }
+
     // normal과 sleep이 쿼리 결과에 없는 경우 0으로 설정
     const processedData = result.rows.map(row => ({
       active: row.active || 0,
@@ -86,7 +92,7 @@ router.get('/donut', async (req, res) => {
       normal: row.normal || 0,
       sleep: row.sleep || 0
     }));
-    
+
     // 클라이언트에게 JSON 형식으로 데이터 반환
     res.json(processedData);
   } catch (error) {
@@ -94,4 +100,5 @@ router.get('/donut', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 module.exports = router;
