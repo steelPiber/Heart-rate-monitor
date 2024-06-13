@@ -9,7 +9,6 @@ const { executeQuery, getUserEmailFromToken } = require('./utility.js'); // ìœ í
 const chartRouter = require('./chart.js');
 const app = express();
 
-app.use(express.static('public'));
 app.use(express.json());
 app.use(cookieParser());
 app.use(googleAuthRouter);
@@ -62,17 +61,6 @@ app.get('/hourly', (req, res) => {
   res.sendFile(__dirname + '/hourlychart.html');
 });
 
-app.post('/api/record', (req, res) => {
-    const record = req.body;
-    console.log('Received record:', record);
-    exerciseRecords.push(record);
-    res.status(200).send('Record received');
-});
-
-app.get('/api/records', (req, res) => {
-    res.json(exerciseRecords);
-});
-
 
 // Start the HTTP server on port 8081
 app.listen(PORT_HTTP, () => {
@@ -80,7 +68,4 @@ app.listen(PORT_HTTP, () => {
 });
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);
-});
-app.listen(EX_PORT, () => {
-  console.log(`EX_server is running on port ${EX_PORT}`);
 });
