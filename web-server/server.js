@@ -39,8 +39,8 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
 
-app.get('/dashboard', (req, res) => {
-  const accessToken = req.cookies.accessToken;
+app.get('/login/:userEmailWithoutDomain', (req, res) => {
+  const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
   if (!accessToken) {
     return res.redirect('/auth/google');
   }
