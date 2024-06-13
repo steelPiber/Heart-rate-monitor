@@ -37,7 +37,8 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
 
-app.get('/dashboard', (req, res) => {
+app.get('/login/:userEmailWithoutDomain', (req, res) => {
+  const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
   const accessToken = req.query.access_token;
   console.log('로그인 토큰', accessToken);
   if (!accessToken) {
