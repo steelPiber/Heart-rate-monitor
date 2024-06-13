@@ -274,7 +274,7 @@ module.exports = {
   insertBPMData,
   selectUserlog,
   selectUserErrlog,
-  //fetchHeartRateData,
+  fetchHeartRateData,
   realtimeQuery,
   minQuery,
   hourQuery,
