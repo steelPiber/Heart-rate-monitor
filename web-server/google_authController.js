@@ -84,7 +84,7 @@ router.get("/login", async (req, res) => {
         httpOnly: true, 
         secure: true 
       });
-      res.redirect(`/dashboard`);
+      res.redirect('${REDIRECT_URL}');
       await oracleDB.selectUserlog(userEmailWithoutDomain);
     } catch (error) {
       console.error("Error retrieving user info:", error);
