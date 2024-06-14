@@ -71,12 +71,19 @@ router.get('/monthly-chart', async (req, res) => {
   }
 });
 
+function daily_donut_chart() {
+  return `SELECT tag, COUNT(*) AS data_count FROM bpmdata WHERE email=:Email AND TO_CHAR(time, 'HH24:MI:SS') BETWEEN '00:00:00' AND '23:59:59' GROUP BY tag ORDER BY tag`;
+}
+
 router.get('/donut', async (req, res) => {
   try {
     console.log('reqToken: ', req.cookies.accessToken);
     const userEmail = await getUserEmailFromToken(req);
-    const query = oracleDB.daily_donut_chart();
+    console.log('userEmail:', userEmail);
+    const query = daily_donut_chart();
+    console.log('Executing query:', query);
     const result = await executeQuery(query, { Email: userEmail });
+    console.log('Query result:', result);
 
     // 기본값 설정
     const processedData = {
@@ -88,18 +95,17 @@ router.get('/donut', async (req, res) => {
     };
 
     // 쿼리 결과가 있을 때만 처리
-    if (result.rows.length > 0) {
+    if (result && result.rows && result.rows.length > 0) {
       result.rows.forEach(row => {
-        processedData[row.tag] = row.data_count;
+        processedData[row.TAG] = row.DATA_COUNT;
       });
     }
 
     // 클라이언트에게 JSON 형식으로 데이터 반환
     res.json(processedData);
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error executing query:", error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 module.exports = router;
