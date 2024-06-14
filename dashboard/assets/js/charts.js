@@ -129,12 +129,29 @@ donutChart();
 
 // 대시보드 안정활동휴식수면평상 하루 그래프 (막대)
 function barChart(url) {
-    const hourLabels = ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23'];
-    /*fetch(url) 
+    fetch(url) 
         .then(response => response.json())
         .then(data => {
-            const hourLabels = data.map(item => item[0]);
-            const avgBPMs = data.map(item => item[1]);*/
+            const hours = [...new Set(data.map(item => item.hour))];
+            const tags = ['active', 'exercise', 'rest', 'normal', 'sleep'];
+
+            // 태그별 데이터 초기화
+            const datasets = tags.map(tag => ({
+                label: tag,
+                fill: true,
+                data: new Array(hours.length).fill(0),
+                backgroundColor: getColorForTag(tag),
+                barThickness: 20
+            }));
+
+            // 데이터 매핑
+            data.forEach(item => {
+                const hourIndex = hours.indexOf(item.hour);
+                const tagIndex = tags.indexOf(item.tag);
+                if (hourIndex !== -1 && tagIndex !== -1) {
+                    datasets[tagIndex].data[hourIndex] = item.data_count;
+                }
+            });
 
             // 모든 해당 클래스의 캔버스를 선택
             const canvases = document.querySelectorAll('.bar-graph');
@@ -145,41 +162,11 @@ function barChart(url) {
                     canvas.chartInstance.destroy();
                 }
 
-                new Chart(ctx, {
+                canvas.chartInstance = new Chart(ctx, {
                     type: "bar",
                     data: {
-                        labels: hourLabels,
-                        datasets: [{
-                            label: "활동",
-                            fill: true,
-                            data: [12, 19, 3, 5, 2, 3, 9, 10,12, 19, 3, 5, 2, 3, 9, 10,12, 19, 3, 5, 2, 3, 9, 10],
-                            backgroundColor: '#ef476f',
-                            barThickness: 20
-                        },{
-                            label: "수면",
-                            fill: true,
-                            data:  [2, 3, 20, 5, 1, 4, 6, 8,2, 3, 20, 5, 1, 4, 6, 8,2, 3, 20, 5, 1, 4, 6, 8],
-                            backgroundColor: '#ffd166',
-                            barThickness: 20
-                        },{
-                            label: "안정",
-                            fill: true,
-                            data: [3, 10, 13, 15, 22, 7, 11, 6,3, 10, 13, 15, 22, 7, 11, 6,3, 10, 13, 15, 22, 7, 11, 6],
-                            backgroundColor: '#06d6a0',
-                            barThickness: 20
-                        },{
-                            label: "평상",
-                            fill: true,
-                            data: [5, 2, 10, 20, 30, 14, 8, 12,5, 2, 10, 20, 30, 14, 8, 12,5, 2, 10, 20, 30, 14, 8, 12],
-                            backgroundColor: '#118ab2',
-                            barThickness: 20
-                        },{
-                            label: "운동",
-                            fill: true,
-                            data: [20, 30, 15, 10, 5, 9, 3, 1,20, 30, 15, 10, 5, 9, 3, 1,20, 30, 15, 10, 5, 9, 3, 1],
-                            backgroundColor: '#073b4c',
-                            barThickness: 20
-                        }],
+                        labels: hours,
+                        datasets: datasets,
                     },
                     options: {
                         responsive: false,
@@ -190,7 +177,10 @@ function barChart(url) {
                                     label: function(tooltipItem) {
                                         const datasetIndex = tooltipItem.datasetIndex;
                                         const datasets = tooltipItem.chart.data.datasets;
-                                        const orderedDatasets = [datasets[4], datasets[3], datasets[2], datasets[1], datasets[0]]; // 운동, 평상, 안정, 수면, 활동 순서
+                                        const orderedDatasets = datasets.slice().sort((a, b) => {
+                                            const order = ['운동', '평상', '안정', '수면', '활동'];
+                                            return order.indexOf(a.label) - order.indexOf(b.label);
+                                        });
                                         const dataset = orderedDatasets[datasetIndex];
                                         return dataset.label + ': ' + dataset.data[tooltipItem.dataIndex];
                                     },
@@ -258,11 +248,23 @@ function barChart(url) {
                     },
                 });
             });
-        /*)
+        })
         .catch(error => {
             console.error('Error fetching chart data:', error);
-        });*/
+        });
 }
+
+function getColorForTag(tag) {
+    switch (tag) {
+        case 'active': return '#ef476f';
+        case 'exercise': return '#ffd166';
+        case 'rest': return '#06d6a0';
+        case 'normal': return '#118ab2';
+        case 'sleep': return '#073b4c';
+        default: return '#000';
+    }
+}
+
 
 barChart();
 
