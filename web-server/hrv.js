@@ -88,7 +88,7 @@ const { calculateRRIntervals, detectArrhythmiaWithHRV, analyzeAbnormalHR, evalua
 
 const app = express();
 
-router.get('/analyze-heart-rate', async (req, res) => {
+router.get('/DetectionOfBradycardiaAndTachycardia', async (req, res) => {
     const heartRateData = await oracleDB.fetchHeartRateData();
 
     if (heartRateData.length < 5000) {
