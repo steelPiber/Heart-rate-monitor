@@ -113,6 +113,13 @@ router.get('bar-chart', async (req, res) => {
     const result = await executeQuery(query, { Email: userEmail });
     console.log('Query result:', result);
 
+    if (result.length === 0) {
+      // 쿼리 결과가 없을 때
+      res.json([{ HOUR: '0', TAG: 'rest', DATA_COUNT: '0' }]);
+    } else {
+      // 쿼리 결과가 있을 때
+      res.json(result);
+    }
     
   } catch (error) {
     console.error("Error executing query:", error);
