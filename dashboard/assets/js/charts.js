@@ -160,7 +160,7 @@ function donutChart(url) {
                     },
                 });
             });
-        )
+        })
         .catch(error => {
             console.error('Error fetching chart data:', error);
         });
