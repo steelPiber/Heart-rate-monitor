@@ -71,7 +71,7 @@ router.get('/monthly-chart', async (req, res) => {
   }
 });
 
-router.get('/donut', async (req, res) => {
+router.get('/daily-tag-chart', async (req, res) => {
   try {
     console.log('reqToken: ', req.cookies.accessToken);
     const userEmail = await getUserEmailFromToken(req);
