@@ -71,16 +71,12 @@ router.get('/monthly-chart', async (req, res) => {
   }
 });
 
-function daily_donut_chart() {
-  return `SELECT tag, COUNT(*) AS data_count FROM bpmdata WHERE email=:Email AND TO_CHAR(time, 'HH24:MI:SS') BETWEEN '00:00:00' AND '23:59:59' GROUP BY tag ORDER BY tag`;
-}
-
 router.get('/donut', async (req, res) => {
   try {
     console.log('reqToken: ', req.cookies.accessToken);
     const userEmail = await getUserEmailFromToken(req);
     console.log('userEmail:', userEmail);
-    const query = daily_donut_chart();
+    const query = oracleDB.daily_donut_chart();
     console.log('Executing query:', query);
     const result = await executeQuery(query, { Email: userEmail });
     console.log('Query result:', result);
