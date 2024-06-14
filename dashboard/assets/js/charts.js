@@ -50,8 +50,8 @@ fetch('/hourly-chart')
 });   
 
 // 대시보드 활동수면안정평상운동 그래프 (도넛)
-function donutChart(url) {
-    fetch(url) 
+function donutChart() {
+    fetch(/donut) 
         .then(response => response.json())
         .then(data => {
             const hourLabels = data.map(item => item[0]);
