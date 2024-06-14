@@ -103,7 +103,7 @@ router.get('/daily-tag-chart', async (req, res) => {
   }
 });
 
-router.get('bar-chart', async (req, res) => {
+router.get('/bar-chart', async (req, res) => {
   try {
     console.log('reqToken: ', req.cookies.accessToken);
     const userEmail = await getUserEmailFromToken(req);
