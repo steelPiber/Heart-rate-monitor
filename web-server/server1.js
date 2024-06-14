@@ -49,6 +49,7 @@ async function getUserEmailFromToken(req) {
   }
   console.log('getUserEmailFromToken : ', accessToken);
   const userInfo = await getUserInfo(accessToken);
+  console.log('userInfo : ', userInfo);
   return userInfo.email.split('@')[0];
 }
 
