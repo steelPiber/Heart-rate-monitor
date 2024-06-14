@@ -129,19 +129,27 @@ donutChart();
 
 // 대시보드 안정활동휴식수면평상 하루 그래프 (막대)
 function barChart(url) {
-    fetch(url) 
+    fetch(url)
         .then(response => response.json())
         .then(data => {
             const hours = [...new Set(data.map(item => item.hour))];
             const tags = ['active', 'exercise', 'rest', 'normal', 'sleep'];
 
+            const tagTranslations = {
+                active: '활동',
+                exercise: '운동',
+                rest: '안정',
+                normal: '평상',
+                sleep: '수면'
+            };
+
             // 태그별 데이터 초기화
             const datasets = tags.map(tag => ({
-                label: tag,
+                label: tagTranslations[tag],
                 fill: true,
                 data: new Array(hours.length).fill(0),
                 backgroundColor: getColorForTag(tag),
-                barThickness: 20
+                barThickness: 15 // 막대 두께를 줄여서 간격을 좁힘
             }));
 
             // 데이터 매핑
@@ -166,7 +174,10 @@ function barChart(url) {
                     type: "bar",
                     data: {
                         labels: hours,
-                        datasets: datasets,
+                        datasets: datasets.sort((a, b) => {
+                            const order = ['운동', '평상', '안정', '수면', '활동'];
+                            return order.indexOf(a.label) - order.indexOf(b.label);
+                        }),
                     },
                     options: {
                         responsive: false,
@@ -245,6 +256,8 @@ function barChart(url) {
                                 }
                             },
                         },
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.5
                     },
                 });
             });
@@ -264,7 +277,6 @@ function getColorForTag(tag) {
         default: return '#000';
     }
 }
-
 
 barChart();
 
