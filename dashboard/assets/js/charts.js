@@ -269,5 +269,5 @@ barChart();
 // Initialize donut and bar charts on page load or when needed
 document.addEventListener('DOMContentLoaded', () => {
     donutChart('/daily-tag-chart');
-    barChart('/hourly-chart');
+    barChart('/bar-chart');
 });
