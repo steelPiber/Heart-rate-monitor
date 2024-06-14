@@ -73,11 +73,8 @@ router.get('/monthly-chart', async (req, res) => {
 
 router.get('/daily-tag-chart', async (req, res) => {
   try {
-    console.log('reqToken: ', req.cookies.accessToken);
     const userEmail = await getUserEmailFromToken(req);
-    console.log('userEmail:', userEmail);
     const query = oracleDB.daily_donut_chart();
-    console.log('Executing query:', query);
     const result = await executeQuery(query, { Email: userEmail });
     console.log('Query result:', result);
 
@@ -105,4 +102,22 @@ router.get('/daily-tag-chart', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+router.get('bar-chart', async (req, res) => {
+  try {
+    console.log('reqToken: ', req.cookies.accessToken);
+    const userEmail = await getUserEmailFromToken(req);
+    console.log('userEmail:', userEmail);
+    const query = oracleDB.daily_bar_chart();
+    console.log('Executing query:', query);
+    const result = await executeQuery(query, { Email: userEmail });
+    console.log('Query result:', result);
+
+    
+  } catch (error) {
+    console.error("Error executing query:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;
