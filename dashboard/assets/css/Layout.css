@@ -413,7 +413,6 @@ a{
 
 
 /*PC 버전 트레이닝 기록 레이아웃*/
-
 .wrap-cont-tr{
     display: flex;
     flex-direction: column;
@@ -421,42 +420,93 @@ a{
     padding: 20px;
     margin-left: 70px;
 }
-.record-details{
+.record-list{
+    left: 0;
     width: 100%;
-    height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    margin-left: 0;
 }
-.training-record-container{
-    width: 100%;
+.record{
+    width: 97%;
     height: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px;
+    padding: 10px 20px;
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-} 
-.calendar-container{
+    margin-bottom: 10px;
+}
+.record-details span{
+    color: #4CAF50;
+    font-weight: bold;
+}
+.record-details a {
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #FFA29B;
+    color: #fff;
+}
+.record-details a:hover {
+    background-color: #F5675D;
+}
+.map{
+    width: 65%;
+    height: 300px;
+}
+
+.segment-details {
+    background: white;
     width: 100%;
-    height: 90px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+.segment-details span {
+    font-weight: bold;
+}
+.segment-details button {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: #FFA29B;
+    cursor: pointer;
+    color: #fff;
+}
+.segment-details button:hover{
+    background-color: #F5675D;
+}
+
+.pagination { 
+    display: flex; 
+    justify-content: center; 
+    margin-top: 20px; 
+}
+.pagination button { 
+    background-color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    border: 1px solid #c7c7c7;
+    cursor: pointer;
+    margin: 0 5px; 
+    padding: 5px 10px; 
 }
 /*PC 버전 트레이닝 기록 레이아웃*/ 
 
-
+@media screen and (max-width:768px) {
+    .header-icon{
+        display: none;
+    }
+    .wrap-cont-tr{
+        padding: 20px 20px; 
+        display: inline-block; 
+        width: 100%;
+        box-sizing: border-box;
+        margin: 30px 0;
+        padding-bottom: 70px;
+    }
+}
 
 
 
