@@ -114,18 +114,16 @@ router.get('/bar-chart', async (req, res) => {
     console.log('Query result:', result);
 
     // 기본값 설정
-    const processedData = {
-      hour: 0,
-      tag: 'rest',
-      data_count: 0
-    };
-    
+    const processedData = [];
+
     // 쿼리 결과가 있을 때만 처리
     if (result && result.rows && result.rows.length > 0) {
       result.rows.forEach(row => {
         const [hour, tag, data_count] = row;
-        processedData[tag.toLowerCase()] = data_count;
+        processedData.push({ hour, tag, data_count });
       });
+    } else {
+      processedData.push({ hour: 0, tag: 'rest', data_count: 0 });
     }
 
     // 클라이언트에게 JSON 형식으로 데이터 반환
