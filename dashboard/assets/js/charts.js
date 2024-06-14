@@ -1,47 +1,53 @@
-function updateChart(data) {
-            // 차트를 초기화
-            const ctx = document.getElementById('graph').getContext('2d');
-            const labels = data.map(item => item[0]); // 첫 번째 요소는 시간
-            const values = data.map(item => item[1]); // 두 번째 요소는 BPM 값
+// 대시보드 심박수평균 daily weekly monthly (선 라인)
+function updateChart(data, chartClass) {
+    // 모든 해당 클래스의 캔버스를 선택
+    const canvases = document.querySelectorAll(`.${chartClass}`);
+    canvases.forEach(canvas => {
+        const ctx = canvas.getContext('2d');
+        const labels = data.map(item => item[0]); // 첫 번째 요소는 시간
+        const values = data.map(item => item[1]); // 두 번째 요소는 BPM 값
 
-            // 기존 차트를 초기화
-            if (window.myChart) {
-                window.myChart.destroy();
-            }
-
-            // 새로운 차트를 생성
-            window.myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Heart Rate',
-                        data: values,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
+        // 기존 차트를 초기화
+        if (canvas.chartInstance) {
+            canvas.chartInstance.destroy();
         }
 
-        // 페이지 로드 시 초기 차트 데이터를 로드
-        fetch('/hourly-chart')
-        .then(response => response.json())
-        .then(responseData => {
-            const { userEmail, data } = responseData;
-            console.log('User Email:', userEmail); // 추가된 userEmail을 로그에 출력
-            updateChart(data);
-        })
-        .catch(error => {
-            console.error('Error fetching initial chart data:', error);
-        });   
+        // 새로운 차트를 생성
+        canvas.chartInstance = new Chart(ctx, {
+            type: 'line', // 차트 유형: 선형 차트
+            data: {
+                labels: labels, // x축 라벨
+                datasets: [{
+                    label: 'Heart Rate', // 데이터셋 라벨
+                    data: values, // y축 데이터
+                    borderColor: 'rgba(75, 192, 192, 1)', // 선 색상
+                    borderWidth: 1 // 선 두께
+                }]
+            },
+            options: {
+                responsive: true, // 반응형 옵션
+                maintainAspectRatio: false, // 종횡비 유지 여부
+                scales: {
+                    y: {
+                        beginAtZero: true // y축 시작값을 0으로 설정
+                    }
+                }
+            }
+        });
+    });
+}
+
+// 페이지 로드 시 초기 차트 데이터를 로드
+fetch('/hourly-chart')
+.then(response => response.json())
+.then(responseData => {
+    const { userEmail, data } = responseData;
+    console.log('User Email:', userEmail); // 추가된 userEmail을 로그에 출력
+    updateChart(data, 'graph'); // 'graph' 클래스를 가진 모든 캔버스에 차트를 생성
+})
+.catch(error => {
+    console.error('Error fetching initial chart data:', error);
+});   
 
 // 대시보드 활동수면안정평상운동 그래프 (도넛)
 function donutChart(url) {
