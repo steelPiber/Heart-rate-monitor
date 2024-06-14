@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.css" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgHGTpER1l9P4S9WM01hBAWX6Sag3bpyE"></script>
     <title>Heart Dashboard</title>
 </head>
 <body>
@@ -15,6 +16,7 @@
         <li><a href="/dashboard"><img src="../assets/img/bottom_icon03-w.png"><span>메인보드</span></a></li>
         <li><a href="/beat-track"><img src="../assets/img/bottom_icon02-w.png"><span>트레이닝</span></a></li>
         <li><a href="/training-record"><img src="../assets/img/bottom_icon04-w.png"><span>트레이닝 기록</span></a></li>
+        <!-- <li><a href="/health-checkup"><img src="../assets/img/bottom_icon04-w.png"><span>건강 진단</span></a></li>         -->
     </ul>
     <div class="nav-logout logout"><a href="/logout"></a><img src="../assets/img/logout-w.png"><span>로그아웃</span></div>
     </nav>
@@ -24,31 +26,26 @@
     <div class="hamburger-mob" id="hamburger-mob">☰</div> 
     <nav class="nav-mob" id="nav-mob">
         <a href="/dashboard">메인 보드</a>
-        <a href="/profile">프로필</a>
         <a href="/beat-track">트레이닝</a>
         <a href="/training-record">트레이닝 기록</a>
+        <!-- <a href="/health-checkup">건강 진단</a> -->
     </nav>
     <!--pc 전용 레이아웃-->
-    <div class="wrap-cont-pc">
+    <div class="wrap-cont-tr">
         <div class="">
             <a href="/dashboard"><img src="../assets/img/logo.png"></a>
         </div>
-        <div>
-            <div class="first-row">
-                <div class="training-record-container">
-
-                </div>
+        <div class="first-row">
+            <div class="record-list" id="record-list"></div>
+        </div>
+        <div class="pagination" id="pagination"></div>
+        <div class="second-row">
+            <div class="segment-details" id="segment-details">
+                <h2>Segment Details</h2>
+                <ul id="segment-list"></ul>
+                <button onclick="hideSegmentDetails()">Back</button>
             </div>
         </div>
-        <div>
-            <div class="second-row">
-                <div class="calendar-container"></div>
-            </div>
-        </div>
-    </div>
-    <!--모바일 전용 레이아웃-->
-    <div class="wrap-cont">
-
     </div>
 
     <div class="bottom_icon">
@@ -75,68 +72,9 @@
 <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
 <script src="../assets/js/plugins/chartjs.min.js"></script>
 
-<script> //모바일네비바 펼치기스크립트
-    document.getElementById('hamburger-mob').addEventListener('click', function() {
-        document.getElementById('nav-mob').classList.toggle('open');
-    });
-</script>
+<!-- 트레이닝기록 스크립트 -->
+<script src="../assets/js/training-record-test.js"></script>
 
-<script> //pc 버전 메뉴바 펼치기 스크립트
-    document.addEventListener('DOMContentLoaded', function () {
-        const hamburger = document.getElementById('hamburger-pc');
-        const overlay = document.getElementById('overlay');
-        const navPc = document.querySelector('.nav-pc');
-        const navItems = document.querySelectorAll('.nav-links li span, .nav-logout span');
+<!-- 메뉴바 스크립트 -->
+<script src="../assets/js/menubar.js"></script>
 
-        hamburger.addEventListener('click', function () {
-            if (navPc.style.width === '250px') {
-                navPc.style.width = '80px';
-                overlay.style.opacity = '0';
-                setTimeout(() => {
-                    overlay.style.display = 'none';
-                }, 300); // 0.3s transition
-                navItems.forEach(item => item.style.display = 'none');
-            } else {
-                navPc.style.width = '250px';
-                overlay.style.display = 'block';
-                setTimeout(() => {
-                    overlay.style.opacity = '1';
-                }, 10);
-                navItems.forEach(item => item.style.display = 'inline');
-            }
-        });
-
-        overlay.addEventListener('click', function () {
-            navPc.style.width = '80px';
-            overlay.style.opacity = '0';
-            setTimeout(() => {
-                overlay.style.display = 'none';
-            }, 300); // 0.3s transition
-            navItems.forEach(item => item.style.display = 'none');
-        });
-    });
-</script>
-<script>
-        //로그아웃 버튼 클릭 이벤트 리스너 추가
-        document.querySelector('.logout').addEventListener('click', function() {
-            fetch('/logout', { //클릭 시 서버로 로그아웃 요청을 보냄
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    // 로그아웃 성공 시, 홈 페이지로 리디렉션
-                    window.location.href = 'https://heartrate.ddns.net';
-                } else {
-                    // 로그아웃 실패 시, 에러 메시지 출력
-                    alert('로그아웃에 실패했습니다.');
-                }
-            })
-            .catch(error => {
-                console.error('Error during logout:', error);
-                alert('로그아웃 중 에러가 발생했습니다.');
-            });
-        });
- </script>
