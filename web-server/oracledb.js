@@ -261,7 +261,7 @@ function monthly_graph() {
 
 // 각 태그 별 심박수 수(도넛 차트)
 function daily_donut_chart() {
-  return `SELECT tag, COUNT(*) AS data_count FROM bpmdata WHERE email=:Email AND TO_CHAR(time, 'HH24:MI:SS') BETWEEN '00:00:00' AND '23:59:59' GROUP BY tag ORDER BY tag`;
+    return `SELECT tag, COUNT(*) AS data_count  FROM bpmdata  WHERE email=:Email AND TO_CHAR(time, 'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD') AND TO_CHAR(time, 'HH24:MI:SS') BETWEEN '00:00:00' AND '23:59:59'  GROUP BY tag  ORDER BY tag`;
 }
 
 // 실시간 태그
