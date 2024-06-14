@@ -14,9 +14,10 @@
         <ul class="nav-links" id="nav-links">
             <li><a href="/dashboard"><img src="../assets/img/bottom_icon03-w.png"><span>메인보드</span></a></li>
             <li><a href="/beat-track"><img src="../assets/img/bottom_icon02-w.png"><span>트레이닝</span></a></li>
-            <li><a href="/training-record"><img src="../assets/img/bottom_icon04-w.png"><span>트레이닝 기록</span></a></li>
+            <li><a href="/training-record"><img src="../assets/img/bottom_icon04-w.png"><span>트레이닝 기록</span></a></li>        
+            <!-- <li><a href="/health-checkup"><img src="../assets/img/bottom_icon04-w.png"><span>건강 진단</span></a></li>         -->
         </ul>
-        <div class="nav-logout logout"><a href="/logout"></a><img src="../assets/img/logout-w.png"><span>로그아웃</span></div>
+        <div class="nav-logout logout"><a href="/logout"></a><img src="../assets/img/logout-w.png"><span>로그아웃</span></div>    
     </nav>
     <div class="overlay" id="overlay"></div>
     <!-- 모바일 네비바 -->
@@ -26,6 +27,7 @@
         <a href="/dashboard">메인 보드</a>
         <a href="/beat-track">트레이닝</a>
         <a href="/training-record">트레이닝 기록</a>
+        <!-- <a href="/health-checkup">건강 진단</a> -->
     </nav>
 
     <!--pc 전용 레이아웃-->
@@ -206,13 +208,13 @@
             <li>
                 <a href="../index.html"><img src="../assets/img/bottom_icon01.png"></a></li>
             <li>
-                <a href="/beat-track"><img src="../assets/img/bottom_icon02.png"></a></li>            
+                <a href="./beat-track.html"><img src="../assets/img/bottom_icon02.png"></a></li>            
             <li>
-                <a href="/dashboard"><img src="../assets/img/bottom_icon03.png"></a></li>
+                <a href="./dashboard.html"><img src="../assets/img/bottom_icon03.png"></a></li>
             <li>
-                <a href="/training-record"><img src="../assets/img/bottom_icon04.png"></a></li>
+                <a href="./training-record.html"><img src="../assets/img/bottom_icon04.png"></a></li>
             <li>
-                <a href="/sitemap"><img src="../assets/img/bottom_icon05.png"></a></li>
+                <a href="./sitemap.html"><img src="../assets/img/bottom_icon05.png"></a></li>
         </ul>
     </div>
     
@@ -224,9 +226,7 @@
     <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
     <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
     <script src="../assets/js/plugins/chartjs.min.js"></script>
-    <!--구현한 스크립트들-->
-    <script src="../assets/js/HR-update.js"></script>
-    <script src="../assets/js/charts.js"></script>
+    
 
     <script> //pc 버전 메뉴바 펼치기 스크립트
         document.addEventListener('DOMContentLoaded', function () {
@@ -264,6 +264,35 @@
             });
         });
     </script>
+    <script> //모바일네비바 펼치기스크립트
+        document.getElementById('hamburger-mob').addEventListener('click', function() {
+            document.getElementById('nav-mob').classList.toggle('open');
+        });
+    </script>
+    <script>//로그아웃 버튼 클릭 이벤트 리스너 추가
+        document.querySelector('.logout').addEventListener('click', function() {
+            fetch('/logout', { //클릭 시 서버로 로그아웃 요청을 보냄
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // 로그아웃 성공 시, 홈 페이지로 리디렉션
+                    window.location.href = 'https://heartrate.ddns.net';
+                } else {
+                    // 로그아웃 실패 시, 에러 메시지 출력
+                    alert('로그아웃에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error during logout:', error);
+                alert('로그아웃 중 에러가 발생했습니다.');
+            });
+        });
+    </script>
+
 
     <script> //태그값 변경시 아이콘 변경 스크립트
         function fetchDynamicIconData() {
@@ -354,86 +383,61 @@
     </script>
 
 
-    <script> //모바일네비바 펼치기스크립트
-        document.getElementById('hamburger-mob').addEventListener('click', function() {
-            document.getElementById('nav-mob').classList.toggle('open');
-        });
-    </script>
-    <script>
-        //로그아웃 버튼 클릭 이벤트 리스너 추가
-        document.querySelector('.logout').addEventListener('click', function() {
-            fetch('/logout', { //클릭 시 서버로 로그아웃 요청을 보냄
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    // 로그아웃 성공 시, 홈 페이지로 리디렉션
-                    window.location.href = 'https://heartrate.ddns.net';
-                } else {
-                    // 로그아웃 실패 시, 에러 메시지 출력
-                    alert('로그아웃에 실패했습니다.');
-                }
-            })
-            .catch(error => {
-                console.error('Error during logout:', error);
-                alert('로그아웃 중 에러가 발생했습니다.');
+
+    <script> // 버튼 클릭 이벤트 리스너 추가
+        
+    document.querySelectorAll('.button-container .button a').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault(); // 기본 동작 방지
+
+            // 모든 버튼을 비활성화 상태로 초기화
+            document.querySelectorAll('.button').forEach(function(btn) {
+                btn.classList.remove('active');
             });
-        });
-    </script>
 
-    <script>
-        // 버튼 클릭 이벤트 리스너 추가
-        document.querySelector('.button-container').addEventListener('click', function(event) {
-            if (event.target.tagName === 'A') {
-                event.preventDefault(); // 기본 동작 방지
-                
-                // 모든 버튼을 비활성화 상태로 초기화
-                document.querySelectorAll('.button').forEach(function(button) {
-                    button.classList.remove('active');
-                });
-                
-                // 클릭한 버튼을 활성화 상태로 변경
-                event.target.parentElement.classList.add('active');
+            // 클릭한 버튼을 활성화 상태로 변경
+            event.target.parentElement.classList.add('active');
 
-                // 클릭한 버튼에 따라 다른 URL로 데이터 요청
-                let url;
-                const buttonText = event.target.textContent.trim();
-                
-                //버튼 클릭 시 차트 변경
-                if (buttonText === 'Daily'){
-                    url = '/hourly-chart';
-                } else if (buttonText === 'Weekly'){
-                    url = '/weekly-chart';
-                } else if (buttonText === 'Monthly') {
-                    url = '/monthly-chart';
-                }
+            // 클릭한 버튼에 따라 다른 URL로 데이터 요청
+            let url;
+            const buttonText = event.target.textContent.trim();
 
-                
-                // 데이터 요청 및 차트 업데이트
-                fetch(url)
-                    .then(response => {if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                     })
-                    .then(responseData => {
-                        const { userEmail, data } = responseData;
-                        console.log('User Email:', userEmail); // 추가된 userEmail을 로그에 출력
-                        updateChart(data);  /// updateChart 함수 호출하여 차트 업데이트
-                    })
-                    .catch(error => {
-                        console.error('Error fetching chart data:', error);
-                    });
+            if (buttonText === 'Daily') {
+                url = '/hourly-chart';
+            } else if (buttonText === 'Weekly') {
+                url = '/weekly-chart';
+            } else if (buttonText === 'Monthly') {
+                url = '/monthly-chart';
             }
-        });
 
-        // 페이지 로드 시 초기 버튼 활성화 상태 설정
-        document.querySelector('.button-container .button:first-child a').click();
-    
+            // 데이터 요청 및 차트 업데이트
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(responseData => {
+                    const { userEmail, data } = responseData;
+                    console.log('User Email:', userEmail); // userEmail 로그에 출력
+                    updateChart(data); // updateChart 함수 호출하여 차트 업데이트
+                })
+                .catch(error => {
+                    console.error('Error fetching chart data:', error);
+                });
+        });
+    });
+
+    // 페이지 로드 시 초기 버튼 활성화 상태 설정
+    document.querySelector('.button-container .button:first-child').classList.add('active');
+
         
     
     </script>
+
+    <!--구현한 스크립트들-->
+    <script src="../assets/js/HR-update.js"></script>
+    <script src="../assets/js/charts.js"></script>
+
 </html>
