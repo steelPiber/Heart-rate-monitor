@@ -385,55 +385,50 @@
     </script>
 
     <script>
-        // 버튼 클릭 이벤트 리스너 추가
+        // 버튼 클릭 이벤트 리스너
         document.querySelector('.button-container').addEventListener('click', function(event) {
             if (event.target.tagName === 'A') {
-                event.preventDefault(); // 기본 동작 방지
-                
-                // 모든 버튼을 비활성화 상태로 초기화
-                document.querySelectorAll('.button').forEach(function(button) {
+                event.preventDefault(); // <a> 태그의 기본 동작 방지
+
+                // 모든 버튼에서 'active' 클래스 제거
+                document.querySelectorAll('.button').forEach(button => {
                     button.classList.remove('active');
                 });
-                
-                // 클릭한 버튼을 활성화 상태로 변경
+
+                // 클릭한 버튼에 'active' 클래스 추가
                 event.target.parentElement.classList.add('active');
 
-                // 클릭한 버튼에 따라 다른 URL로 데이터 요청
+                // 클릭한 버튼의 텍스트를 기반으로 URL 결정
                 let url;
                 const buttonText = event.target.textContent.trim();
-                
-                //버튼 클릭 시 차트 변경
-                if (buttonText === 'Daily'){
+                if (buttonText === 'Daily') {
                     url = '/hourly-chart';
-                } else if (buttonText === 'Weekly'){
+                } else if (buttonText === 'Weekly') {
                     url = '/weekly-chart';
                 } else if (buttonText === 'Monthly') {
                     url = '/monthly-chart';
                 }
 
-                
-                // 데이터 요청 및 차트 업데이트
+                // 서버에서 데이터 가져오기
                 fetch(url)
-                    .then(response => {if (!response.ok) {
-                            throw new Error('Network response was not ok');
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('네트워크 응답이 정상이 아닙니다');
                         }
                         return response.json();
-                     })
+                    })
                     .then(responseData => {
                         const { userEmail, data } = responseData;
-                        console.log('User Email:', userEmail); // 추가된 userEmail을 로그에 출력
-                        updateChart(data);  /// updateChart 함수 호출하여 차트 업데이트
+                        console.log('사용자 이메일:', userEmail); // 사용자 이메일 로그
+                        updateChart(data); // 가져온 데이터로 차트 업데이트
                     })
                     .catch(error => {
-                        console.error('Error fetching chart data:', error);
+                        console.error('차트 데이터를 가져오는 중 오류 발생:', error);
                     });
             }
         });
 
-        // 페이지 로드 시 초기 버튼 활성화 상태 설정
+        // 페이지 로드 시 첫 번째 버튼 (Daily) 클릭 이벤트 발생
         document.querySelector('.button-container .button:first-child a').click();
-    
-        
-    
     </script>
 </html>
