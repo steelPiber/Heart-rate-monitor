@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link id="pagestyle" href="../assets/css/Layout.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgHGTpER1l9P4S9WM01hBAWX6Sag3bpyE"></script>
+    <title>Heart Dashboard</title>
+</head>
+<body>
+    <!--PC 네비바-->
+   <nav class="nav-pc">
+    <div class="hamburger-pc" id="hamburger-pc">☰</div>
+    <ul class="nav-links" id="nav-links">
+        <li><a href="/dashboard"><img src="../assets/img/bottom_icon03-w.png"><span>메인보드</span></a></li>
+        <li><a href="/beat-track"><img src="../assets/img/bottom_icon02-w.png"><span>트레이닝</span></a></li>
+        <li><a href="/training-record"><img src="../assets/img/bottom_icon04-w.png"><span>트레이닝 기록</span></a></li>
+    </ul>
+    <div class="nav-logout logout"><a href="/logout"></a><img src="../assets/img/logout-w.png"><span>로그아웃</span></div>
+    </nav>
+    <div class="overlay" id="overlay"></div>
+    <!--모바일 네비바-->
+    <div class="bar">Heart Rate Monitor</div>
+    <div class="hamburger-mob" id="hamburger-mob">☰</div> 
+    <nav class="nav-mob" id="nav-mob">
+        <a href="/dashboard">메인 보드</a>
+        <a href="/beat-track">트레이닝</a>
+        <a href="/training-record">트레이닝 기록</a>
+    </nav>
+    <!--pc 전용 레이아웃-->
+    <div class="wrap-cont-tr">
+        <div class="">
+            <a href="/dashboard"><img src="../assets/img/logo.png"></a>
+        </div>
+        <div class="first-row">
+            <div class="record-list" id="record-list"></div>
+        </div>
+        <div class="pagination" id="pagination"></div>
+        <div class="second-row">
+            <div class="segment-details" id="segment-details">
+                <h2>Segment Details</h2>
+                <ul id="segment-list"></ul>
+                <button onclick="hideSegmentDetails()">Back</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom_icon">
+        <ul>
+            <li>
+                <a href="../index.html"><img src="../assets/img/bottom_icon01.png"></a></li>
+            <li>
+                <a href="/beat-track"><img src="../assets/img/bottom_icon02.png"></a></li>            
+            <li>
+                <a href="/dashboard"><img src="../assets/img/bottom_icon03.png"></a></li>
+            <li>
+                <a href="/training-record"><img src="../assets/img/bottom_icon04.png"></a></li>
+            <li>
+                <a href="/sitemap"><img src="../assets/img/bottom_icon05.png"></a></li>
+        </ul>
+    </div>
+
+    <!-- 플러그인 스크립트들 -->
+    <script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+    <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+    <script src="../assets/js/plugins/chartjs.min.js"></script>
+
+    <!-- 트레이닝기록 스크립트 -->
+    <script>
+        async function fetchRecords() {
+            const pathParts = window.location.pathname.split('/');
+            const userId = pathParts[2];
+            if (!userId) {
+                console.error('Invalid userId');
+                return;
+            }
+
+            try {
+                // Fetch and update records from external server
+                await fetch(`/api/fetch-and-update/${userId}`);
+
+                const response = await fetch(`/training-record/${userId}/records`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch records');
+                }
+                const records = await response.json();
+                console.log("Fetched records:", records);
+                const recordList = document.getElementById('record-list');
+                recordList.innerHTML = '';
+                records.forEach(record => {
+                    const avgHeartRate = record.segments.reduce((sum, seg) => sum + seg.avgHeartRate, 0) / record.segments.length;
+                    const recordDiv = document.createElement('div');
+                    recordDiv.classList.add('record');
+                    recordDiv.innerHTML = `
+                        <div class="record-details">
+                            <a href="#" onclick="fetchSegments('${userId}', '${record._id}')">
+                                Distance: ${(record.distance / 1000).toFixed(2)} km<br>
+                                Time: ${Math.floor(record.elapsedTime / 60)} min ${record.elapsedTime % 60} sec<br>
+                                Calories: ${Math.floor(record.calories)}<br>
+                                Start Time: ${new Date(record.date).toLocaleString()}<br>
+                                Avg Heart Rate: ${isNaN(avgHeartRate) ? 'N/A' : avgHeartRate.toFixed(2)}
+                            </a>
+                        </div>
+                        <div id="map-${record._id}" class="map"></div>
+                    `;
+                    recordList.appendChild(recordDiv);
+                    initMap(record.pathPoints, `map-${record._id}`);
+                });
+            } catch (error) {
+                console.error('Error fetching records:', error);
+            }
+        }
+
+        async function fetchSegments(userId, recordId) {
+            try {
+                const response = await fetch(`/training-record/${userId}/${recordId}/segments`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch segments');
+                }
+                const segments = await response.json();
+                console.log("Fetched segments:", segments);
+                const segmentList = document.getElementById('segment-list');
+                segmentList.innerHTML = '';
+                segments.forEach(segment => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `Avg Heart Rate: ${segment.avgHeartRate}, Min Heart Rate: ${segment.minHeartRate}, Max Heart Rate: ${segment.maxHeartRate}`;
+                    segmentList.appendChild(listItem);
+                });
+                document.getElementById('segment-details').style.display = 'block';
+                document.getElementById('record-list').style.display = 'none';
+            } catch (error) {
+                console.error('Error fetching segments:', error);
+            }
+        }
+
+        function hideSegmentDetails() {
+            document.getElementById('segment-details').style.display = 'none';
+            document.getElementById('record-list').style.display = 'block';
+        }
+
+        function initMap(pathPoints, elementId) {
+            if (!pathPoints || pathPoints.length === 0) return;
+
+            const map = new google.maps.Map(document.getElementById(elementId), {
+                zoom: 15,
+                center: { lat: pathPoints[0].latitude, lng: pathPoints[0].longitude },
+            });
+
+            const bounds = new google.maps.LatLngBounds();
+            const route = pathPoints.map(point => {
+                const latLng = { lat: point.latitude, lng: point.longitude };
+                bounds.extend(latLng);
+                return latLng;
+            });
+
+            const polyline = new google.maps.Polyline({
+                path: route,
+                geodesic: true,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 2,
+            });
+
+            polyline.setMap(map);
+            map.fitBounds(bounds);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchRecords();
+        });
+    </script>
+
+    <!-- 메뉴바 스크립트 -->
+    <script src="../assets/js/menubar.js"></script>
+</body>
+</html>
