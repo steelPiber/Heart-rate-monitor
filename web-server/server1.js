@@ -6,7 +6,7 @@ const oracleDB = require('./oracledb.js');
 const { router: googleAuthRouter } = require("./google_authController.js");
 const bpmRouter = require('./bpm.js'); // bpm 라우터 모듈 불러오기
 const hrvRouter = require('./hrv.js');
-
+const axios = require("axios");
 const app = express();
 
 app.use(express.json());
@@ -27,6 +27,20 @@ async function executeQuery(query, params) {
     throw err;
   }
 }
+const getUserInfo = async (accessToken) => {
+  try {
+    const userInfoApi = await axios.get(
+      `https://www.googleapis.com/oauth2/v2/userinfo`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
+    );
+    return userInfoApi.data;
+  } catch (err) {
+    return err;
+  }
+};
 
 async function getUserEmailFromToken(req) {
   const accessToken = req.cookies.accessToken;
