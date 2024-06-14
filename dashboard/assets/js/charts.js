@@ -148,7 +148,8 @@ function barChart(url) {
                 label: tagTranslations[tag],
                 fill: true,
                 data: new Array(hours.length).fill(0),
-                backgroundColor: getColorForTag(tag)
+                backgroundColor: getColorForTag(tag),
+                maxBarThickness: 10 // 막대의 최대 두께를 줄여서 간격을 좁힘
             }));
 
             // 데이터 매핑
@@ -255,8 +256,8 @@ function barChart(url) {
                                 }
                             },
                         },
-                        barPercentage: 0.8,  // 막대 사이의 간격을 좁히기 위한 옵션
-                        categoryPercentage: 0.8 // 카테고리 간격을 좁히기 위한 옵션
+                        barPercentage: 0.6,  // 막대 사이의 간격을 좁히기 위한 옵션
+                        categoryPercentage: 0.6 // 카테고리 간격을 좁히기 위한 옵션
                     },
                 });
             });
@@ -276,7 +277,6 @@ function getColorForTag(tag) {
         default: return '#000';
     }
 }
-
 
 barChart();
 
