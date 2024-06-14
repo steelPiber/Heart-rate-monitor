@@ -269,6 +269,10 @@ function realtimeTagQuery() {
   return `SELECT tag FROM bpmdata WHERE email = :Email ORDER BY time DESC FETCH FIRST 1 ROWS ONLY`;
 }
 
+function daily_bar_chart() {
+    return `SELECT TO_CHAR(time, 'HH24') AS hour, tag, COUNT(*) AS data_count FROM bpmdata WHERE email = :Email AND time >= TRUNC(SYSDATE) AND time < TRUNC(SYSDATE) + 1 GROUP BY TO_CHAR(time, 'HH24'), tag ORDER BY hour, tag`;
+}
+
 module.exports = {
   connectToOracleDB,
   insertBPMData,
@@ -292,4 +296,5 @@ module.exports = {
   monthly_graph,
   daily_donut_chart,
   realtimeTagQuery,
+  daily_bar_chart,
 };
