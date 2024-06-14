@@ -250,7 +250,7 @@ a{
 }
 .donut-chart-wrap{
     width: 100%;
-    height: 100%;
+    height: 90%;
 }
 .bar-chart-container{
     flex-grow: 6;
@@ -413,11 +413,46 @@ a{
 
 
 /*PC 버전 트레이닝 기록 레이아웃*/
-.training-record-container{
 
+.wrap-cont-tr{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    margin-left: 70px;
+}
+.record-details{
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+.training-record-container{
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 } 
 .calendar-container{
-
+    width: 100%;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 /*PC 버전 트레이닝 기록 레이아웃*/ 
 
@@ -1091,8 +1126,41 @@ a{
         border-radius: 16px;
         box-sizing: border-box;
     }
-    .map-container:hover {
+    .mob-workout-result-container{
+        display: flex;
+        width: 100%;
+        height: 100px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        margin-top: 20px;
+        padding: 20px 14px;
+        background-color: #F5675D;
+        color: #FFFFFF;
+        box-shadow: 6px 6px 6px 2px rgba(0, 0, 0, 0.25);
+        border-radius: 16px;
+        box-sizing: border-box;
+    }
 
+    .wr-title {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .wr-content {
+        display: flex;
+        justify-content: space-between;
+    }
+    .wr-right, .wr-left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center
+    }
+    .wr-left span, .wr-right span{
+        font-size: 14px;
+    }
+    .wr-left div, .wr-right div{
+        font-weight: bold;
+        font-size: 20px;
     }
 
     .center-icon-container {
