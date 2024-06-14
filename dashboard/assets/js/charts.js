@@ -54,8 +54,17 @@ function donutChart(url) {
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            // 데이터에서 태그와 값을 추출
-            const labels = Object.keys(data);
+            // 태그 번역
+            const tagTranslations = {
+                active: '활동',
+                exercise: '운동',
+                rest: '안정',
+                normal: '평상',
+                sleep: '수면'
+            };
+
+            // 데이터에서 태그와 값을 추출하고 번역
+            const labels = Object.keys(data).map(tag => tagTranslations[tag] || tag);
             const values = Object.values(data);
 
             // 모든 해당 클래스의 캔버스를 선택
