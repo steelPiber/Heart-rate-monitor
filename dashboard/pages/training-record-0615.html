@@ -1,89 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link id="pagestyle" href="../assets/css/Layout.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.css" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise Tracker</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+        }
+        main {
+            margin: 20px;
+        }
+        h1 {
+            margin: 0;
+        }
+        .record {
+            display: flex;
+            justify-content: space-between;
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+	    border-radius: 10px;.
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .record-details {
+            flex: 1;
+            padding-right: 20px;
+        }
+        .record-details a {
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .map {
+            width: 100%;
+            height: 200px;
+        }
+        #segment-details {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgHGTpER1l9P4S9WM01hBAWX6Sag3bpyE"></script>
-    <title>Heart Dashboard</title>
-</head>
-<body>
-    <!--PC 네비바-->
-   <nav class="nav-pc">
-    <div class="hamburger-pc" id="hamburger-pc">☰</div>
-    <ul class="nav-links" id="nav-links">
-        <li><a href="/dashboard"><img src="../assets/img/bottom_icon03-w.png"><span>메인보드</span></a></li>
-        <li><a href="/beat-track"><img src="../assets/img/bottom_icon02-w.png"><span>트레이닝</span></a></li>
-        <li><a href="/training-record"><img src="../assets/img/bottom_icon04-w.png"><span>트레이닝 기록</span></a></li>
-    </ul>
-    <div class="nav-logout logout"><a href="/logout"></a><img src="../assets/img/logout-w.png"><span>로그아웃</span></div>
-    </nav>
-    <div class="overlay" id="overlay"></div>
-    <!--모바일 네비바-->
-    <div class="bar">Heart Rate Monitor</div>
-    <div class="hamburger-mob" id="hamburger-mob">☰</div> 
-    <nav class="nav-mob" id="nav-mob">
-        <a href="/dashboard">메인 보드</a>
-        <a href="/beat-track">트레이닝</a>
-        <a href="/training-record">트레이닝 기록</a>
-    </nav>
-    <!--pc 전용 레이아웃-->
-    <div class="wrap-cont-tr">
-        <div class="">
-            <a href="/dashboard"><img src="../assets/img/logo.png"></a>
-        </div>
-        <div class="first-row">
-            <div class="record-list" id="record-list"></div>
-        </div>
-        <div class="pagination" id="pagination"></div>
-        <div class="second-row">
-            <div class="segment-details" id="segment-details">
-                <h2>Segment Details</h2>
-                <ul id="segment-list"></ul>
-                <button onclick="hideSegmentDetails()">Back</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="bottom_icon">
-        <ul>
-            <li>
-                <a href="../index.html"><img src="../assets/img/bottom_icon01.png"></a></li>
-            <li>
-                <a href="/beat-track"><img src="../assets/img/bottom_icon02.png"></a></li>            
-            <li>
-                <a href="/dashboard"><img src="../assets/img/bottom_icon03.png"></a></li>
-            <li>
-                <a href="/training-record"><img src="../assets/img/bottom_icon04.png"></a></li>
-            <li>
-                <a href="/sitemap"><img src="../assets/img/bottom_icon05.png"></a></li>
-        </ul>
-    </div>
-
-    <!-- 플러그인 스크립트들 -->
-    <script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
-    <script src="../assets/js/core/popper.min.js"></script>
-    <script src="../assets/js/core/bootstrap.min.js"></script>
-    <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
-    <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
-    <script src="../assets/js/plugins/chartjs.min.js"></script>
-
-    <!-- 트레이닝기록 스크립트 -->
     <script>
         async function fetchRecords() {
-            const pathParts = window.location.pathname.split('/');
-            const userId = pathParts[2];
-            if (!userId) {
-                console.error('Invalid userId');
-                return;
-            }
-
             try {
-                // Fetch and update records from external server
-                await fetch(`/api/fetch-and-update/${userId}`);
-
-                const response = await fetch(`/training-record/${userId}/records`);
+                const response = await fetch(`/training-record/records`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch records');
                 }
@@ -97,7 +88,7 @@
                     recordDiv.classList.add('record');
                     recordDiv.innerHTML = `
                         <div class="record-details">
-                            <a href="#" onclick="fetchSegments('${userId}', '${record._id}')">
+                            <a href="#" onclick="fetchSegments('${record._id}')">
                                 Distance: ${(record.distance / 1000).toFixed(2)} km<br>
                                 Time: ${Math.floor(record.elapsedTime / 60)} min ${record.elapsedTime % 60} sec<br>
                                 Calories: ${Math.floor(record.calories)}<br>
@@ -115,9 +106,9 @@
             }
         }
 
-        async function fetchSegments(userId, recordId) {
+        async function fetchSegments(recordId) {
             try {
-                const response = await fetch(`/training-record/${userId}/${recordId}/segments`);
+                const response = await fetch(`/training-record/${recordId}/segments`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch segments');
                 }
@@ -173,8 +164,18 @@
             fetchRecords();
         });
     </script>
-
-    <!-- 메뉴바 스크립트 -->
-    <script src="../assets/js/menubar.js"></script>
+</head>
+<body>
+    <header>
+        Exercise Tracker
+    </header>
+    <main>
+        <div id="record-list"></div>
+        <div id="segment-details">
+            <h2>Segment Details</h2>
+            <ul id="segment-list"></ul>
+            <button onclick="hideSegmentDetails()">Back</button>
+        </div>
+    </main>
 </body>
 </html>
