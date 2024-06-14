@@ -79,33 +79,42 @@ async function selectUserErrlog(paramEmail){
 }
 
 // DB에서 최근 24시간 동안의 심박수 데이터 가져오기
-/*async function fetchHeartRateData() {
-  let connection;
+async function fetchHeartRateData() {
+    let connection;
 
-  try {
-    connection = await connectToOracleDB();
+    try {
+        connection = await connectToOracleDB();
 
-    const result = await connection.execute(
-      `SELECT idx, bpm, time, email, tag
-       FROM bpmdata
-       WHERE time > (SELECT max(time) - INTERVAL '24' HOUR FROM bpmdata) AND email='pyh5523' AND bpm <> 0 
-       ORDER BY time`
-    );
+        const result = await connection.execute(
+            `SELECT idx, bpm, time, email, tag
+             FROM bpmdata
+             WHERE time > (SELECT max(time) - INTERVAL '24' HOUR FROM bpmdata) 
+               AND email='pyh5523' 
+               AND bpm <> 0 
+             ORDER BY time`
+        );
 
-    const df = new pandas.DataFrame(result.rows, result.metaData.map(meta => meta.name.toUpperCase()));
-    return df;
-  } catch (err) {
-    console.error(err);
-  } finally {
-    if (connection) {
-      try {
-        await connection.close();
-      } catch (err) {
-        console.error(err);
-      }
+        const data = result.rows.map(row => {
+            return result.metaData.reduce((acc, meta, index) => {
+                acc[meta.name.toUpperCase()] = row[index];
+                return acc;
+            }, {});
+        });
+
+        return data;
+    } catch (err) {
+        console.error("Error fetching heart rate data:", err);
+        throw err;
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                console.error("Error closing connection:", err);
+            }
+        }
     }
-  }
-}*/
+}
 
 // 실시간 삼박수
 function realtimeQuery() {
@@ -252,7 +261,7 @@ function monthly_graph() {
 
 // 각 태그 별 심박수 수(도넛 차트)
 function daily_donut_chart() {
-  return `SELECT tag, COUNT(*) AS data_count  FROM bpmdata  WHERE email=:Email AND TO_CHAR(time, 'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD') AND TO_CHAR(time, 'HH24:MI:SS') BETWEEN '00:00:00' AND '23:59:59'  GROUP BY tag  ORDER BY tag`;
+  return `SELECT tag, COUNT(*) AS data_count FROM bpmdata WHERE email=:Email AND TO_CHAR(time, ‘HH24:MI:SS’) BETWEEN ’00:00:00’ AND ’23:59:59’ GROUP BY tag ORDER BY tag`;
 }
 
 // 실시간 태그
@@ -265,7 +274,7 @@ module.exports = {
   insertBPMData,
   selectUserlog,
   selectUserErrlog,
-  //fetchHeartRateData,
+  fetchHeartRateData,
   realtimeQuery,
   minQuery,
   hourQuery,
