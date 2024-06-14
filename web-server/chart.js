@@ -113,13 +113,23 @@ router.get('bar-chart', async (req, res) => {
     const result = await executeQuery(query, { Email: userEmail });
     console.log('Query result:', result);
 
-    if (result.length === 0) {
-      // 쿼리 결과가 없을 때
-      res.json([{ HOUR: '0', TAG: 'rest', DATA_COUNT: '0' }]);
-    } else {
-      // 쿼리 결과가 있을 때
-      res.json(result);
+    // 기본값 설정
+    const processedData = {
+      hour: 0,
+      tag: 'rest',
+      data_count: 0
+    };
+    
+    // 쿼리 결과가 있을 때만 처리
+    if (result && result.rows && result.rows.length > 0) {
+      result.rows.forEach(row => {
+        const [hour, tag, data_count] = row;
+        processedData[tag.toLowerCase()] = data_count;
+      });
     }
+
+    // 클라이언트에게 JSON 형식으로 데이터 반환
+    res.json(processedData);
     
   } catch (error) {
     console.error("Error executing query:", error);
