@@ -32,20 +32,18 @@
     </nav>
     <!--pc 전용 레이아웃-->
     <div class="wrap-cont-tr">
-        <div class="">
+        <div class="header-icon">
             <a href="/dashboard"><img src="../assets/img/logo.png"></a>
         </div>
         <div class="first-row">
             <div class="record-list" id="record-list"></div>
-        </div>
-        <div class="pagination" id="pagination"></div>
-        <div class="second-row">
             <div class="segment-details" id="segment-details">
-                <h2>Segment Details</h2>
+                <h2>심박수 통계</h2>
                 <ul id="segment-list"></ul>
-                <button onclick="hideSegmentDetails()">Back</button>
+                <button onclick="hideSegmentDetails()">뒤로가기</button>
             </div>
         </div>
+        <div class="pagination" id="pagination"></div>
     </div>
 
     <div class="bottom_icon">
@@ -73,7 +71,7 @@
 <script src="../assets/js/plugins/chartjs.min.js"></script>
 
 <!-- 트레이닝기록 스크립트 -->
-<script src="../assets/js/training-record-test.js"></script>
+<script src="../assets/js/training-record.js"></script>
 
 <!-- 메뉴바 스크립트 -->
 <script src="../assets/js/menubar.js"></script>
