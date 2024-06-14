@@ -51,17 +51,18 @@ fetch('/hourly-chart')
 
 // 대시보드 활동수면안정평상운동 그래프 (도넛)
 function donutChart(url) {
-    fetch(url) 
+    fetch(url)
         .then(response => response.json())
         .then(data => {
-            const hourLabels = data.map(item => item[0]);
-            const dailyTag = data.map(item => item[1]);
+            // 데이터에서 태그와 값을 추출
+            const labels = Object.keys(data);
+            const values = Object.values(data);
 
             // 모든 해당 클래스의 캔버스를 선택
             const canvases = document.querySelectorAll('.donut-graph');
             canvases.forEach(canvas => {
                 const ctx = canvas.getContext('2d');
-                
+
                 const backgroundColors = [
                     '#ef476f','#ffd166','#06d6a0','#118ab2','#073b4c'
                 ];
@@ -73,11 +74,11 @@ function donutChart(url) {
                 canvas.chartInstance = new Chart(ctx, {
                     type: "doughnut",
                     data: {
-                        labels: hourLabels,
+                        labels: labels,
                         datasets: [{
-                            label: "BPM 박동수",
+                            label: "Daily Activity",
                             fill: true,
-                            data: dailyTag,
+                            data: values,
                             backgroundColor: backgroundColors,
                             maxBarThickness: 6
                         }],
@@ -87,7 +88,7 @@ function donutChart(url) {
                         maintainAspectRatio: false,
                         plugins: {
                             legend: {
-                                display: false,
+                                display: true, // 범례를 표시하도록 변경
                             }
                         },
                         interaction: {
@@ -114,49 +115,7 @@ function donutChart(url) {
                                 top: 0,
                                 bottom: 0
                             }
-                        },
-                        scales: {
-                            y: {
-                                grid: {
-                                    drawBorder: false,
-                                    display: true,
-                                    drawOnChartArea: true,
-                                    drawTicks: false,
-                                    borderDash: [5, 5]
-                                },
-                                ticks: {
-                                    display: true,
-                                    padding: 10,
-                                    color: '#fbfbfb',
-                                    font: {
-                                        size: 11,
-                                        family: "Open Sans",
-                                        style: 'normal',
-                                        lineHeight: 2
-                                    },
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    drawBorder: false,
-                                    display: false,
-                                    drawOnChartArea: false,
-                                    drawTicks: false,
-                                    borderDash: [5, 5]
-                                },
-                                ticks: {
-                                    display: false,
-                                    color: '#ccc',
-                                    padding: 20,
-                                    font: {
-                                        size: 11,
-                                        family: "Open Sans",
-                                        style: 'normal',
-                                        lineHeight: 2
-                                    },
-                                }
-                            },
-                        },
+                        }
                     },
                 });
             });
