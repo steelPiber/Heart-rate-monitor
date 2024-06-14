@@ -93,8 +93,10 @@ router.get('/donut', async (req, res) => {
     // 쿼리 결과가 있을 때만 처리
     if (result && result.rows && result.rows.length > 0) {
       result.rows.forEach(row => {
-        // row.tag와 row.data_count를 사용하여 processedData를 업데이트합니다.
-        processedData[row.TAG.toLowerCase()] = row.DATA_COUNT;
+        if (row.TAG && row.DATA_COUNT !== undefined) {
+          const tag = row.TAG.toLowerCase();
+          processedData[tag] = row.DATA_COUNT;
+        }
       });
     }
 
