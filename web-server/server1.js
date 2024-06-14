@@ -33,6 +33,7 @@ async function getUserEmailFromToken(req) {
   if (!accessToken) {
     throw new Error('Access token is missing');
   }
+  console.log('getUserEmailFromToken : ', accessToken);
   const userInfo = await getUserInfo(accessToken);
   return userInfo.email.split('@')[0];
 }
