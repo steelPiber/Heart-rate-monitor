@@ -232,92 +232,96 @@
 <script src="../assets/js/menubar.js"></script>
 
 
-    <script> //태그값 변경시 아이콘 변경 스크립트
-        function fetchDynamicIconData() {
-            fetch('/status')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    var serverTag = data[0]; // 서버에서 받은 태그 값
-        
-                    // 이미지 요소 선택
-                    var imgElements = document.querySelectorAll(".dynamicImage");
-        
-                    // 태그 값에 따라 이미지 src 변경
-                    imgElements.forEach(imgElement => {
-                        if (serverTag === "exercise") {
+    <script> function updateDynamicIconAndText() {
+        fetch('/status')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                var serverTag = data.tag; // 서버에서 받은 태그 값
+    
+                // 이미지 요소 선택
+                var imgElements = document.querySelectorAll(".dynamicImage");
+    
+                // 태그 값에 따라 이미지 src 변경
+                imgElements.forEach(imgElement => {
+                    switch (serverTag) {
+                        case "exercise":
                             imgElement.src = "../assets/img/workout.png";
-                        } else if (serverTag === "rest") {
+                            break;
+                        case "rest":
                             imgElement.src = "../assets/img/rest.png";
-                        } else if (serverTag === "sleep") {
+                            break;
+                        case "sleep":
                             imgElement.src = "../assets/img/sleep.png";
-                        } else if (serverTag === "normal") {
+                            break;
+                        case "normal":
                             imgElement.src = "../assets/img/normal.png";
-                        } else if (serverTag === "active") {
+                            break;
+                        case "active":
                             imgElement.src = "../assets/img/active.png";
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching status data:', error);
-                    // 에러 발생 시 로딩 이미지로 대체
-                    var imgElements = document.querySelectorAll(".dynamicImage");
-                    imgElements.forEach(imgElement => {
-                        imgElement.src = "../assets/img/loading.gif";
-                    });
-                });
-        }
-        
-        setInterval(fetchDynamicIconData, 1000);
-        document.addEventListener('DOMContentLoaded', fetchDynamicIconData);        
-    </script>
-
-    <script>//태그값 변경시 텍스트 변경 스크립트
-        function fetchDynamicIconData() {
-            fetch('/status')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                            break;
+                        default:
+                            imgElement.src = "../assets/img/loading.gif";
+                            break;
                     }
-                    return response.json();
-                })
-                .then(data => {
-                    var serverTag = data.tag; // 서버에서 받은 태그 값
-        
-                    // 상태 텍스트 요소 선택
-                    var statusTextElements = document.querySelectorAll(".status-text");
-        
-                    // 태그 값에 따라 상태 텍스트 변경
-                    statusTextElements.forEach(textElement => {
-                        if (serverTag === "exercise") {
-                            textElement.textContent = "Exercise";
-                        } else if (serverTag === "rest") {
-                            textElement.textContent = "Rest";
-                        } else if (serverTag === "sleep") {
-                            textElement.textContent = "Sleep";
-                        } else if (serverTag === "normal") {
-                            textElement.textContent = "Normal";
-                        } else if (serverTag === "active") {
-                            textElement.textContent = "Active";
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching status data:', error);
-                    var statusTextElements = document.querySelectorAll(".status-text");
-                    statusTextElements.forEach(textElement => {
-                        textElement.textContent = "Loading...";
-                    });
                 });
-        }
-        
-        // 페이지 로드 시 및 매초 데이터 갱신
-        document.addEventListener('DOMContentLoaded', fetchDynamicIconData);
-        setInterval(fetchDynamicIconData, 1000);
+    
+                // 상태 텍스트 요소 선택
+                var statusTextElements = document.querySelectorAll(".status-text");
+    
+                // 태그 값에 따라 상태 텍스트 변경
+                statusTextElements.forEach(textElement => {
+                    switch (serverTag) {
+                        case "exercise":
+                            textElement.textContent = "Exercise";
+                            break;
+                        case "rest":
+                            textElement.textContent = "Rest";
+                            break;
+                        case "sleep":
+                            textElement.textContent = "Sleep";
+                            break;
+                        case "normal":
+                            textElement.textContent = "Normal";
+                            break;
+                        case "active":
+                            textElement.textContent = "Active";
+                            break;
+                        default:
+                            textElement.textContent = "Loading...";
+                            break;
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching status data:', error);
+                // 에러 발생 시 이미지와 텍스트를 로딩 이미지 또는 에러 상태로 설정
+                var imgElements = document.querySelectorAll(".dynamicImage");
+                imgElements.forEach(imgElement => {
+                    imgElement.src = "../assets/img/loading.gif";
+                });
+    
+                var statusTextElements = document.querySelectorAll(".status-text");
+                statusTextElements.forEach(textElement => {
+                    textElement.textContent = "Loading...";
+                });
+            });
+    }
+    
+    // 페이지 로드 시 및 매초 데이터 갱신
+    document.addEventListener('DOMContentLoaded', function() {
+        updateDynamicIconAndText();
+    });
+    
+    setInterval(function() {
+        updateDynamicIconAndText();
+    }, 1000);
+    
+
     </script>
 
 
