@@ -208,13 +208,13 @@
             <li>
                 <a href="../index.html"><img src="../assets/img/bottom_icon01.png"></a></li>
             <li>
-                <a href="/beat-track"><img src="../assets/img/bottom_icon02.png"></a></li>            
+                <a href="./beat-track.html"><img src="../assets/img/bottom_icon02.png"></a></li>            
             <li>
-                <a href="/dashboard"><img src="../assets/img/bottom_icon03.png"></a></li>
+                <a href="./dashboard.html"><img src="../assets/img/bottom_icon03.png"></a></li>
             <li>
-                <a href="/training-record"><img src="../assets/img/bottom_icon04.png"></a></li>
+                <a href="./training-record.html"><img src="../assets/img/bottom_icon04.png"></a></li>
             <li>
-                <a href="/sitemap"><img src="../assets/img/bottom_icon05.png"></a></li>
+                <a href="./sitemap.html"><img src="../assets/img/bottom_icon05.png"></a></li>
         </ul>
     </div>
     
@@ -232,8 +232,7 @@
 <script src="../assets/js/menubar.js"></script>
 
 
-    <script>
-        //태그값 변경시 아이콘 변경 스크립트
+    <script> //태그값 변경시 아이콘 변경 스크립트
         function fetchDynamicIconData() {
             fetch('/status')
                 .then(response => {
@@ -244,10 +243,10 @@
                 })
                 .then(data => {
                     var serverTag = data[0]; // 서버에서 받은 태그 값
-
+        
                     // 이미지 요소 선택
                     var imgElements = document.querySelectorAll(".dynamicImage");
-
+        
                     // 태그 값에 따라 이미지 src 변경
                     imgElements.forEach(imgElement => {
                         if (serverTag === "exercise") {
@@ -262,10 +261,36 @@
                             imgElement.src = "../assets/img/active.png";
                         }
                     });
+                })
+                .catch(error => {
+                    console.error('Error fetching status data:', error);
+                    // 에러 발생 시 로딩 이미지로 대체
+                    var imgElements = document.querySelectorAll(".dynamicImage");
+                    imgElements.forEach(imgElement => {
+                        imgElement.src = "../assets/img/loading.gif";
+                    });
+                });
+        }
+        
+        setInterval(fetchDynamicIconData, 1000);
+        document.addEventListener('DOMContentLoaded', fetchDynamicIconData);        
+    </script>
 
+    <script>//태그값 변경시 텍스트 변경 스크립트
+        function fetchDynamicText() {
+            fetch('/status')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    var serverTag = data[0]; // 서버에서 받은 태그 값
+        
                     // 상태 텍스트 요소 선택
                     var statusTextElements = document.querySelectorAll(".status-text");
-
+        
                     // 태그 값에 따라 상태 텍스트 변경
                     statusTextElements.forEach(textElement => {
                         if (serverTag === "exercise") {
@@ -283,22 +308,16 @@
                 })
                 .catch(error => {
                     console.error('Error fetching status data:', error);
-                    // 에러 발생 시 로딩 이미지로 대체
-                    var imgElements = document.querySelectorAll(".dynamicImage");
-                    imgElements.forEach(imgElement => {
-                        imgElement.src = "../assets/img/loading.gif";
-                    });
-
                     var statusTextElements = document.querySelectorAll(".status-text");
                     statusTextElements.forEach(textElement => {
                         textElement.textContent = "Loading...";
                     });
                 });
         }
-
+        
         // 페이지 로드 시 및 매초 데이터 갱신
-        document.addEventListener('DOMContentLoaded', fetchDynamicIconData);
-        setInterval(fetchDynamicIconData, 1000);
+        document.addEventListener('DOMContentLoaded', fetchDynamicText);
+        setInterval(fetchDynamicText, 1000);
     </script>
 
 
