@@ -82,6 +82,7 @@ router.get('/DetectionOfArrhythmia', async (req, res) => {
                 'ACTIVE': [70, 130]
             };
             const results = [];
+            results.push({ userEmail });
             for (const tag of tags) {
                 const tagData = heartRateData.filter(row => row.TAG.toUpperCase() === tag);
                 if (tagData.length > 0) {
@@ -100,11 +101,11 @@ router.get('/DetectionOfArrhythmia', async (req, res) => {
             }
             res.json(results);
         } else {
-            res.json({ userEmail, message: "Error: 'TAG' column not found in the data." });
+            res.json({ userEmail: userEmail, message: "Error: 'TAG' column not found in the data." });
         }
     } catch (error) {
         console.error("Error during arrhythmia detection:", error);
-        res.status(500).json({ userEmail, message: "Internal server error." });
+        res.status(500).json({ userEmail: userEmail, message: "Internal server error." });
     }
 });
 
@@ -203,13 +204,13 @@ router.get('/DetectionOfBradycardiaAndTachycardia', async (req, res) => {
         }
 
         res.json({
-            userEmail,
+            userEmail: userEmail,
             bradycardiaPeriods: hasBradycardiaPeriods,
             tachycardiaPeriods: hasTachycardiaPeriods
         });
     } catch (error) {
         console.error("Error occurred while detecting bradycardia and tachycardia:", error);
-        res.status(500).json({ userEmail, message: "Internal server error." });
+        res.status(500).json({ userEmail: userEmail, message: "Internal server error." });
     }
 });
 
