@@ -2,6 +2,7 @@ const express = require('express');
 const oracleDB = require('./oracledb.js');
 const router = express.Router();
 const moment = require('moment');
+const { getUserEmailFromToken, executeQuery } = require('./utility.js');
 
 // HRV 분석 함수들
 function calculateRRIntervals(data) {
@@ -65,6 +66,7 @@ function evaluateAbnormalPatterns(abnormalPeriods) {
 // 기존 엔드포인트 (DetectionOfArrhythmia)
 router.get('/DetectionOfArrhythmia', async (req, res) => {
     try {
+        const userEmail = await getUserEmailFromToken(req);
         const heartRateData = await oracleDB.fetchHeartRateData();
         if (heartRateData.length < 5000) {
             res.json({ message: "Your heart rate is not high enough to detect an arrhythmia." });
@@ -98,11 +100,11 @@ router.get('/DetectionOfArrhythmia', async (req, res) => {
             }
             res.json(results);
         } else {
-            res.json({ message: "Error: 'TAG' column not found in the data." });
+            res.json({ userEmail, message: "Error: 'TAG' column not found in the data." });
         }
     } catch (error) {
         console.error("Error during arrhythmia detection:", error);
-        res.status(500).json({ message: "Internal server error." });
+        res.status(500).json({ userEmail, message: "Internal server error." });
     }
 });
 
@@ -110,7 +112,7 @@ router.get('/DetectionOfArrhythmia', async (req, res) => {
 router.get('/DetectionOfBradycardiaAndTachycardia', async (req, res) => {
     try {
         const heartRateData = await oracleDB.fetchHeartRateData();
-        
+        const userEmail = await getUserEmailFromToken(req);
         let hasBradycardiaPeriods = false;
         let hasTachycardiaPeriods = false;
         let currentPeriod = null;
@@ -201,12 +203,13 @@ router.get('/DetectionOfBradycardiaAndTachycardia', async (req, res) => {
         }
 
         res.json({
+            userEmail,
             bradycardiaPeriods: hasBradycardiaPeriods,
             tachycardiaPeriods: hasTachycardiaPeriods
         });
     } catch (error) {
         console.error("Error occurred while detecting bradycardia and tachycardia:", error);
-        res.status(500).json({ message: "Internal server error." });
+        res.status(500).json({ userEmail, message: "Internal server error." });
     }
 });
 
