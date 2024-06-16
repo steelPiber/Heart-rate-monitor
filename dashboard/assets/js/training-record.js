@@ -1,5 +1,6 @@
 let currentPage = 1; // 초기 페이지 설정
 const recordsPerPage = 5; // 페이지당 운동 기록 수
+const pagesPerGroup = 10; // 그룹당 페이지 수
 
 async function fetchRecords(page = 1) {
     try {
@@ -52,8 +53,21 @@ function renderPagination(totalRecords, page) {
     pagination.innerHTML = '';
 
     const totalPages = Math.ceil(totalRecords / recordsPerPage);
+    const currentGroup = Math.ceil(page / pagesPerGroup);
+    const startPage = (currentGroup - 1) * pagesPerGroup + 1;
+    const endPage = Math.min(currentGroup * pagesPerGroup, totalPages);
 
-    for (let i = 1; i <= totalPages; i++) {
+    if (currentGroup > 1) {
+        const prevButton = document.createElement('button');
+        prevButton.textContent = '이전';
+        prevButton.addEventListener('click', () => {
+            currentPage = startPage - 1;
+            fetchRecords(currentPage);
+        });
+        pagination.appendChild(prevButton);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
         const button = document.createElement('button');
         button.textContent = i;
         if (i === page) {
@@ -64,6 +78,16 @@ function renderPagination(totalRecords, page) {
             fetchRecords(currentPage);
         });
         pagination.appendChild(button);
+    }
+
+    if (currentGroup * pagesPerGroup < totalPages) {
+        const nextButton = document.createElement('button');
+        nextButton.textContent = '다음';
+        nextButton.addEventListener('click', () => {
+            currentPage = endPage + 1;
+            fetchRecords(currentPage);
+        });
+        pagination.appendChild(nextButton);
     }
 }
 
