@@ -112,7 +112,7 @@
                     <li class="button"><a href="#">Weekly</a></li>
                     <li class="button"><a href="#">Monthly</a></li>
                 </ul>
-                <div class="pc-chart-wrap">
+                <div class="pc-chart-wrap" style="height: 90%;">
                     <canvas class="graph" ></canvas>
                 </div>
             </div>
@@ -322,7 +322,7 @@
 
 
 
-    <script> // 버튼 클릭 이벤트 리스너 추가
+    <!-- <script> // 버튼 클릭 이벤트 리스너 추가
         
     document.querySelectorAll('.button-container .button a').forEach(button => {
         button.addEventListener('click', function(event) {
@@ -372,7 +372,56 @@
 
         
     
+    </script> -->
+
+    <script>
+        document.querySelectorAll('.button-container').forEach(container => {
+            container.querySelectorAll('.button a').forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault(); // 기본 동작 방지
+
+                    // 모든 버튼을 비활성화 상태로 초기화
+                    container.querySelectorAll('.button').forEach(function(btn) {
+                        btn.classList.remove('active');
+                    });
+
+                    // 클릭한 버튼을 활성화 상태로 변경
+                    event.target.parentElement.classList.add('active');
+
+                    const dataKey = event.target.getAttribute('data-url');
+
+                    // 서버에서 데이터 요청 및 차트 업데이트
+                    fetch(`/api/data?chart=${dataKey}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            updateChart(data, 'graph');
+                        })
+                        .catch(error => {
+                            console.error('Error fetching chart data:', error);
+                            // 오류 시, 더미 데이터 사용
+                            const data = dummyData[dataKey];
+                            updateChart(data, 'graph');
+                        });
+                });
+            });
+
+            // 페이지 로드 시 초기 버튼 활성화 상태 설정 및 초기 차트 데이터 로드
+            container.querySelector('.button:first-child a').click();
+        });
+
+        // 페이지 로드 시 초기 차트 데이터를 로드
+        fetch('/hourly-chart')
+        .then(response => response.json())
+        .then(responseData => {
+            const { userEmail, data } = responseData;
+            console.log('User Email:', userEmail); // 추가된 userEmail을 로그에 출력
+            updateChart(data, 'graph'); // 'graph' 클래스를 가진 모든 캔버스에 차트를 생성
+        })
+        .catch(error => {
+            console.error('Error fetching initial chart data:', error);
+        });   
     </script>
+
 
     <!--구현한 스크립트들-->
     <script src="../assets/js/HR-update.js"></script>
