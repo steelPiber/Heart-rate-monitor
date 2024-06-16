@@ -1,3 +1,8 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // 기본적으로 Daily 차트 데이터를 가져와 차트를 업데이트
+    fetchData('/hourly-chart');
+});
+
 // 클릭 이벤트를 통해 데이터를 가져오고 차트를 업데이트하는 함수
 document.getElementById('daily-btn').addEventListener('click', function() {
     fetchData('/hourly-chart');
