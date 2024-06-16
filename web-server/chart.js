@@ -104,14 +104,9 @@ router.get('/daily-tag-chart', async (req, res) => {
 
 router.get('/bar-chart', async (req, res) => {
   try {
-    console.log('reqToken: ', req.cookies.accessToken);
     const userEmail = await getUserEmailFromToken(req);
-    console.log('userEmail:', userEmail);
     const query = oracleDB.daily_bar_chart();
-    console.log('Executing query:', query);
     const result = await executeQuery(query, { Email: userEmail });
-    console.log('Query result:', result);
-
     // 기본값 설정
     const processedData = [];
 
