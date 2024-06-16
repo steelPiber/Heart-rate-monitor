@@ -279,3 +279,11 @@ document.addEventListener('DOMContentLoaded', () => {
     donutChart('/daily-tag-chart');
     barChart('/bar-chart');
 });
+
+setInterval(() => {
+    donutChart('/daily-tag-chart');
+}, 5000);
+
+setInterval(() => {
+    barChart('/bar-chart');
+}, 5000);
