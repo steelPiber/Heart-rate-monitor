@@ -1,55 +1,68 @@
 let currentPage = 1; // 초기 페이지 설정
 const recordsPerPage = 5; // 페이지당 운동 기록 수
 
-async function fetchRecords(page) {
+async function fetchRecords(page = 1) {
     try {
-        const response = await fetch(`/training-record/records?page=${page}&limit=${recordsPerPage}`);
+        const response = await fetch(`/training-record/records`);
         if (!response.ok) {
             throw new Error('Failed to fetch records');
         }
-        const { records, totalRecords } = await response.json(); // 서버에서 전체 레코드 수와 현재 페이지 레코드를 함께 전달받음
-        console.log(`Fetched records (page ${page}):`, records);
+        const records = await response.json();
+        console.log("Fetched records:", records);
+
+        // 전체 레코드 수
+        const totalRecords = records.length;
+
+        // 현재 페이지의 레코드만 가져오기
+        const startIndex = (page - 1) * recordsPerPage;
+        const endIndex = startIndex + recordsPerPage;
+        const currentRecords = records.slice(startIndex, endIndex);
+
         const recordList = document.getElementById('record-list');
         recordList.innerHTML = '';
-        records.forEach(record => {
+
+        currentRecords.forEach(record => {
             const avgHeartRate = record.segments.reduce((sum, seg) => sum + seg.avgHeartRate, 0) / record.segments.length;
             const recordDiv = document.createElement('div');
             recordDiv.classList.add('record');
             recordDiv.innerHTML = `
                 <div class="record-details">
-                    <a href="#" onclick="fetchSegments('${record._id}')">
-                        Distance: ${(record.distance / 1000).toFixed(2)} km<br>
-                        Time: ${Math.floor(record.elapsedTime / 60)} min ${record.elapsedTime % 60} sec<br>
-                        Calories: ${Math.floor(record.calories)}<br>
-                        Start Time: ${new Date(record.date).toLocaleString()}<br>
-                        Avg Heart Rate: ${isNaN(avgHeartRate) ? 'N/A' : avgHeartRate.toFixed(2)}
-                    </a>
+                    거리: <span>${(record.distance / 1000).toFixed(2)} km</span><br>
+                    시간: <span>${Math.floor(record.elapsedTime / 60)} min ${record.elapsedTime % 60} sec</span><br>
+                    소모 칼로리: <span>${Math.floor(record.calories)}</span><br>
+                    시작 시간: <span>${new Date(record.date).toLocaleString()}</span><br>
+                    평균 심박수: <span>${isNaN(avgHeartRate) ? 'N/A' : avgHeartRate.toFixed(2)}</span><br><br><br>
+                    <a href="#" onclick="fetchSegments('${record._id}')">심박수 통계</a>
                 </div>
-                <div id="map-${record._id}" class="map" style="width: 100%; height: 200px;"></div>
+                <div id="map-${record._id}" class="map"></div>
             `;
             recordList.appendChild(recordDiv);
             initMap(record.pathPoints, `map-${record._id}`);
         });
 
-        // 페이지네이션 처리
-        const pagination = document.getElementById('pagination');
-        pagination.innerHTML = '';
-        const totalPages = Math.ceil(totalRecords / recordsPerPage);
-        for (let i = 1; i <= totalPages; i++) {
-            const pageButton = document.createElement('button');
-            pageButton.textContent = i;
-            pageButton.classList.add('page-button');
-            if (i === page) {
-                pageButton.classList.add('active');
-            }
-            pageButton.addEventListener('click', function() {
-                currentPage = i;
-                fetchRecords(currentPage);
-            });
-            pagination.appendChild(pageButton);
-        }
+        renderPagination(totalRecords, page);
     } catch (error) {
         console.error('Error fetching records:', error);
+    }
+}
+
+function renderPagination(totalRecords, page) {
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = '';
+
+    const totalPages = Math.ceil(totalRecords / recordsPerPage);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement('button');
+        button.textContent = i;
+        if (i === page) {
+            button.disabled = true;
+        }
+        button.addEventListener('click', () => {
+            currentPage = i;
+            fetchRecords(currentPage);
+        });
+        pagination.appendChild(button);
     }
 }
 
@@ -65,11 +78,9 @@ async function fetchSegments(recordId) {
         segmentList.innerHTML = '';
         segments.forEach(segment => {
             const listItem = document.createElement('li');
-            listItem.innerHTML = `
-                평균 심박수: <span>${segment.avgHeartRate}</span><br>
-                최저 심박수: <span>${segment.minHeartRate}</span><br>
-                최대 심박수: <span>${segment.maxHeartRate}</span><br><br>
-            `;
+            listItem.innerHTML = `평균 심박수: <span>${segment.avgHeartRate}</span><br>
+                                최저 심박수: <span>${segment.minHeartRate}</span><br>
+                                최대 심박수: <span>${segment.maxHeartRate}</span><br><br>`;
             segmentList.appendChild(listItem);
         });
         document.getElementById('segment-details').style.display = 'block';
