@@ -37,8 +37,6 @@ function updateChart(data, chartClass) {
     });
 }
 
-
-
 // 대시보드 활동수면안정평상운동 그래프 (도넛)
 function donutChart(url) {
     fetch(url)
@@ -49,7 +47,6 @@ function donutChart(url) {
                 active: '활동',
                 exercise: '운동',
                 rest: '안정',
-                normal: '평상',
                 sleep: '수면'
             };
 
@@ -138,7 +135,6 @@ function barChart(url) {
                 active: '활동',
                 exercise: '운동',
                 rest: '안정',
-                normal: '평상',
                 sleep: '수면'
             };
 
@@ -174,7 +170,7 @@ function barChart(url) {
                     data: {
                         labels: hours,
                         datasets: datasets.sort((a, b) => {
-                            const order = ['운동', '평상', '안정', '수면', '활동'];
+                            const order = ['운동', '안정', '수면', '활동'];
                             return order.indexOf(a.label) - order.indexOf(b.label);
                         }),
                     },
@@ -188,7 +184,7 @@ function barChart(url) {
                                         const datasetIndex = tooltipItem.datasetIndex;
                                         const datasets = tooltipItem.chart.data.datasets;
                                         const orderedDatasets = datasets.slice().sort((a, b) => {
-                                            const order = ['운동', '평상', '안정', '수면', '활동'];
+                                            const order = ['운동', '안정', '수면', '활동'];
                                             return order.indexOf(a.label) - order.indexOf(b.label);
                                         });
                                         const dataset = orderedDatasets[datasetIndex];
@@ -199,7 +195,7 @@ function barChart(url) {
                                     }
                                 },
                                 itemSort: function(a, b) {
-                                    const order = ['운동', '평상', '안정', '수면', '활동'];
+                                    const order = ['운동', '안정', '수면', '활동'];
                                     return order.indexOf(a.dataset.label) - order.indexOf(b.dataset.label);
                                 }
                             },
@@ -271,7 +267,6 @@ function getColorForTag(tag) {
         case 'active': return '#ef476f';
         case 'exercise': return '#ffd166';
         case 'rest': return '#06d6a0';
-        case 'normal': return '#118ab2';
         case 'sleep': return '#073b4c';
         default: return '#000';
     }
