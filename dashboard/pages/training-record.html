@@ -10,20 +10,20 @@
 </head>
 <body>
     <!--PC 네비바-->
-   <nav class="nav-pc">
-    <div class="hamburger-pc" id="hamburger-pc">☰</div>
-    <ul class="nav-links" id="nav-links">
-        <li><a href="/dashboard"><img src="../assets/img/bottom_icon03-w.png"><span>메인보드</span></a></li>
-        <li><a href="/beat-track"><img src="../assets/img/bottom_icon02-w.png"><span>트레이닝</span></a></li>
-        <li><a href="/training-record"><img src="../assets/img/bottom_icon04-w.png"><span>트레이닝 기록</span></a></li>
-        <!-- <li><a href="/health-checkup"><img src="../assets/img/bottom_icon04-w.png"><span>건강 진단</span></a></li>         -->
-    </ul>
-    <div class="nav-logout logout"><a href="/logout"></a><img src="../assets/img/logout-w.png"><span>로그아웃</span></div>
+    <nav class="nav-pc">
+        <div class="hamburger-pc" id="hamburger-pc">☰</div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="/dashboard"><img src="../assets/img/bottom_icon03-w.png"><span>메인보드</span></a></li>
+            <li><a href="/beat-track"><img src="../assets/img/bottom_icon02-w.png"><span>트레이닝</span></a></li>
+            <li><a href="/training-record"><img src="../assets/img/bottom_icon04-w.png"><span>트레이닝 기록</span></a></li>
+            <!-- <li><a href="/health-checkup"><img src="../assets/img/bottom_icon04-w.png"><span>건강 진단</span></a></li>         -->
+        </ul>
+        <div class="nav-logout logout"><a href="/logout"></a><img src="../assets/img/logout-w.png"><span>로그아웃</span></div>
     </nav>
     <div class="overlay" id="overlay"></div>
     <!--모바일 네비바-->
     <div class="bar">Heart Rate Monitor</div>
-    <div class="hamburger-mob" id="hamburger-mob">☰</div> 
+    <div class="hamburger-mob" id="hamburger-mob">☰</div>
     <nav class="nav-mob" id="nav-mob">
         <a href="/dashboard">메인 보드</a>
         <a href="/beat-track">트레이닝</a>
@@ -53,26 +53,26 @@
             <li>
                 <a href="/beat-track"><img src="../assets/img/bottom_icon02.png"></a></li>            
             <li>
-                <a href="/dashboard"><img src="../assets/img/bottom_icon03.png"></a></li>
+		   <a href="/dashboard"><img src="../assets/img/bottom_icon03.png"></a></li>
             <li>
                 <a href="/training-record"><img src="../assets/img/bottom_icon04.png"></a></li>
             <li>
                 <a href="/sitemap"><img src="../assets/img/bottom_icon05.png"></a></li>
         </ul>
     </div>
+
+    <!--플러그인 스크립트들-->
+    <script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+    <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+    <script src="../assets/js/plugins/chartjs.min.js"></script>
+
+    <!-- 트레이닝기록 스크립트 -->
+    <script src="../assets/js/training-record.js"></script>
+
+    <!-- 메뉴바 스크립트 -->
+    <script src="../assets/js/menubar.js"></script>
 </body>
-
-<!--플러그인 스크립트들-->
-<script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
-<script src="../assets/js/core/popper.min.js"></script>
-<script src="../assets/js/core/bootstrap.min.js"></script>
-<script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
-<script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
-<script src="../assets/js/plugins/chartjs.min.js"></script>
-
-<!-- 트레이닝기록 스크립트 -->
-<script src="../assets/js/training-record.js"></script>
-
-<!-- 메뉴바 스크립트 -->
-<script src="../assets/js/menubar.js"></script>
-
+</html>
