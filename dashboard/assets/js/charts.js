@@ -129,7 +129,7 @@ function barChart(url) {
         .then(response => response.json())
         .then(data => {
             const hours = [...new Set(data.map(item => item.hour))];
-            const tags = ['active', 'exercise', 'rest', 'normal', 'sleep'];
+            const tags = ['active', 'exercise', 'rest', 'sleep'];
 
             const tagTranslations = {
                 active: '활동',
