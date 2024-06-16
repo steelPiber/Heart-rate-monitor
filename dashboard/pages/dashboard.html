@@ -319,60 +319,6 @@
         document.addEventListener('DOMContentLoaded', fetchDynamicText);
         setInterval(fetchDynamicText, 1000);
     </script>
-
-
-
-    <!-- <script> // 버튼 클릭 이벤트 리스너 추가
-        
-    document.querySelectorAll('.button-container .button a').forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault(); // 기본 동작 방지
-
-            // 모든 버튼을 비활성화 상태로 초기화
-            document.querySelectorAll('.button').forEach(function(btn) {
-                btn.classList.remove('active');
-            });
-
-            // 클릭한 버튼을 활성화 상태로 변경
-            event.target.parentElement.classList.add('active');
-
-            // 클릭한 버튼에 따라 다른 URL로 데이터 요청
-            let url;
-            const buttonText = event.target.textContent.trim();
-
-            if (buttonText === 'Daily') {
-                url = '/hourly-chart';
-            } else if (buttonText === 'Weekly') {
-                url = '/weekly-chart';
-            } else if (buttonText === 'Monthly') {
-                url = '/monthly-chart';
-            }
-
-            // 데이터 요청 및 차트 업데이트
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(responseData => {
-                    const { userEmail, data } = responseData;
-                    console.log('User Email:', userEmail); // userEmail 로그에 출력
-                    updateChart(data); // updateChart 함수 호출하여 차트 업데이트
-                })
-                .catch(error => {
-                    console.error('Error fetching chart data:', error);
-                });
-        });
-    });
-
-    // 페이지 로드 시 초기 버튼 활성화 상태 설정
-    document.querySelector('.button-container .button:first-child').classList.add('active');
-
-        
-    
-    </script> -->
     <script>
         document.querySelectorAll('.button-container').forEach(container => {
             container.querySelectorAll('.button a').forEach(button => {
