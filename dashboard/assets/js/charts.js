@@ -1,4 +1,4 @@
-// 대시보드 심박수평균 daily weekly monthly (선 라인)
+//대시보드 심박수평균 daily weekly monthly (선 라인)
 function updateChart(data, chartClass) {
     // 모든 해당 클래스의 캔버스를 선택
     const canvases = document.querySelectorAll(`.${chartClass}`);
@@ -37,17 +37,7 @@ function updateChart(data, chartClass) {
     });
 }
 
-// 페이지 로드 시 초기 차트 데이터를 로드
-fetch('/hourly-chart')
-.then(response => response.json())
-.then(responseData => {
-    const { userEmail, data } = responseData;
-    console.log('User Email:', userEmail); // 추가된 userEmail을 로그에 출력
-    updateChart(data, 'graph'); // 'graph' 클래스를 가진 모든 캔버스에 차트를 생성
-})
-.catch(error => {
-    console.error('Error fetching initial chart data:', error);
-});   
+
 
 // 대시보드 활동수면안정평상운동 그래프 (도넛)
 function donutChart(url) {
