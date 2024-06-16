@@ -83,7 +83,6 @@ router.get('/daily-tag-chart', async (req, res) => {
       active: 0,
       exercise: 0,
       rest: 0,
-      normal: 0,
       sleep: 0
     };
 
