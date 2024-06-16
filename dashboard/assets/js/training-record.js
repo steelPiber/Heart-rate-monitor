@@ -2,19 +2,12 @@ let currentPage = 1; // 초기 페이지 설정
 const recordsPerPage = 5; // 페이지당 운동 기록 수
 
 async function fetchRecords(page) {
-    const pathParts = window.location.pathname.split('/');
-    const userId = pathParts[1];
-    if (!userId || !userId.includes('@')) {
-        console.error('Invalid userId');
-        return;
-    }
-
     try {
         const response = await fetch(`/training-record/records?page=${page}&limit=${recordsPerPage}`);
         if (!response.ok) {
             throw new Error('Failed to fetch records');
         }
-        const records = await response.json();
+        const { records, totalRecords } = await response.json(); // 서버에서 전체 레코드 수와 현재 페이지 레코드를 함께 전달받음
         console.log(`Fetched records (page ${page}):`, records);
         const recordList = document.getElementById('record-list');
         recordList.innerHTML = '';
@@ -24,14 +17,15 @@ async function fetchRecords(page) {
             recordDiv.classList.add('record');
             recordDiv.innerHTML = `
                 <div class="record-details">
-                    거리: <span>${(record.distance / 1000).toFixed(2)} km</span><br>
-                    시간: <span>${Math.floor(record.elapsedTime / 60)} min ${record.elapsedTime % 60} sec</span><br>
-                    소모 칼로리: <span>${Math.floor(record.calories)}</span><br>
-                    시작 시간: <span>${new Date(record.date).toLocaleString()}</span><br>
-                    평균 심박수: <span>${isNaN(avgHeartRate) ? 'N/A' : avgHeartRate.toFixed(2)}</span><br><br><br>
-                    <a href="#" onclick="fetchSegments('${record._id}')">심박수 통계</a>
+                    <a href="#" onclick="fetchSegments('${record._id}')">
+                        Distance: ${(record.distance / 1000).toFixed(2)} km<br>
+                        Time: ${Math.floor(record.elapsedTime / 60)} min ${record.elapsedTime % 60} sec<br>
+                        Calories: ${Math.floor(record.calories)}<br>
+                        Start Time: ${new Date(record.date).toLocaleString()}<br>
+                        Avg Heart Rate: ${isNaN(avgHeartRate) ? 'N/A' : avgHeartRate.toFixed(2)}
+                    </a>
                 </div>
-                <div id="map-${record._id}" class="map"></div>
+                <div id="map-${record._id}" class="map" style="width: 100%; height: 200px;"></div>
             `;
             recordList.appendChild(recordDiv);
             initMap(record.pathPoints, `map-${record._id}`);
@@ -40,10 +34,14 @@ async function fetchRecords(page) {
         // 페이지네이션 처리
         const pagination = document.getElementById('pagination');
         pagination.innerHTML = '';
-        const totalPages = Math.ceil(records.length / recordsPerPage);
+        const totalPages = Math.ceil(totalRecords / recordsPerPage);
         for (let i = 1; i <= totalPages; i++) {
             const pageButton = document.createElement('button');
             pageButton.textContent = i;
+            pageButton.classList.add('page-button');
+            if (i === page) {
+                pageButton.classList.add('active');
+            }
             pageButton.addEventListener('click', function() {
                 currentPage = i;
                 fetchRecords(currentPage);
