@@ -46,7 +46,7 @@
                             <div class="bpmValue">0</div></span></div>
                     </li>
                 </ul>
-            </div>
+            </div>        
             <div class="status-container">
                 <div class="outer-circle"></div>
                 <div class="inner-circle"></div>
@@ -58,35 +58,46 @@
             <div class="average-heart-board">
                 <div class="container-title">시간대별 평균</div>
                 <div class="heart-board-wrap">
-                    <div class="heart-rate-container">
-                    <div class="heart-rate">1분 평균</div>
-                    <div class="heart-rate">
-                        <div class="minbpmContainer">0</div></div></div>
-                
-                    <div class="heart-rate-container">
-                    <div class="heart-rate">1시간 평균</div>
-                    <div class="heart-rate">
-                        <div class="hourbpmContainer">0</div></div></div>
-            
-                    <div class="heart-rate-container">
-                    <div class="heart-rate">하루 평균</div>
-                    <div class="heart-rate">
-                        <div class="daybpmContainer">0</div></div></div>
-    
-                    <div class="heart-rate-container">
-                    <div class="heart-rate">주 평균</div>
-                    <div class="heart-rate">
-                        <div class="weekbpmContainer">0</div></div></div>
-    
-                    <div class="heart-rate-container">
-                    <div class="heart-rate">한 달 평균</div>
-                    <div class="heart-rate">
-                        <div class="monthbpmContainer">0</div></div></div>
-    
-                    <div class="heart-rate-container">
-                    <div class="heart-rate">연 평균</div>
-                    <div class="heart-rate">
-                        <div class="yearbpmContainer">0</div></div></div>
+                    <div class="heart-rate-row">
+                        <div class="heart-rate-container">
+                            <div class="heart-rate">분 평균</div>
+                            <div class="heart-rate">
+                                <div class="minbpmContainer">0</div>
+                            </div>
+                        </div>
+                        <div class="heart-rate-container">
+                            <div class="heart-rate">시간 평균</div>
+                            <div class="heart-rate">
+                                <div class="hourbpmContainer">0</div>
+                            </div>
+                        </div>
+                        <div class="heart-rate-container">
+                            <div class="heart-rate">일 평균</div>
+                            <div class="heart-rate">
+                                <div class="daybpmContainer">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="heart-rate-row">
+                        <div class="heart-rate-container">
+                            <div class="heart-rate">주 평균</div>
+                            <div class="heart-rate">
+                                <div class="weekbpmContainer">0</div>
+                            </div>
+                        </div>
+                        <div class="heart-rate-container">
+                            <div class="heart-rate">월 평균</div>
+                            <div class="heart-rate">
+                                <div class="monthbpmContainer">0</div>
+                            </div>
+                        </div>
+                        <div class="heart-rate-container">
+                            <div class="heart-rate">연 평균</div>
+                            <div class="heart-rate">
+                                <div class="yearbpmContainer">0</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -139,17 +150,17 @@
             <div class="scroll-board" data-simplebar>
     
                 <div class="heart-rate-container">
-                <div class="heart-rate">1분 평균</div>
+                <div class="heart-rate">분 평균</div>
                 <div class="heart-rate">
                     <div class="minbpmContainer">0</div></div></div>
             
                 <div class="heart-rate-container">
-                <div class="heart-rate">1시간 평균</div>
+                <div class="heart-rate">시간 평균</div>
                 <div class="heart-rate">
                     <div class="hourbpmContainer">0</div></div></div>
         
                 <div class="heart-rate-container">
-                <div class="heart-rate">하루 평균</div>
+                <div class="heart-rate">일 평균</div>
                 <div class="heart-rate">
                     <div class="daybpmContainer">0</div></div></div>
 
@@ -159,7 +170,7 @@
                     <div class="weekbpmContainer">0</div></div></div>
 
                 <div class="heart-rate-container">
-                <div class="heart-rate">한 달 평균</div>
+                <div class="heart-rate">월 평균</div>
                 <div class="heart-rate">
                     <div class="monthbpmContainer">0</div></div></div>
 
@@ -186,15 +197,16 @@
 
         </div>
         <div class="chart-container" data-simplebar style="overflow-x: auto; overflow-y:hidden; white-space:nowrap;" >
-            <div class="container-title" style="padding-top: 0;">안정활동휴식</div>
+            <div class="container-title" style="padding-top: 0;">하루 활동 통계</div>
             <canvas class="bar-graph" width="1000" height="350" style="padding-bottom: 20px;"></canvas>
         </div>
         <div class="chart-container">
-            <div class="container-title">안정활동휴식 </div>
+            <div class="container-title">시간별 활동 통계 </div>
             <canvas class="donut-graph"></canvas>
             <img id="centerIcon" src="" alt="Icon" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
         </div>
 
+        <!-- 모바일 바닥글 (로그아웃버튼) -->
         <div class="footer">
             <div class="footer-nav">
                 <ul class="d-flex justify-content-around">
@@ -203,6 +215,8 @@
             </div>
         </div>
     </div>
+
+        <!-- 모바일 바닥 아이콘 리스트 -->
     <div class="bottom_icon">
         <ul>
             <li>
@@ -320,6 +334,60 @@
         setInterval(fetchDynamicText, 1000);
     </script>
 
+
+
+    <!-- <script> // 버튼 클릭 이벤트 리스너 추가
+        
+    document.querySelectorAll('.button-container .button a').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault(); // 기본 동작 방지
+
+            // 모든 버튼을 비활성화 상태로 초기화
+            document.querySelectorAll('.button').forEach(function(btn) {
+                btn.classList.remove('active');
+            });
+
+            // 클릭한 버튼을 활성화 상태로 변경
+            event.target.parentElement.classList.add('active');
+
+            // 클릭한 버튼에 따라 다른 URL로 데이터 요청
+            let url;
+            const buttonText = event.target.textContent.trim();
+
+            if (buttonText === 'Daily') {
+                url = '/hourly-chart';
+            } else if (buttonText === 'Weekly') {
+                url = '/weekly-chart';
+            } else if (buttonText === 'Monthly') {
+                url = '/monthly-chart';
+            }
+
+            // 데이터 요청 및 차트 업데이트
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(responseData => {
+                    const { userEmail, data } = responseData;
+                    console.log('User Email:', userEmail); // userEmail 로그에 출력
+                    updateChart(data); // updateChart 함수 호출하여 차트 업데이트
+                })
+                .catch(error => {
+                    console.error('Error fetching chart data:', error);
+                });
+        });
+    });
+
+    // 페이지 로드 시 초기 버튼 활성화 상태 설정
+    document.querySelector('.button-container .button:first-child').classList.add('active');
+
+        
+    
+    </script> -->
+
     <script>
         document.querySelectorAll('.button-container').forEach(container => {
             container.querySelectorAll('.button a').forEach(button => {
@@ -338,15 +406,14 @@
 
                     // 서버에서 데이터 요청 및 차트 업데이트
                     fetch(`/${dataKey}`)
-    				.then(response => response.json())
-				.then(data => {
-        	   // Extract the 'data' part from the response
-        				const chartData = data.data;
-        				updateChart(chartData, 'graph');
-    				})
-	    		 .catch(error => {
-        			console.error('Error fetching data:', error);
-    			  });
+                        .then(response => response.json())
+                        .then(data => {
+                            const chartData = data.data;
+                            updateChart(chartData, 'graph');
+                        })
+                        .catch(error => {
+                            console.error('Error fetching chart data:', error);
+                        });
                 });
             });
 
