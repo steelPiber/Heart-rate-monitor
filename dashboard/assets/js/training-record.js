@@ -10,7 +10,7 @@ async function fetchRecords(page) {
     }
 
     try {
-        const response = await fetch(`/api/records?email=${userId}&page=${page}&limit=${recordsPerPage}`);
+        const response = await fetch(`/training-record/records`);
         if (!response.ok) {
             throw new Error('Failed to fetch records');
         }
@@ -57,7 +57,7 @@ async function fetchRecords(page) {
 
 async function fetchSegments(recordId) {
     try {
-        const response = await fetch(`/api/records/${recordId}/segments`);
+        const response = await fetch(`/training-record/${recordId}/segments`);
         if (!response.ok) {
             throw new Error('Failed to fetch segments');
         }
