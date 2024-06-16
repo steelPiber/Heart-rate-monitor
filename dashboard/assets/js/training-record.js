@@ -3,6 +3,7 @@ const recordsPerPage = 5; // 페이지당 운동 기록 수
 
 async function fetchRecords(page = 1) {
     try {
+        console.log(`Fetching records for page: ${page}`);
         const response = await fetch(`/training-record/records`);
         if (!response.ok) {
             throw new Error('Failed to fetch records');
