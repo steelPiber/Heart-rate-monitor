@@ -12,6 +12,9 @@ async function fetchRecords(page = 1) {
         const records = await response.json();
         console.log("Fetched records:", records);
 
+        // 최신 기록이 첫 페이지에 나오도록 레코드를 역순으로 정렬
+        records.sort((a, b) => new Date(b.date) - new Date(a.date));
+
         // 전체 레코드 수
         const totalRecords = records.length;
 
