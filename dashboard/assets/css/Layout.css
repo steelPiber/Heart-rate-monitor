@@ -119,10 +119,10 @@ a{
     gap: 20px;
     padding: 0;
     border-radius: 10px;
+    width: 100%;
     position: relative;
     align-items: center;
 }
-
 
 .first-row > div, .second-row > div, .third-row > div {
     padding: 20px;
@@ -134,51 +134,112 @@ a{
     background-color: #FFA29B;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+    position: relative; /* 상대 위치 지정 */
 }
-.rt-heart-board img {
-    width: 100px;
-}
-.heart-rate-container-big{
-    
-}
-.real-time{
-    font-size: 45px;
-}
-.heart-rate {
-    position: absolute;
-    margin-left: 30px;
-}
-.heart-rate:first-child {
-    top: 0;
-    left: 0;
-    font-size: 18px;
-    color: #FFFFFF;
-}
-.heart-rate:nth-child(2){
-    top: 55%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 
-    font-size: 32px;
-    font-weight: bold;
-    color: white;
+.rt-heart-board img {
+    width: 110px;
+    height: auto;
+    margin-top: 30px;
 }
+@media screen and (max-width: 1200px) {
+    .rt-heart-board img {
+        display: none;
+    }
+}
+
+.heart-rate-row {
+    display: flex;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    gap: 5px; /* 요소 간의 간격을 조금 줄임 */
+    width: 100%;
+    padding-left: 30px; /* 글씨를 오른쪽으로 이동시키기 위해 패딩 값 증가 */
+    margin-top: 10px;
+}
+
+.heart-rate-container-big {
+    flex: 1 0 50%; /* 각 컨테이너의 너비를 50%로 지정 */
+    color: #F5675D; /* 글씨 색을 #F5675D로 지정 */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 가운데 정렬 */
+    justify-content: center; /* 가운데 정렬 */
+    height: 100%;
+    position: absolute; /* 절대 위치 지정 */
+    top: 50%; /* 세로 중앙 정렬 */
+    left: 50%; /* 가로 중앙 정렬 */
+    transform: translate(-50%, -50%); /* 중앙으로 이동 */
+}
+
+.real-time {
+    font-size: 45px;
+    margin-top: 0;
+}
+
+.heart-rate {
+    color: #ffffff; /* 글씨 색을 #F5675D로 지정 */
+    text-align: center; /* 가운데 정렬 */
+    margin-right: 0; /* 글씨를 오른쪽으로 이동하지 않음 */
+    width: 100%; /* 전체 너비 사용 */
+}
+
+.heart-rate:first-child {
+    top: auto; /* 위치 초기화 */
+    left: auto; /* 위치 초기화 */
+    font-size: 18px; /* 글씨 크기 */
+}
+
+.heart-rate:nth-child(2) {
+    top: auto; /* 위치 초기화 */
+    left: auto; /* 위치 초기화 */
+    transform: none; /* 변형 초기화 */
+    font-size: 32px; /* 글씨 크기 */
+    font-weight: bold; /* 글씨 두께 */
+}
+.average-heart-board .heart-rate:first-child {
+    top: auto; /* 위치 초기화 */
+    left: auto; /* 위치 초기화 */
+    font-size: 18px; /* 글씨 크기 */
+    color: #37363d; /* 글씨 색을 #F5675D로 지정 */
+}
+
+.average-heart-board .heart-rate:nth-child(2) {
+    top: auto; /* 위치 초기화 */
+    left: auto; /* 위치 초기화 */
+    transform: none; /* 변형 초기화 */
+    font-size: 32px; /* 글씨 크기 */
+    font-weight: bold; /* 글씨 두께 */
+    color: #F5675D; /* 글씨 색을 #F5675D로 지정 */
+}
+
 .average-heart-board {
     flex-grow: 6;
-    height: 200px;
+    height: 200px; /* 높이 고정 */
     background-color: #FFFFFF;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+    padding: 20px;
+    color: #F5675D; /* 글씨 색을 #F5675D로 지정 */
 }
-.heart-board-wrap{
-    width: 100%;
-    height: 95%;
+
+.heart-board-wrap {
+    display: flex;
+    flex-direction: column; /* 수직으로 정렬 */
+    gap: 10px; /* 요소 간의 간격 */
+    justify-content: flex-start; /* 왼쪽 정렬 */
 }
+
+.heart-rate-container {
+    flex: 1 0 30%; /* 각 컨테이너의 너비를 30%로 지정 */
+    color: #F5675D; /* 글씨 색을 #F5675D로 지정 */
+}
+
+
 /*아이콘 배치 컨테이너*/
 .status-container{
     position: absolute;
     left: 40%;
-    transform: translateX(-40%);
+    transform: translateX(-65%);
     width: 150px;
     height: 150px;
     display: flex;
@@ -599,7 +660,7 @@ a{
     height: 350px;
     margin-top: 155px;
     
-    background: rgba(241, 201, 179, 0.78);
+    background: #FFA29B;
     box-shadow: 8px 8px 11px 2px rgba(0, 0, 0, 0.25);
     border-radius: 16px;
     
@@ -883,6 +944,7 @@ a{
         width: 100%;
         height: auto;
         margin: 0;
+        align-items: center;
         padding-top: 10px;
         padding-bottom: 10px;
         padding-left: 16px;
@@ -893,6 +955,13 @@ a{
         box-shadow: 8px 8px 11px 2px rgba(0, 0, 0, 0.25);
         border-radius: 16px;
         
+    }
+    .heart-board ul {
+        display: flex;
+        align-items: center; /* 수직 가운데 정렬 */
+        list-style: none;
+        padding: 0;
+        margin: 0;
     }
     .heart-board img {
         max-width: 70%;
@@ -906,10 +975,12 @@ a{
         font-size: 30px;
     }
     .heart-rate-container-big{
-        position: relative;
-        width: 150px; 
+        position: absolute; /* 자식 요소의 위치를 절대적으로 설정 */
+        top: 220px; /* 원하는 여백 크기로 설정 */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 150px;
         height: 80px;
-        margin-top: 28px;
     }
     .real-time{
         font-size: 3rem;
@@ -1042,13 +1113,16 @@ a{
     }
 }
 
-
+.footer{
+    display: none;
+}
 
 
  /*맨 밑에 회색존 footer*/
 @media screen and (max-width: 768px) {
     /*맨 밑에 회색존 footer*/
     .footer { 
+        display: block;
         padding: 16px 8px; 
         color: #919191; 
         font-size: 14px; 
