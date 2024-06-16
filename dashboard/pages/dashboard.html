@@ -46,7 +46,7 @@
                             <div class="bpmValue">0</div></span></div>
                     </li>
                 </ul>
-            </div>
+            </div>        
             <div class="status-container">
                 <div class="outer-circle"></div>
                 <div class="inner-circle"></div>
@@ -58,35 +58,46 @@
             <div class="average-heart-board">
                 <div class="container-title">시간대별 평균</div>
                 <div class="heart-board-wrap">
-                    <div class="heart-rate-container">
-                    <div class="heart-rate">1분 평균</div>
-                    <div class="heart-rate">
-                        <div class="minbpmContainer">0</div></div></div>
-                
-                    <div class="heart-rate-container">
-                    <div class="heart-rate">1시간 평균</div>
-                    <div class="heart-rate">
-                        <div class="hourbpmContainer">0</div></div></div>
-            
-                    <div class="heart-rate-container">
-                    <div class="heart-rate">하루 평균</div>
-                    <div class="heart-rate">
-                        <div class="daybpmContainer">0</div></div></div>
-    
-                    <div class="heart-rate-container">
-                    <div class="heart-rate">주 평균</div>
-                    <div class="heart-rate">
-                        <div class="weekbpmContainer">0</div></div></div>
-    
-                    <div class="heart-rate-container">
-                    <div class="heart-rate">한 달 평균</div>
-                    <div class="heart-rate">
-                        <div class="monthbpmContainer">0</div></div></div>
-    
-                    <div class="heart-rate-container">
-                    <div class="heart-rate">연 평균</div>
-                    <div class="heart-rate">
-                        <div class="yearbpmContainer">0</div></div></div>
+                    <div class="heart-rate-row">
+                        <div class="heart-rate-container">
+                            <div class="heart-rate">분 평균</div>
+                            <div class="heart-rate">
+                                <div class="minbpmContainer">0</div>
+                            </div>
+                        </div>
+                        <div class="heart-rate-container">
+                            <div class="heart-rate">시간 평균</div>
+                            <div class="heart-rate">
+                                <div class="hourbpmContainer">0</div>
+                            </div>
+                        </div>
+                        <div class="heart-rate-container">
+                            <div class="heart-rate">일 평균</div>
+                            <div class="heart-rate">
+                                <div class="daybpmContainer">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="heart-rate-row">
+                        <div class="heart-rate-container">
+                            <div class="heart-rate">주 평균</div>
+                            <div class="heart-rate">
+                                <div class="weekbpmContainer">0</div>
+                            </div>
+                        </div>
+                        <div class="heart-rate-container">
+                            <div class="heart-rate">월 평균</div>
+                            <div class="heart-rate">
+                                <div class="monthbpmContainer">0</div>
+                            </div>
+                        </div>
+                        <div class="heart-rate-container">
+                            <div class="heart-rate">연 평균</div>
+                            <div class="heart-rate">
+                                <div class="yearbpmContainer">0</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,11 +119,11 @@
             <div class="pc-chart-container">
                 <div class="container-title">심박수 평균</div>
                 <ul class="button-container">
-                    <li class="button active"><a href="#">Daily</a></li>
-                    <li class="button"><a href="#">Weekly</a></li>
-                    <li class="button"><a href="#">Monthly</a></li>
+                    <li class="button active"><a href="#" data-url="hourly-chart">Daily</a></li>
+                    <li class="button"><a href="#" data-url="weekly-chart">Weekly</a></li>
+                    <li class="button"><a href="#" data-url="monthly-chart">Monthly</a></li>
                 </ul>
-                <div class="pc-chart-wrap">
+                <div class="pc-chart-wrap" style="height: 90%;">
                     <canvas class="graph" ></canvas>
                 </div>
             </div>
@@ -139,17 +150,17 @@
             <div class="scroll-board" data-simplebar>
     
                 <div class="heart-rate-container">
-                <div class="heart-rate">1분 평균</div>
+                <div class="heart-rate">분 평균</div>
                 <div class="heart-rate">
                     <div class="minbpmContainer">0</div></div></div>
             
                 <div class="heart-rate-container">
-                <div class="heart-rate">1시간 평균</div>
+                <div class="heart-rate">시간 평균</div>
                 <div class="heart-rate">
                     <div class="hourbpmContainer">0</div></div></div>
         
                 <div class="heart-rate-container">
-                <div class="heart-rate">하루 평균</div>
+                <div class="heart-rate">일 평균</div>
                 <div class="heart-rate">
                     <div class="daybpmContainer">0</div></div></div>
 
@@ -159,7 +170,7 @@
                     <div class="weekbpmContainer">0</div></div></div>
 
                 <div class="heart-rate-container">
-                <div class="heart-rate">한 달 평균</div>
+                <div class="heart-rate">월 평균</div>
                 <div class="heart-rate">
                     <div class="monthbpmContainer">0</div></div></div>
 
@@ -177,24 +188,25 @@
             <div class="container-title-main">심박수 평균</div>
 
             <ul class="button-container">
-                <li class="button active"><a href="#">Daily</a></li>
-                <li class="button"><a href="#">Weekly</a></li>
-                <li class="button"><a href="#">Monthly</a></li>
+                <li class="button active"><a href="#" data-url="hourly-chart">Daily</a></li>
+                <li class="button"><a href="#" data-url="weekly-chart">Weekly</a></li>
+                <li class="button"><a href="#" data-url="monthly-chart">Monthly</a></li>
             </ul>
                 
             <canvas class="graph"></canvas>
 
         </div>
         <div class="chart-container" data-simplebar style="overflow-x: auto; overflow-y:hidden; white-space:nowrap;" >
-            <div class="container-title" style="padding-top: 0;">안정활동휴식</div>
+            <div class="container-title" style="padding-top: 0;">하루 활동 통계</div>
             <canvas class="bar-graph" width="1000" height="350" style="padding-bottom: 20px;"></canvas>
         </div>
         <div class="chart-container">
-            <div class="container-title">안정활동휴식 </div>
+            <div class="container-title">시간별 활동 통계 </div>
             <canvas class="donut-graph"></canvas>
             <img id="centerIcon" src="" alt="Icon" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
         </div>
 
+        <!-- 모바일 바닥글 (로그아웃버튼) -->
         <div class="footer">
             <div class="footer-nav">
                 <ul class="d-flex justify-content-around">
@@ -203,6 +215,8 @@
             </div>
         </div>
     </div>
+
+        <!-- 모바일 바닥 아이콘 리스트 -->
     <div class="bottom_icon">
         <ul>
             <li>
@@ -228,196 +242,201 @@
     <script src="../assets/js/plugins/chartjs.min.js"></script>
     
 
-    <script> //pc 버전 메뉴바 펼치기 스크립트
-        document.addEventListener('DOMContentLoaded', function () {
-            const hamburger = document.getElementById('hamburger-pc');
-            const overlay = document.getElementById('overlay');
-            const navPc = document.querySelector('.nav-pc');
-            const navItems = document.querySelectorAll('.nav-links li span, .nav-logout span');
-
-            // 햄버거 버튼 클릭 시 메뉴바 확장/축소 및 오버레이 표시/숨기기
-            hamburger.addEventListener('click', function () {
-                if (navPc.style.width === '250px') {
-                    navPc.style.width = '80px';
-                    overlay.style.opacity = '0';
-                    setTimeout(() => {
-                        overlay.style.display = 'none';
-                    }, 300); // 0.3s transition
-                    navItems.forEach(item => item.style.display = 'none');
-                } else {
-                    navPc.style.width = '250px';
-                    overlay.style.display = 'block';
-                    setTimeout(() => {
-                        overlay.style.opacity = '1';
-                    }, 10);
-                    navItems.forEach(item => item.style.display = 'inline');
-                }
-            });
-
-            overlay.addEventListener('click', function () {
-                navPc.style.width = '80px';
-                overlay.style.opacity = '0';
-                setTimeout(() => {
-                    overlay.style.display = 'none';
-                }, 300); // 0.3s transition
-                navItems.forEach(item => item.style.display = 'none');
-            });
-        });
-    </script>
-    <script> //모바일네비바 펼치기스크립트
-        document.getElementById('hamburger-mob').addEventListener('click', function() {
-            document.getElementById('nav-mob').classList.toggle('open');
-        });
-    </script>
-    <script>//로그아웃 버튼 클릭 이벤트 리스너 추가
-        document.querySelector('.logout').addEventListener('click', function() {
-            fetch('/logout', { //클릭 시 서버로 로그아웃 요청을 보냄
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    // 로그아웃 성공 시, 홈 페이지로 리디렉션
-                    window.location.href = 'https://heartrate.ddns.net';
-                } else {
-                    // 로그아웃 실패 시, 에러 메시지 출력
-                    alert('로그아웃에 실패했습니다.');
-                }
-            })
-            .catch(error => {
-                console.error('Error during logout:', error);
-                alert('로그아웃 중 에러가 발생했습니다.');
-            });
-        });
-    </script>
+<!-- 메뉴바 스크립트 -->
+<script src="../assets/js/menubar.js"></script>
 
 
-    <script>
-    function fetchDynamicIconData() {
-        fetch('/status')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                var serverTag = data.tag; // 서버에서 받은 태그 값
-
-                // 이미지 요소 선택
-                var imgElements = document.querySelectorAll(".dynamicImage");
-
-                // 태그 값에 따라 이미지 src 변경
-                imgElements.forEach(imgElement => {
-                    if (serverTag === "exercise") {
-                        imgElement.src = "../assets/img/workout.png";
-                    } else if (serverTag === "rest") {
-                        imgElement.src = "../assets/img/rest.png";
-                    } else if (serverTag === "sleep") {
-                        imgElement.src = "../assets/img/sleep.png";
-                    } else if (serverTag === "normal") {
-                        imgElement.src = "../assets/img/normal.png";
-                    } else if (serverTag === "active") {
-                        imgElement.src = "../assets/img/active.png";
+    <script> //태그값 변경시 아이콘 변경 스크립트
+        function fetchDynamicIconData() {
+            fetch('/status')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
                     }
+                    return response.json();
+                })
+                .then(data => {
+                    var serverTag = data[0]; // 서버에서 받은 태그 값
+        
+                    // 이미지 요소 선택
+                    var imgElements = document.querySelectorAll(".dynamicImage");
+        
+                    // 태그 값에 따라 이미지 src 변경
+                    imgElements.forEach(imgElement => {
+                        if (serverTag === "exercise") {
+                            imgElement.src = "../assets/img/workout.png";
+                        } else if (serverTag === "rest") {
+                            imgElement.src = "../assets/img/rest.png";
+                        } else if (serverTag === "sleep") {
+                            imgElement.src = "../assets/img/sleep.png";
+                        } else if (serverTag === "normal") {
+                            imgElement.src = "../assets/img/normal.png";
+                        } else if (serverTag === "active") {
+                            imgElement.src = "../assets/img/active.png";
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching status data:', error);
+                    // 에러 발생 시 로딩 이미지로 대체
+                    var imgElements = document.querySelectorAll(".dynamicImage");
+                    imgElements.forEach(imgElement => {
+                        imgElement.src = "../assets/img/loading.gif";
+                    });
                 });
-
-                // 상태 텍스트 요소 선택
-                var statusTextElements = document.querySelectorAll(".status-text");
-
-                // 태그 값에 따라 상태 텍스트 변경
-                statusTextElements.forEach(textElement => {
-                    if (serverTag === "exercise") {
-                        textElement.textContent = "Exercise";
-                    } else if (serverTag === "rest") {
-                        textElement.textContent = "Rest";
-                    } else if (serverTag === "sleep") {
-                        textElement.textContent = "Sleep";
-                    } else if (serverTag === "normal") {
-                        textElement.textContent = "Normal";
-                    } else if (serverTag === "active") {
-                        textElement.textContent = "Active";
-                    }
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching status data:', error);
-                // 에러 발생 시 로딩 이미지로 대체
-                var imgElements = document.querySelectorAll(".dynamicImage");
-                imgElements.forEach(imgElement => {
-                    imgElement.src = "../assets/img/loading.gif";
-                });
-
-                var statusTextElements = document.querySelectorAll(".status-text");
-                statusTextElements.forEach(textElement => {
-                    textElement.textContent = "Loading...";
-                });
-            });
-    }
-
-    // 페이지 로드 시 및 매초 데이터 갱신
-    document.addEventListener('DOMContentLoaded', fetchDynamicIconData);
-    setInterval(fetchDynamicIconData, 1000);
-</script>
-
-
-
-<script> // 버튼 클릭 이벤트 리스너 추가
-    
-document.querySelectorAll('.button-container .button a').forEach(button => {
-    button.addEventListener('click', function(event) {
-        event.preventDefault(); // 기본 동작 방지
-
-        // 모든 버튼을 비활성화 상태로 초기화
-        document.querySelectorAll('.button').forEach(function(btn) {
-            btn.classList.remove('active');
-        });
-
-        // 클릭한 버튼을 활성화 상태로 변경
-        event.target.parentElement.classList.add('active');
-
-        // 클릭한 버튼에 따라 다른 URL로 데이터 요청
-        let url;
-        const buttonText = event.target.textContent.trim();
-
-        if (buttonText === 'Daily') {
-            url = '/hourly-chart';
-        } else if (buttonText === 'Weekly') {
-            url = '/weekly-chart';
-        } else if (buttonText === 'Monthly') {
-            url = '/monthly-chart';
         }
+        
+        setInterval(fetchDynamicIconData, 1000);
+        document.addEventListener('DOMContentLoaded', fetchDynamicIconData);        
+    </script>
 
-        // 데이터 요청 및 차트 업데이트
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(responseData => {
-                const { userEmail, data } = responseData;
-                console.log('User Email:', userEmail); // userEmail 로그에 출력
-                updateChart(data); // updateChart 함수 호출하여 차트 업데이트
-            })
-            .catch(error => {
-                console.error('Error fetching chart data:', error);
+    <script>//태그값 변경시 텍스트 변경 스크립트
+        function fetchDynamicText() {
+            fetch('/status')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    var serverTag = data[0]; // 서버에서 받은 태그 값
+        
+                    // 상태 텍스트 요소 선택
+                    var statusTextElements = document.querySelectorAll(".status-text");
+        
+                    // 태그 값에 따라 상태 텍스트 변경
+                    statusTextElements.forEach(textElement => {
+                        if (serverTag === "exercise") {
+                            textElement.textContent = "Exercise";
+                        } else if (serverTag === "rest") {
+                            textElement.textContent = "Rest";
+                        } else if (serverTag === "sleep") {
+                            textElement.textContent = "Sleep";
+                        } else if (serverTag === "normal") {
+                            textElement.textContent = "Normal";
+                        } else if (serverTag === "active") {
+                            textElement.textContent = "Active";
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching status data:', error);
+                    var statusTextElements = document.querySelectorAll(".status-text");
+                    statusTextElements.forEach(textElement => {
+                        textElement.textContent = "Loading...";
+                    });
+                });
+        }
+        
+        // 페이지 로드 시 및 매초 데이터 갱신
+        document.addEventListener('DOMContentLoaded', fetchDynamicText);
+        setInterval(fetchDynamicText, 1000);
+    </script>
+
+
+
+    <!-- <script> // 버튼 클릭 이벤트 리스너 추가
+        
+    document.querySelectorAll('.button-container .button a').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault(); // 기본 동작 방지
+
+            // 모든 버튼을 비활성화 상태로 초기화
+            document.querySelectorAll('.button').forEach(function(btn) {
+                btn.classList.remove('active');
             });
-    });
-});
 
-// 페이지 로드 시 초기 버튼 활성화 상태 설정
-document.querySelector('.button-container .button:first-child').classList.add('active');
+            // 클릭한 버튼을 활성화 상태로 변경
+            event.target.parentElement.classList.add('active');
+
+            // 클릭한 버튼에 따라 다른 URL로 데이터 요청
+            let url;
+            const buttonText = event.target.textContent.trim();
+
+            if (buttonText === 'Daily') {
+                url = '/hourly-chart';
+            } else if (buttonText === 'Weekly') {
+                url = '/weekly-chart';
+            } else if (buttonText === 'Monthly') {
+                url = '/monthly-chart';
+            }
+
+            // 데이터 요청 및 차트 업데이트
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(responseData => {
+                    const { userEmail, data } = responseData;
+                    console.log('User Email:', userEmail); // userEmail 로그에 출력
+                    updateChart(data); // updateChart 함수 호출하여 차트 업데이트
+                })
+                .catch(error => {
+                    console.error('Error fetching chart data:', error);
+                });
+        });
+    });
+
+    // 페이지 로드 시 초기 버튼 활성화 상태 설정
+    document.querySelector('.button-container .button:first-child').classList.add('active');
 
         
     
+    </script> -->
+
+    <script>
+        document.querySelectorAll('.button-container').forEach(container => {
+            container.querySelectorAll('.button a').forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault(); // 기본 동작 방지
+
+                    // 모든 버튼을 비활성화 상태로 초기화
+                    container.querySelectorAll('.button').forEach(function(btn) {
+                        btn.classList.remove('active');
+                    });
+
+                    // 클릭한 버튼을 활성화 상태로 변경
+                    event.target.parentElement.classList.add('active');
+
+                    const dataKey = event.target.getAttribute('data-url');
+
+                    // 서버에서 데이터 요청 및 차트 업데이트
+                    fetch(`/${dataKey}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const chartData = data.data;
+                            updateChart(chartData, 'graph');
+                        })
+                        .catch(error => {
+                            console.error('Error fetching chart data:', error);
+                        });
+                });
+            });
+
+            // 페이지 로드 시 초기 버튼 활성화 상태 설정 및 초기 차트 데이터 로드
+            container.querySelector('.button:first-child a').click();
+        });
+
+        // 페이지 로드 시 초기 차트 데이터를 로드
+        fetch('/hourly-chart')
+        .then(response => response.json())
+        .then(responseData => {
+            const { userEmail, data } = responseData;
+            console.log('User Email:', userEmail); // 추가된 userEmail을 로그에 출력
+            updateChart(data, 'graph'); // 'graph' 클래스를 가진 모든 캔버스에 차트를 생성
+        })
+        .catch(error => {
+            console.error('Error fetching initial chart data:', error);
+        });   
     </script>
+
 
     <!--구현한 스크립트들-->
     <script src="../assets/js/HR-update.js"></script>
     <script src="../assets/js/charts.js"></script>
-    
+
 </html>
