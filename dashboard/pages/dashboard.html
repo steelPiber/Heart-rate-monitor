@@ -108,9 +108,9 @@
             <div class="pc-chart-container">
                 <div class="container-title">심박수 평균</div>
                 <ul class="button-container">
-                    <li class="button active"><a href="#">Daily</a></li>
-                    <li class="button"><a href="#">Weekly</a></li>
-                    <li class="button"><a href="#">Monthly</a></li>
+                    <li class="button active"><a href="#" data-url="hourly-chart">Daily</a></li>
+                    <li class="button"><a href="#" data-url="weekly-chart">Weekly</a></li>
+                    <li class="button"><a href="#" data-url="monthly-chart">Monthly</a></li>
                 </ul>
                 <div class="pc-chart-wrap" style="height: 90%;">
                     <canvas class="graph" ></canvas>
@@ -177,9 +177,9 @@
             <div class="container-title-main">심박수 평균</div>
 
             <ul class="button-container">
-                <li class="button active"><a href="#">Daily</a></li>
-                <li class="button"><a href="#">Weekly</a></li>
-                <li class="button"><a href="#">Monthly</a></li>
+                <li class="button active"><a href="#" data-url="hourly-chart">Daily</a></li>
+                <li class="button"><a href="#" data-url="weekly-chart">Weekly</a></li>
+                <li class="button"><a href="#" data-url="monthly-chart">Monthly</a></li>
             </ul>
                 
             <canvas class="graph"></canvas>
@@ -398,8 +398,6 @@
                         })
                         .catch(error => {
                             console.error('Error fetching chart data:', error);
-                            // 오류 시, 더미 데이터 사용
-                            const data = dummyData[dataKey];
                             updateChart(data, 'graph');
                         });
                 });
