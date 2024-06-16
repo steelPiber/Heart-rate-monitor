@@ -282,8 +282,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 setInterval(() => {
     donutChart('/daily-tag-chart');
-}, 5000);
+}, 180000);
 
 setInterval(() => {
     barChart('/bar-chart');
-}, 5000);
+}, 180000);
