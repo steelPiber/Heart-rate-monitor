@@ -1,4 +1,4 @@
-sync function fetchRecords() {
+async function fetchRecords() {
             try {
                 const response = await fetch(`/training-record/records`);
                 if (!response.ok) {
