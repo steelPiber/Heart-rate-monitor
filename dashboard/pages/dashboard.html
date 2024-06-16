@@ -373,7 +373,74 @@
         
     
     </script> -->
+    <script>
+        document.getElementById('daily-btn').addEventListener('click', function() {
+            fetchData('/hourly-chart');
+        });
 
+        document.getElementById('weekly-btn').addEventListener('click', function() {
+            fetchData('/weekly-chart');
+        });
+
+        document.getElementById('monthly-btn').addEventListener('click', function() {
+            fetchData('/monthly-chart');
+        });
+
+        function fetchData(url) {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const chartData = data.data;
+                    const labels = chartData.map(item => item[0]);
+                    const values = chartData.map(item => item[1]);
+                    updateChart(labels, values);
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        let myChart;
+        function updateChart(labels, values) {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            if (myChart) {
+                myChart.destroy();
+            }
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Data',
+                        data: values,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Time'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Value'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize with daily data
+        fetchData('/hourly-chart');
+    </script>
     <script>
         document.querySelectorAll('.button-container').forEach(container => {
             container.querySelectorAll('.button a').forEach(button => {
