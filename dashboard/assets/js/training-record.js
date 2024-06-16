@@ -10,7 +10,7 @@ async function fetchRecords(page) {
     }
 
     try {
-        const response = await fetch(`/training-record/records`);
+        const response = await fetch(`/training-record/records?page=${page}&limit=${recordsPerPage}`);
         if (!response.ok) {
             throw new Error('Failed to fetch records');
         }
