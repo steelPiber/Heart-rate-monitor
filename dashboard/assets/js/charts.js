@@ -1,69 +1,50 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // 기본적으로 Daily 차트 데이터를 가져와 차트를 업데이트
-    fetchData('/hourly-chart');
-});
+//대시보드 심박수평균 daily weekly monthly (선 라인)
+function updateChart(data, chartClass) {
+    // 모든 해당 클래스의 캔버스를 선택
+    const canvases = document.querySelectorAll(`.${chartClass}`);
+    canvases.forEach(canvas => {
+        const ctx = canvas.getContext('2d');
+        const labels = data.map(item => item[0]); // 첫 번째 요소는 시간
+        const values = data.map(item => item[1]); // 두 번째 요소는 BPM 값
 
-// 클릭 이벤트를 통해 데이터를 가져오고 차트를 업데이트하는 함수
-document.getElementById('daily-btn').addEventListener('click', function() {
-    fetchData('/hourly-chart');
-});
+        // 기존 차트를 초기화
+        if (canvas.chartInstance) {
+            canvas.chartInstance.destroy();
+        }
 
-document.getElementById('weekly-btn').addEventListener('click', function() {
-    fetchData('/weekly-chart');
-});
-
-document.getElementById('monthly-btn').addEventListener('click', function() {
-    fetchData('/monthly-chart');
-});
-
-// 데이터를 가져와 차트를 업데이트하는 함수
-function fetchData(url) {
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            const chartData = data.data;
-            const labels = chartData.map(item => item[0]);
-            const values = chartData.map(item => item[1]);
-            updateChart(labels, values);
-        })
-        .catch(error => console.error('Error fetching data:', error));
-}
-
-// 차트를 생성하고 업데이트하는 함수
-let myChart;
-function updateChart(labels, values) {
-    const ctx = document.getElementById('myChart').getContext('2d');
-    if (myChart) {
-        myChart.destroy();
-    }
-    myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Heart Rate',
-                data: values,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true
+        // 새로운 차트를 생성
+        canvas.chartInstance = new Chart(ctx, {
+            type: 'line', // 차트 유형: 선형 차트
+            data: {
+                labels: labels, // x축 라벨
+                datasets: [{
+                    label: 'Heart Rate', // 데이터셋 라벨
+                    data: values, // y축 데이터
+                    borderColor: 'rgba(75, 192, 192, 1)', // 선 색상
+                    borderWidth: 1 // 선 두께
+                }]
+            },
+            options: {
+                responsive: true, // 반응형 옵션
+                maintainAspectRatio: false, // 종횡비 유지 여부
+                scales: {
+                    y: {
+                        beginAtZero: true // y축 시작값을 0으로 설정
+                    }
                 }
             }
-        }
+        });
     });
 }
 
-// 도넛 차트를 생성하는 함수
+
+
+// 대시보드 활동수면안정평상운동 그래프 (도넛)
 function donutChart(url) {
     fetch(url)
         .then(response => response.json())
         .then(data => {
+            // 태그 번역
             const tagTranslations = {
                 active: '활동',
                 exercise: '운동',
@@ -72,15 +53,17 @@ function donutChart(url) {
                 sleep: '수면'
             };
 
+            // 데이터에서 태그와 값을 추출하고 번역
             const labels = Object.keys(data).map(tag => tagTranslations[tag] || tag);
             const values = Object.values(data);
 
+            // 모든 해당 클래스의 캔버스를 선택
             const canvases = document.querySelectorAll('.donut-graph');
             canvases.forEach(canvas => {
                 const ctx = canvas.getContext('2d');
 
                 const backgroundColors = [
-                    '#ef476f', '#ffd166', '#06d6a0', '#118ab2', '#073b4c'
+                    '#ef476f','#ffd166','#06d6a0','#118ab2','#073b4c'
                 ];
 
                 if (canvas.chartInstance) {
@@ -104,7 +87,7 @@ function donutChart(url) {
                         maintainAspectRatio: false,
                         plugins: {
                             legend: {
-                                display: true,
+                                display: true, // 범례를 표시하도록 변경
                             }
                         },
                         interaction: {
@@ -114,10 +97,12 @@ function donutChart(url) {
                         hover: {
                             onHover: function(event, chartElement) {
                                 if (chartElement.length) {
+                                    // 마우스가 데이터 포인트 위에 있을 때
                                     var index = chartElement[0].index;
                                     centerIcon.src = icons[index];
                                     centerIcon.style.display = 'block';
                                 } else {
+                                    // 마우스가 데이터 포인트 밖에 있을 때
                                     centerIcon.style.display = 'none';
                                 }
                             }
@@ -139,7 +124,9 @@ function donutChart(url) {
         });
 }
 
-// 막대 차트를 생성하는 함수
+donutChart();
+
+// 대시보드 안정활동휴식수면평상 하루 그래프 (막대)
 function barChart(url) {
     fetch(url)
         .then(response => response.json())
@@ -155,14 +142,16 @@ function barChart(url) {
                 sleep: '수면'
             };
 
+            // 태그별 데이터 초기화
             const datasets = tags.map(tag => ({
                 label: tagTranslations[tag],
                 fill: true,
                 data: new Array(hours.length).fill(0),
                 backgroundColor: getColorForTag(tag),
-                maxBarThickness: 10
+                maxBarThickness: 10 // 막대의 최대 두께를 줄여서 간격을 좁힘
             }));
 
+            // 데이터 매핑
             data.forEach(item => {
                 const hourIndex = hours.indexOf(item.hour);
                 const tagIndex = tags.indexOf(item.tag);
@@ -171,6 +160,7 @@ function barChart(url) {
                 }
             });
 
+            // 모든 해당 클래스의 캔버스를 선택
             const canvases = document.querySelectorAll('.bar-graph');
             canvases.forEach(canvas => {
                 const ctx = canvas.getContext('2d');
@@ -265,8 +255,8 @@ function barChart(url) {
                                 }
                             },
                         },
-                        barPercentage: 0.6,
-                        categoryPercentage: 0.6
+                        barPercentage: 0.6,  // 막대 사이의 간격을 좁히기 위한 옵션
+                        categoryPercentage: 0.6 // 카테고리 간격을 좁히기 위한 옵션
                     },
                 });
             });
@@ -276,7 +266,6 @@ function barChart(url) {
         });
 }
 
-// 태그에 따른 색상 반환
 function getColorForTag(tag) {
     switch (tag) {
         case 'active': return '#ef476f';
@@ -288,7 +277,9 @@ function getColorForTag(tag) {
     }
 }
 
-// 페이지 로드 시 도넛 차트와 막대 차트 초기화
+barChart();
+
+// Initialize donut and bar charts on page load or when needed
 document.addEventListener('DOMContentLoaded', () => {
     donutChart('/daily-tag-chart');
     barChart('/bar-chart');
