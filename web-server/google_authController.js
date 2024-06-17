@@ -102,4 +102,17 @@ router.get("/logout", (req, res) => {
   });
 });
 
+router.get('/profile', async (req, res) => {
+  try {
+    const token = req.cookies.accessToken; // 클라이언트에서 보내는 accessToken
+    const userInfo = await getUserInfo(token);
+    const userProfileUrl = userInfo.link; // 구글 프로필 URL
+
+    res.json({ userProfileUrl });
+  } catch (error) {
+    console.error("Error retrieving user profile:", error);
+    res.status(500).json({ error: "Failed to retrieve user profile" });
+  }
+});
+
 module.exports = { router, getUserInfo };
