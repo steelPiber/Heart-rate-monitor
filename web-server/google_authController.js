@@ -106,7 +106,7 @@ router.get('/profile', async (req, res) => {
   try {
     const token = req.cookies.accessToken; // 클라이언트에서 보내는 accessToken
     const userInfo = await getUserInfo(token);
-    const userProfileUrl = userInfo.link; // 구글 프로필 URL
+    const userProfileUrl = userInfo.picture; // 구글 프로필 URL
 
     res.json({ userProfileUrl });
   } catch (error) {
