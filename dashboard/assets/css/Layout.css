@@ -857,10 +857,14 @@ a{
     
 
 }
+.bottom_icon{
+    display: none;
+}
 /*공통 아이콘 (하단)*/
 @media screen and (max-width:768px){
     
     .bottom_icon { 
+        display: block;
         position: fixed; 
         bottom: 0; 
         width: 100%; 
