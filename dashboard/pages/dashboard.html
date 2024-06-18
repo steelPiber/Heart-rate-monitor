@@ -17,9 +17,7 @@
             <li><a href="/training-record"><img src="../assets/img/bottom_icon04-w.png"><span>트레이닝 기록</span></a></li>        
             <!-- <li><a href="/health-checkup"><img src="../assets/img/bottom_icon04-w.png"><span>건강 진단</span></a></li>         -->
         </ul>
-	<div class="user-profile-img">
-            	<img id="profile-img-pc" src="" alt="프로필 이미지">
-        </div>
+        <div class="user-profile-img"><img id="profile-img-pc" src="" alt="프로필 이미지"></div>
         <div class="nav-logout logout"><a href="/logout"></a><img src="../assets/img/logout-w.png"><span>로그아웃</span></div>    
     </nav>
     <div class="overlay" id="overlay"></div>
@@ -138,7 +136,7 @@
         <h1>(로그인사용자) <div class="status" style="margin-bottom: 16px; margin-top:16px;">
             <img src="../assets/img/normal.png" class="dynamicImage">
             <span class="status-text"></span>
-        </div></h1>
+        </div></h1>        
         <div class="dash-board">
             <div class="heart-board">         
                 <ul>
@@ -205,7 +203,9 @@
         </div>
         <div class="chart-container">
             <div class="container-title">시간별 활동 통계 </div>
-            <canvas class="donut-graph"></canvas>
+            <div class="mob-donut-wrap">
+                <canvas class="donut-graph"></canvas>
+            </div>
             <img id="centerIcon" src="" alt="Icon" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
         </div>
 
@@ -222,10 +222,8 @@
         <!-- 모바일 바닥 아이콘 리스트 -->
     <div class="bottom_icon">
         <ul>
-	    <li>
-               <div class="user-profile-img">
-            		<img id="profile-img-mob" src="" alt="프로필 이미지">
-               </div>
+            <li>
+                <div class="user-profile-img"><img id="profile-img-mob" src="" alt=""></div>
             </li>
             <li>
                 <a href="../index.html"><img src="../assets/img/bottom_icon01.png"></a></li>
@@ -382,41 +380,7 @@
         .catch(error => {
             console.error('Error fetching initial chart data:', error);
         });   
-    </script>    
-    <script>
-    	function fetchUserProfileImage() {
-    fetch('/profile')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('네트워크 응답이 정상이 아닙니다');
-            }
-            return response.json();
-        })
-        .then(data => {
-            const profileImageUrl = data.userProfileUrl;
-            
-            // 데스크톱 레이아웃 이미지 업데이트
-            const profileImgElementPC = document.getElementById('profile-img-pc');
-            if (profileImgElementPC) {
-                profileImgElementPC.src = profileImageUrl;
-            }
-            
-            // 모바일 레이아웃 이미지 업데이트
-            const profileImgElementMob = document.getElementById('profile-img-mob');
-            if (profileImgElementMob) {
-                profileImgElementMob.src = profileImageUrl;
-            }
-        })
-        .catch(error => {
-            console.error('프로필 이미지 데이터를 가져오는 중 오류 발생:', error);
-            // 선택적으로 오류 처리: 기본 이미지 설정 또는 오류 메시지 표시
-        });
-}
-
-// DOM이 로드되면 함수를 호출합니다
-document.addEventListener('DOMContentLoaded', fetchUserProfileImage);
-
-	</script>
+    </script>
 
 
     <!--구현한 스크립트들-->

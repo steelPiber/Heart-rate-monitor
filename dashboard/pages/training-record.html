@@ -10,30 +10,29 @@
 </head>
 <body>
     <!--PC 네비바-->
-    <nav class="nav-pc">
-        <div class="hamburger-pc" id="hamburger-pc">☰</div>
-        <ul class="nav-links" id="nav-links">
-            <li><a href="/dashboard"><img src="../assets/img/bottom_icon03-w.png"><span>메인보드</span></a></li>
-            <li><a href="/beat-track"><img src="../assets/img/bottom_icon02-w.png"><span>트레이닝</span></a></li>
-            <li><a href="/training-record"><img src="../assets/img/bottom_icon04-w.png"><span>트레이닝 기록</span></a></li>
-            <!-- <li><a href="/health-checkup"><img src="../assets/img/bottom_icon04-w.png"><span>건강 진단</span></a></li>         -->
-        </ul>
-	<div class="user-profile-img">
-           	<img id="profile-img-pc" src="" alt="프로필 이미지">
-        </div>
-        <div class="nav-logout logout"><a href="/logout"></a><img src="../assets/img/logout-w.png"><span>로그아웃</span></div>
+   <nav class="nav-pc">
+    <div class="hamburger-pc" id="hamburger-pc">☰</div>
+    <ul class="nav-links" id="nav-links">
+        <li><a href="/dashboard"><img src="../assets/img/bottom_icon03-w.png"><span>메인보드</span></a></li>
+        <li><a href="/beat-track"><img src="../assets/img/bottom_icon02-w.png"><span>트레이닝</span></a></li>
+        <li><a href="/training-record"><img src="../assets/img/bottom_icon04-w.png"><span>트레이닝 기록</span></a></li>
+        <!-- <li><a href="/health-checkup"><img src="../assets/img/bottom_icon04-w.png"><span>건강 진단</span></a></li>         -->
+    </ul>
+    <div class="user-profile-img"><img id="profile-img-pc" src="" alt="프로필 이미지"></div>
+    <div class="nav-logout logout"><a href="/logout"></a><img src="../assets/img/logout-w.png"><span>로그아웃</span></div>
     </nav>
     <div class="overlay" id="overlay"></div>
     <!--모바일 네비바-->
     <div class="bar">Heart Rate Monitor</div>
-    <div class="hamburger-mob" id="hamburger-mob">☰</div>
+    <div class="hamburger-mob" id="hamburger-mob">☰</div> 
     <nav class="nav-mob" id="nav-mob">
         <a href="/dashboard">메인 보드</a>
         <a href="/beat-track">트레이닝</a>
         <a href="/training-record">트레이닝 기록</a>
         <!-- <a href="/health-checkup">건강 진단</a> -->
     </nav>
-    <!--pc 전용 레이아웃-->
+
+    <!-- main 레이아웃 -->
     <div class="wrap-cont-tr">
         <div class="header-icon">
             <a href="/dashboard"><img src="../assets/img/logo.png"></a>
@@ -49,70 +48,46 @@
         <div class="pagination" id="pagination"></div>
     </div>
 
+    <!-- 모바일 바닥글 (로그아웃버튼) -->
+    <div class="footer">
+        <div class="footer-nav">
+            <ul class="d-flex justify-content-around">
+                <li class="footer-logout"><a href=""> 로그아웃 </a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 모바일 바닥 아이콘 리스트 -->
     <div class="bottom_icon">
         <ul>
-	    <li>
-		<div class="user-profile-img">
-            		<img id="profile-img-mob" src="" alt="프로필 이미지">
-       	    	</div>
-	    <li>
+            <li>
+                <div class="user-profile-img"><img id="profile-img-mob" src="" alt="프로필이미지"></div>
+            </li>
             <li>
                 <a href="../index.html"><img src="../assets/img/bottom_icon01.png"></a></li>
             <li>
                 <a href="/beat-track"><img src="../assets/img/bottom_icon02.png"></a></li>            
             <li>
-		   <a href="/dashboard"><img src="../assets/img/bottom_icon03.png"></a></li>
+                <a href="/dashboard"><img src="../assets/img/bottom_icon03.png"></a></li>
             <li>
                 <a href="/training-record"><img src="../assets/img/bottom_icon04.png"></a></li>
             <li>
                 <a href="/sitemap"><img src="../assets/img/bottom_icon05.png"></a></li>
         </ul>
     </div>
- <script>
-    	function fetchUserProfileImage() {
-    fetch('/profile')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('네트워크 응답이 정상이 아닙니다');
-            }
-            return response.json();
-        })
-        .then(data => {
-            const profileImageUrl = data.userProfileUrl;
-            
-            // 데스크톱 레이아웃 이미지 업데이트
-            const profileImgElementPC = document.getElementById('profile-img-pc');
-            if (profileImgElementPC) {
-                profileImgElementPC.src = profileImageUrl;
-            }
-            
-            // 모바일 레이아웃 이미지 업데이트
-            const profileImgElementMob = document.getElementById('profile-img-mob');
-            if (profileImgElementMob) {
-                profileImgElementMob.src = profileImageUrl;
-            }
-        })
-        .catch(error => {
-            console.error('프로필 이미지 데이터를 가져오는 중 오류 발생:', error);
-            // 선택적으로 오류 처리: 기본 이미지 설정 또는 오류 메시지 표시
-        });
-}
-
-// DOM이 로드되면 함수를 호출합니다
-document.addEventListener('DOMContentLoaded', fetchUserProfileImage);
- </script>
-    <!--플러그인 스크립트들-->
-    <script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
-    <script src="../assets/js/core/popper.min.js"></script>
-    <script src="../assets/js/core/bootstrap.min.js"></script>
-    <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
-    <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
-    <script src="../assets/js/plugins/chartjs.min.js"></script>
-
-    <!-- 트레이닝기록 스크립트 -->
-    <script src="../assets/js/training-record.js"></script>
-
-    <!-- 메뉴바 스크립트 -->
-    <script src="../assets/js/menubar.js"></script>
 </body>
-</html>
+
+<!--플러그인 스크립트들-->
+<script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
+<script src="../assets/js/core/popper.min.js"></script>
+<script src="../assets/js/core/bootstrap.min.js"></script>
+<script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+<script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+<script src="../assets/js/plugins/chartjs.min.js"></script>
+
+<!-- 트레이닝기록 스크립트 -->
+<script src="../assets/js/training-record.js"></script>
+
+<!-- 메뉴바 스크립트 -->
+<script src="../assets/js/menubar.js"></script>
+
