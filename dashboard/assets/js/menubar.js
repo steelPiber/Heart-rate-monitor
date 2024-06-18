@@ -61,3 +61,36 @@ document.querySelector('.logout').addEventListener('click', function() {
         alert('로그아웃 중 에러가 발생했습니다.');
     });
 });
+
+//유저 프로필 가져오는 함수
+function fetchUserProfileImage() {
+    fetch('/profile')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('네트워크 응답이 정상이 아닙니다');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const profileImageUrl = data.userProfileUrl;
+            
+            // 데스크톱 레이아웃 이미지 업데이트
+            const profileImgElementPC = document.getElementById('profile-img-pc');
+            if (profileImgElementPC) {
+                profileImgElementPC.src = profileImageUrl;
+            }
+            
+            // 모바일 레이아웃 이미지 업데이트
+            const profileImgElementMob = document.getElementById('profile-img-mob');
+            if (profileImgElementMob) {
+                profileImgElementMob.src = profileImageUrl;
+            }
+        })
+        .catch(error => {
+            console.error('프로필 이미지 데이터를 가져오는 중 오류 발생:', error);
+            // 선택적으로 오류 처리: 기본 이미지 설정 또는 오류 메시지 표시
+        });
+}
+
+// DOM이 로드되면 함수를 호출합니다
+document.addEventListener('DOMContentLoaded', fetchUserProfileImage);
