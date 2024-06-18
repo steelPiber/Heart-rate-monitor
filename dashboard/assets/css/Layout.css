@@ -381,6 +381,7 @@ a{
 }
 
 .target-content {
+    white-space: nowrap;
     display: flex;
     flex: 1.3;
     justify-content: space-around;
@@ -630,6 +631,22 @@ a{
     margin-left: 10px;
     color: white;
 }
+.user-profile-img {
+    position: absolute;
+    margin-left: 14px;
+    width: 50px; 
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.user-profile-img img{
+    width: 105%;
+    height: 105%;
+    object-fit: cover;
+}
 .overlay {
     position: fixed;
     top: 0;
@@ -857,7 +874,7 @@ a{
     .bottom_icon ul { 
         display: flex; 
         width: 96%; 
-        margin: 0 auto; 
+        margin: 0 auto;
     } 
     .bottom_icon li { 
         width: 20%; 
@@ -868,7 +885,22 @@ a{
         display: block; 
         cursor: pointer; 
     } 
-    .bottom_icon li img { width: 26px; } 
+    .bottom_icon li img { width: 26px; }
+
+    .user-profile-img-mob {
+        display: flex;
+        width: 100%; 
+        height: 100%;
+        border-radius: 50%;
+        overflow: hidden;
+        justify-content: center;
+        align-items: center;
+    }
+    .user-profile-img img{
+        width: 105%;
+        height: 105%;
+        object-fit: cover;
+    } 
 }
 
 
@@ -1081,6 +1113,9 @@ a{
         padding-bottom: 0;
         color: #F5675D;
     }
+    .mob-donut-wrap{
+        height: 95%;
+    }
     .data{
         display: none;
     }
@@ -1272,12 +1307,14 @@ a{
     .wr-content {
         display: flex;
         justify-content: space-between;
+        margin-left: 30px;
     }
     .wr-right, .wr-left {
         display: flex;
         flex-direction: column;
         align-items: center;
-        text-align: center
+        text-align: center;
+        margin-left: 20px;
     }
     .wr-left span, .wr-right span{
         font-size: 14px;
