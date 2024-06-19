@@ -53,8 +53,8 @@
         <div class="second-row">
             <div class="bt-heart-rate-container">
                 <div class="container-title">구간 심박수</div>
-                <div class="workout-graph-wrap" style="height:90%;">
-                    <canvas id="heartRateChart" class="workout-graph"></canvas>
+                <div class="workout-graph-wrap" style="height: 90%;">
+                    <canvas class="workout-graph"></canvas>
                 </div>
             </div>
             <div class="bt-target-zone-container">
@@ -82,8 +82,8 @@
                 <div class="workout-result-container">
                     <span class="wr-title">운동 결과</span>
                     <div class="wr-content">
-                        <div class="wr-right"><div>0 km</div><span>이동 거리</span></div>
-                        <div class="wr-left"><div>0 min</div><span>운동 시간</span></div>
+                        <div class="wr-right"><div class="wr-distance">0 m</div><span>이동 거리</span></div>
+                        <div class="wr-left"><div class="wr-time">0 min</div><span>운동 시간</span></div>
                     </div>
                 </div>
             </div>
@@ -129,8 +129,8 @@
         <div class="mob-workout-result-container">
             <span class="wr-title">운동 결과</span>
             <div class="wr-content">
-                <div class="wr-right"><div>0 km</div><span>이동 거리</span></div>
-                <div class="wr-left"><div>0 min</div><span>운동 시간</span></div>
+                <div class="wr-right"><div class="wr-distance">0 m</div><span>이동 거리</span></div>
+                <div class="wr-left"><div class="wr-time">0 min</div><span>운동 시간</span></div>
             </div>
         </div>
         <div class="map-container">
@@ -182,19 +182,3 @@
 <!-- 메뉴바 스크립트 -->
 <script src="../assets/js/menubar.js"></script>
 
-<script>
-    function initMaps() {
-        const mapOptions = {
-            zoom: 8,
-            center: { lat: 37.7749, lng: -122.4194 }, // 샌프란시스코의 위도와 경도
-        };
-
-        document.querySelectorAll('.map').forEach((mapElement) => {
-            new google.maps.Map(mapElement, mapOptions);
-        });
-    }
-
-    // 구글 맵 스크립트가 로드된 후 initMaps를 호출합니다.
-    window.initMaps = initMaps;
-</script>
-</html>
