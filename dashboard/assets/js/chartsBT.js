@@ -6,8 +6,9 @@ function workoutChart(url) {
     .then(data => {
         if (data.length > 0) {
             const latestData = data[data.length - 1]; // 가장 마지막 데이터를 선택
+            console.log('Latest data:', latestData);
             const segmentHeartRateEntries = latestData.segmentHeartRateEntries;
-
+    
             // x, y 값을 배열로 추출
             const labels = segmentHeartRateEntries.map(entry => entry.x);
             const heartRates = segmentHeartRateEntries.map(entry => entry.y);
