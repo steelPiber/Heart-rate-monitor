@@ -206,13 +206,13 @@ function workoutmap(url){
             var timeElements = document.querySelectorAll(".wr-time");
             
             distanceElements.forEach(element => {
-                element.textContent = Math.round(latestData.distance) + ' m';
+                element.textContent = Math.round(latestData.distance / 10) + ' m';
                 //initMap(record.pathPoints);
             });
             
             // Update time elements with the elapsed time (converted to minutes)
             timeElements.forEach(element => {
-                var elapsedTimeInMinutes = Math.floor(latestData.elapsedTime / 60000);
+                var elapsedTimeInMinutes = Math.floor(latestData.elapsedTime / 600000);
                 element.textContent = elapsedTimeInMinutes + ' min';
             });
         }
