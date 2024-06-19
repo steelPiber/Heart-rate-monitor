@@ -193,65 +193,91 @@ function targetZoneChart(url) {
         });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    workoutChart('/training-record/records');
-    targetZoneChart('/training-record/records');
-    workoutmap('/training-record/records');
-});
 
 function workoutmap(url){
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        if (data.length > 0) {
+            const latestData = data[data.length - 1];
+            console.log('Latest map data:', latestData);
+            
+            var distanceElements = document.querySelectorAll(".wr-distance");
+            var timeElements = document.querySelectorAll(".wr-time");
+            
+            distanceElements.forEach(element => {
+                element.textContent = Math.round(latestData.distance) + ' m';
+                //initMap(record.pathPoints);
+            });
+            
+            // Update time elements with the elapsed time (converted to minutes)
+            timeElements.forEach(element => {
+                var elapsedTimeInMinutes = Math.floor(latestData.elapsedTime / 60000);
+                element.textContent = elapsedTimeInMinutes + ' min';
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
+    });
+    
+}
+
+
+function initMap(pathPoints, mapElement) {
+    if (!pathPoints || pathPoints.length === 0) return;
+
+    const map = new google.maps.Map(mapElement, {
+        zoom: 15,
+        center: { lat: pathPoints[0].latitude, lng: pathPoints[0].longitude },
+    });
+
+    const bounds = new google.maps.LatLngBounds();
+    const route = pathPoints.map(point => {
+        const latLng = { lat: point.latitude, lng: point.longitude };
+        bounds.extend(latLng);
+        return latLng;
+    });
+
+    const polyline = new google.maps.Polyline({
+        path: route,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+    });
+
+    polyline.setMap(map);
+    map.fitBounds(bounds);
+}
+
+function loadMaps(url) {
     fetch(url)
         .then(response => response.json())
         .then(data => {
             if (data.length > 0) {
-                const latestData = data[data.length - 1];
-                console.log('Latest map data:', latestData);
-
-                var distanceElements = document.querySelectorAll(".wr-distance");
-                var timeElements = document.querySelectorAll(".wr-time");
-
-                distanceElements.forEach(element => {
-                    element.textContent = Math.round(latestData.distance) + ' m';
-                    //initMap(record.pathPoints);
+                const maps = document.querySelectorAll('.map');
+                data.forEach((record, index) => {
+                    if (index < maps.length) {
+                        const mapElement = maps[index];
+                        const pathPoints = record.pathPoints; // Adjust this line if pathPoints is nested differently
+                        initMap(pathPoints, mapElement);
+                    }
                 });
-
-                // Update time elements with the elapsed time (converted to minutes)
-                timeElements.forEach(element => {
-                    var elapsedTimeInMinutes = Math.floor(latestData.elapsedTime / 60000);
-                    element.textContent = elapsedTimeInMinutes + ' min';
-                });
+            } else {
+                console.error('No data found or data is not an array');
             }
         })
         .catch(error => {
             console.error('Error fetching data:', error);
         });
-
 }
 
+// Call loadMaps with the URL where your map data is hosted
 
-// function initMap(pathPoints) {
-//     if (!pathPoints || pathPoints.length === 0) return;
-
-//     const map = new google.maps.Map(document.querySelectorAll(map), {
-//         zoom: 15,
-//         center: { lat: pathPoints[0].latitude, lng: pathPoints[0].longitude },
-//     });
-
-//     const bounds = new google.maps.LatLngBounds();
-//     const route = pathPoints.map(point => {
-//         const latLng = { lat: point.latitude, lng: point.longitude };
-//         bounds.extend(latLng);
-//         return latLng;
-//     });
-
-//     const polyline = new google.maps.Polyline({
-//         path: route,
-//         geodesic: true,
-//         strokeColor: '#FF0000',
-//         strokeOpacity: 1.0,
-//         strokeWeight: 2,
-//     });
-
-//     polyline.setMap(map);
-//     map.fitBounds(bounds);
-// }
+document.addEventListener('DOMContentLoaded', () => {
+    workoutChart('/training-record/records');
+    targetZoneChart('/training-record/records');
+    workoutmap('/training-record/records');
+    loadMaps('/training-record/records');
+});
