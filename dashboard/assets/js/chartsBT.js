@@ -1,109 +1,56 @@
 // 비트트랙 운동심박수 차트 그리기 스크립트 (선 라인)
-function workoutChart() {
+function workoutChart(url) {
     const canvases = document.querySelectorAll('.workout-graph');
-    canvases.forEach(canvas => {
-        const ctx = canvas.getContext('2d');
-        let avgBPMs;  // 심박수 데이터를 저장할 변수
-        const hourLabels = ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5', 'Label 6', 'Label 7', 'Label 8'];
-        avgBPMs = [90, 75, 90, 98, 80, 105, 110, 115];
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        if (data.length > 0) {
+            const latestData = data[data.length - 1]; // 가장 마지막 데이터를 선택
+            const segmentHeartRateEntries = latestData.segmentHeartRateEntries;
 
-        new Chart(ctx, {
-            type: "line", // 차트 유형: 선형 차트
-            data: {
-                labels: hourLabels, // x축 라벨
-                datasets: [{
-                    label: "BPM 박동수", // 데이터셋 라벨
-                    tension: 0.4, // 선의 곡률
-                    borderWidth: 0,
-                    pointRadius: 0, // 데이터 포인트 크기
-                    borderColor: "#F5675D", // 선 색상
-                    borderWidth: 3, // 선 두께
-                    fill: true, // 선 아래를 채움
-                    data: avgBPMs, // y축 데이터
-                    maxBarThickness: 6 // 최대 막대 두께
-                }],
-            },
-            options: {
-                responsive: true, // 반응형 옵션
-                maintainAspectRatio: false, // 종횡비 유지 여부
-                plugins: {
-                    legend: {
-                        display: false, // 범례 숨김
+            // x, y 값을 배열로 추출
+            const labels = segmentHeartRateEntries.map(entry => entry.x);
+            const heartRates = segmentHeartRateEntries.map(entry => entry.y);
+
+            // Chart.js를 이용해 그래프 그리기
+            const ctx = document.getElementById('heartRateChart').getContext('2d');
+            const heartRateChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Segment Heart Rate',
+                        data: heartRates,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: false,
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Segment'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Heart Rate'
+                            }
+                        }
                     }
-                },
-                interaction: {
-                    intersect: false, // 교차 지점에서만 툴팁 표시
-                    mode: 'index', // 인덱스 모드 사용
-                },
-                scales: {
-                    y: {
-                        grid: {
-                            drawBorder: false,
-                            display: true,
-                            drawOnChartArea: true,
-                            drawTicks: false,
-                            borderDash: [5, 5]
-                        },
-                        ticks: {
-                            display: true,
-                            padding: 10,
-                            color: '#fbfbfb',
-                            font: {
-                                size: 11,
-                                family: "Open Sans",
-                                style: 'normal',
-                                lineHeight: 2
-                            },
-                        },
-                        title: {
-                            display: true,
-                            text: 'BPM',
-                            color: '#fbfbfb',
-                            font: {
-                                size: 14,
-                                family: "Open Sans",
-                                style: 'normal',
-                                lineHeight: 2
-                            },
-                        }
-                    },
-                    x: {
-                        grid: {
-                            drawBorder: false,
-                            display: false,
-                            drawOnChartArea: false,
-                            drawTicks: false,
-                            borderDash: [5, 5]
-                        },
-                        ticks: {
-                            display: false,
-                            color: '#ccc',
-                            padding: 20,
-                            font: {
-                                size: 11,
-                                family: "Open Sans",
-                                style: 'normal',
-                                lineHeight: 2
-                            },
-                        },
-                        title: {
-                            display: true,
-                            text: 'Distance (km)',
-                            color: '#ccc',
-                            font: {
-                                size: 14,
-                                family: "Open Sans",
-                                style: 'normal',
-                                lineHeight: 2
-                            },
-                        }
-                    },
-                },
-            },
-        });
+                }
+            });
+        } else {
+            console.error('No data found or data is not an array');
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
     });
 }
-
 workoutChart();
 
 // 비트트랙 적정운동량 차트 그리기 스크립트 (가로 막대)
@@ -220,3 +167,7 @@ function targetZoneChart() {
 }
 
 targetZoneChart();
+
+document.addEventListener('DOMContentLoaded', () => {
+    workoutChart('/training-record/records');
+});
