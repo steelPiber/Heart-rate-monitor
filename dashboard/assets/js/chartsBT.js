@@ -65,11 +65,11 @@ function targetZoneChart(url) {
                 // x, y 값을 배열로 추출 및 라벨 매핑
                 const labels = heartRateZoneEntries.map(entry => {
                     switch (entry.x) {
-                        case 0: return 'Maximum';
-                        case 1: return 'Hard';
+                        case 0: return 'Warm up';
+                        case 1: return 'Light';
                         case 2: return 'Moderate';
-                        case 3: return 'Light';
-                        case 4: return 'Warm up';
+                        case 3: return 'Hard';
+                        case 4: return 'Maximum';
                         default: return '';
                     }
                 });
