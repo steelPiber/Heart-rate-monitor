@@ -196,6 +196,7 @@ function targetZoneChart(url) {
 document.addEventListener('DOMContentLoaded', () => {
     workoutChart('/training-record/records');
     targetZoneChart('/training-record/records');
+    workoutmap('/training-record/records');
 });
 
 function workoutmap(url){
@@ -211,6 +212,7 @@ function workoutmap(url){
 
                 distanceElements.forEach(element => {
                     element.textContent = Math.round(latestData.distance) + ' m';
+                    //initMap(record.pathPoints);
                 });
 
                 // Update time elements with the elapsed time (converted to minutes)
@@ -225,3 +227,31 @@ function workoutmap(url){
         });
 
 }
+
+
+// function initMap(pathPoints) {
+//     if (!pathPoints || pathPoints.length === 0) return;
+
+//     const map = new google.maps.Map(document.querySelectorAll(map), {
+//         zoom: 15,
+//         center: { lat: pathPoints[0].latitude, lng: pathPoints[0].longitude },
+//     });
+
+//     const bounds = new google.maps.LatLngBounds();
+//     const route = pathPoints.map(point => {
+//         const latLng = { lat: point.latitude, lng: point.longitude };
+//         bounds.extend(latLng);
+//         return latLng;
+//     });
+
+//     const polyline = new google.maps.Polyline({
+//         path: route,
+//         geodesic: true,
+//         strokeColor: '#FF0000',
+//         strokeOpacity: 1.0,
+//         strokeWeight: 2,
+//     });
+
+//     polyline.setMap(map);
+//     map.fitBounds(bounds);
+// }
