@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    environment:
+      POSTGRES_USER: piber
+      POSTGRES_PASSWORD: wjsansrk
+      POSTGRES_DB: dbsafebpm
+      TZ: "Asia/Seoul"
+      PGTZ: "Asia/Seoul"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  rust-app:
+    build: .
+    environment:
+      DATABASE_URL: postgres://piber:wjsansrk@postgres/dbsafebpm
+      TZ: "Asia/Seoul"
+    ports:
+      - "13389:13389"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+

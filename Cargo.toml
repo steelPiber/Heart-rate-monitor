@@ -1,0 +1,19 @@
+[package]
+name = "rs-hr"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+axum = "0.6"
+hyper = { version = "0.14", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tracing-subscriber = "0.3"
+tokio-postgres = { version = "0.7", features = ["with-chrono-0_4"] }
+dotenv = "0.15"
+chrono = { version = "0.4", features = ["serde"] }
+
+[[bin]]
+name = "rs-hr"
+path = "src/main.rs"

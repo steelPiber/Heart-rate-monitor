@@ -1,0 +1,12 @@
+FROM postgres:latest
+
+# 환경변수 설정
+ENV POSTGRES_USER=piber
+ENV POSTGRES_PASSWORD=wjsansrk
+ENV POSTGRES_DB=dbsafebpm
+ENV TZ=Asia/Seoul
+ENV PGTZ=Asia/Seoul
+
+# 기본 명령어 설정
+CMD ["postgres"]
+
