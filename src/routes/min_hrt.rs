@@ -6,34 +6,32 @@ use axum::{
     Router,                 //라우터 생성 모듈
 };
 
-use serde::Deserialize; //역직렬화 모듈
+use serde::Deserialize; //역질렬화 모듈
 use std::sync::Arc; //참조 카운터 모듈
 use tokio_postgres::Client; //PostgreSQL 클라이언트 모듈
 
-//URL 쿼리 파라미터 역직렬화를 위한 구조체
+//URL 쿼리 파라미터 역질력화 struct
 #[derive(Deserialize)]
-struct RealtimeQuery {
+struct minQuery {
     email: String,
 }
 
-//응답 JSON을 위한 구조체
+//응답 JSON struct
 #[derive(serde::Serialize)]
-struct BpmResult {
+struct BpmValue {
     bpm: i32,
 }
-//실시간 BPM 데이터를 가져오는 핸들러 함수
-async fn get_realtime_bpm(
-    Query(params): Query<RealtimeQuery>,
-    client: Arc<Client>,
-) -> impl IntoResponse {
-    let select_sql = "SECECT ROUND(bpm) as bpm FROM bpmdata WHERE email = $1 ORDER BY time DESC FETCH FIRST 1 ROW ONLY";
-    match client.query_one(select_sql, &[&params.email]).await {
+
+//1분 BPM 데이터를 가져오는 핸들러 함수
+async fn get_min_bpm(Query(params): Query<minQuery>, client: Arc<Client>) -> impl IntoResponse {
+    let min_sql = "SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' MINUTE FROM bpmdata WHERE email = :Email)";
+    match client.query_one(min_sql, &[&params.email]).await {
         Ok(row) => {
             let bpm: i32 = row.get("bpm"); //쿼리 결과에서 bpm 값을 가져옴
-            Json(BpmResult { bpm }).into_response() //JSON 응답 생성
+            Json(BpmValue { bpm }).into_response() //JSON 응답 생성
         }
         Err(err) => {
-            eprintln!("Error querying realtime BPM data: {:?}", err); //오류 로크 출력
+            eprintln!("Error querying min BPM data: {:?}", err); //오류 로그 출력
             (
                 axum::http::StatusCode::INTERNAL_SERVER_ERROR,
                 "Error querying data",
@@ -46,7 +44,7 @@ async fn get_realtime_bpm(
 //라우터 생성 함수
 pub fn create_routes(client: Arc<Client>) -> Router {
     Router::new().route(
-        "/realtime",
-        get(move |query| get_realtime_bpm(query, client.clone())),
+        "/min-bpm",
+        get(move |query| get_min_bpm(query, client.clone())),
     )
 }

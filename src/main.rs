@@ -28,10 +28,12 @@ async fn main() {
         .expect("Failed to create table");
 
     let app = Router::new()
-        .nest("/data", routes::data::create_routes(client.clone())) //데이터 라우트 추가
-        .nest("/recent", routes::recent::create_routes(client.clone())) //최근 데이터 라우트 추가
-        .nest("/current-time", routes::time::create_routes()) //현재 시간 라우트 추가
-        .nest("/realtime", routes::realtime::create_routes(client.clone())); //실시간 데이터 라우트 추가
+        .nest("/data", routes::data::create_routes(client.clone())) //데이터 route add
+        .nest("/recent", routes::recent::create_routes(client.clone())) //최근 데이터 route add
+        .nest("/current-time", routes::time::create_routes()) //현재 시간 route add
+        .nest("/realtime", routes::real_hrt::create_routes(client.clone())) //실시간 데이터 route add
+        .nest("/min-bpm", routes::min_hrt::create_routes(client.clone())); //1분 평균 데이터 route add
+
     let addr = SocketAddr::from(([0, 0, 0, 0], 13389)); //서버 주소 설정
     println!("Listening on {}", addr);
     if let Err(err) = axum::Server::bind(&addr)
