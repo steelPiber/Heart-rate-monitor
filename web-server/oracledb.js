@@ -24,7 +24,7 @@ async function connectToOracleDB() {
   }
 }
 
-// BPM데이터를 Oracle DB에 삽입
+// BPM데이터를 Oracle DB에 삽입 
 async function insertBPMData(bpm, email, tag) {
   const connection = await connectToOracleDB();
 
@@ -78,7 +78,7 @@ async function selectUserErrlog(paramEmail){
      }
 }
 
-// DB에서 최근 24시간 동안의 심박수 데이터 가져오기
+// DB에서 최근 24시간 동안의 심박수 데이터 가져오기 -> hrv.js use a fun
 async function fetchHeartRateData() {
     let connection;
 
