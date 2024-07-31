@@ -6,7 +6,7 @@ const oracleDB = require('./oracledb.js');
 router.use(express.urlencoded({extended:true}));
 router.use(express.json());
 router.use('/public', static(path.join(__dirname, 'public')));
-
+//이메일 중복확인
 router.get('/checkEmailDuplicate', async (req, res) => {
     const userEmail = req.query.email; // 요청에서 사용자 이메일을 추출
     try {
