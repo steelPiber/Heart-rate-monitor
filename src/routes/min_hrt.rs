@@ -12,7 +12,7 @@ use tokio_postgres::Client; //PostgreSQL 클라이언트 모듈
 
 //URL 쿼리 파라미터 역질력화 struct
 #[derive(Deserialize)]
-struct minQuery {
+struct MinQuery {
     email: String,
 }
 
@@ -23,7 +23,7 @@ struct BpmValue {
 }
 
 //1분 BPM 데이터를 가져오는 핸들러 함수
-async fn get_min_bpm(Query(params): Query<minQuery>, client: Arc<Client>) -> impl IntoResponse {
+async fn get_min_bpm(Query(params): Query<MinQuery>, client: Arc<Client>) -> impl IntoResponse {
     let min_sql = "SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' MINUTE FROM bpmdata WHERE email = :Email)";
     match client.query_one(min_sql, &[&params.email]).await {
         Ok(row) => {

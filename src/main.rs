@@ -20,7 +20,11 @@ async fn main() {
     let database_url = env::var("DATABASE_URL")
         .unwrap_or("postgres://piber:wjsansrk@postgres/dbsafebpm".to_string()); //데이터베이스 초기화
 
-    let client = Arc::new(init_db(&database_url).await); // 데이터베이스 초기화
+    let client = Arc::new(
+        init_db(&database_url)
+            .await
+            .expect("Failed to initialize database"),
+    ); // 데이터베이스 초기화
 
     // 테이블이 없으면 생성합니다.
     create_table_if_not_exists(&client)
