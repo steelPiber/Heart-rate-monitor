@@ -24,7 +24,8 @@ async fn get_hour_bpm(
     Query(params): Query<HourQuery>,
     client: Arc<Client>,
     ) -> impl IntoResponse {
-        let hour_sql = "";
+        let hour_sql = "SELECT ROUND(AVG(bpm)) AS avg_bpm FROM bpmdata WHERE email = :Email AND time > (SELECT MAX(time) - INTERVAL '1' HOUR FROM bpmdata WHERE email = :Email)
+";
         match client.query_one(hour_sql, &[&params.email]).await{
             Ok(row) => {
                 let bpm:i32 = row.get("bpm"); //쿼리 결과에서 bpm값을 가져옴
@@ -45,7 +46,7 @@ async fn get_hour_bpm(
 //라우터 생성 
 pub fn create_routes(client: Arc<Client>) -> Router{
         Router::new().route(
-                "/min",
+              "/min",
                 gte(move |query| get_hour_bpm(query, client.clone())),
         )
 }
