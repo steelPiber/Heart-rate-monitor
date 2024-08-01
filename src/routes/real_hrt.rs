@@ -16,7 +16,7 @@ struct RealtimeQuery {
     email: String,
 }
 
-//응답 JSON을 struct
+//응답 JSON_struct
 #[derive(serde::Serialize)]
 struct BpmValue {
     bpm: i32,
