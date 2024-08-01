@@ -29,7 +29,7 @@ function calculateSDNN(rrIntervals) {
     }
     return Math.sqrt(sumSquares / rrIntervals.length);
 }
-
+//HRV를 이용한 부정맥 감지
 function detectArrhythmiaWithHRV(rrIntervals, rmssdThreshold, sdnnThreshold) {
     if (rrIntervals.length < 2) return [false, null, null];
     const rmssd = calculateRMSSD(rrIntervals);
