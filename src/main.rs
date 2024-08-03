@@ -8,6 +8,7 @@ use dotenv::dotenv;
 use std::env;
 use std::net::SocketAddr;
 use std::sync::Arc;
+use tokio::time::{sleep, Duration};
 use tracing_subscriber;
 
 #[tokio::main]
@@ -21,11 +22,18 @@ async fn main() {
         .unwrap_or("postgres://piber:wjsansrk@postgres/dbsafebpm".to_string());
     println!("Database URL: {}", database_url);
 
-    let client = Arc::new(
-        init_db(&database_url)
-            .await
-            .expect("Failed to initialize database"),
-    );
+    // PostgreSQL 시작 대기
+    let client = loop {
+        match init_db(&database_url).await {
+            Ok(client) => break Arc::new(client),
+            Err(err) => {
+                println!("Failed to connect to database: {:?}", err);
+                println!("Retrying in 5 seconds...");
+                sleep(Duration::from_secs(5)).await;
+            }
+        }
+    };
+
     println!("Database connected");
 
     create_table_if_not_exists(&client)
