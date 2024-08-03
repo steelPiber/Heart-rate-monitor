@@ -23,13 +23,19 @@ async fn handle_post(Json(payload): Json<Data>, client: Arc<Client>) -> impl Int
     // BPM 값이 숫자인지 확인하고 변환
     let bpm = match payload.bpm.parse::<i32>() {
         Ok(bpm) => bpm,
-        Err(_) => return (StatusCode::BAD_REQUEST, "Invalid BPM value").into_response(),
+        Err(_) => {
+            println!("Invalid BPM value: {:?}", payload.bpm);
+            return (StatusCode::BAD_REQUEST, "Invalid BPM value").into_response();
+        }
     };
 
     // 이메일 형식 확인
     let email_without_domain = match payload.email.split('@').next() {
         Some(e) => e.to_string(),
-        None => return (StatusCode::BAD_REQUEST, "Invalid email format").into_response(),
+        None => {
+            println!("Invalid email format: {:?}", payload.email);
+            return (StatusCode::BAD_REQUEST, "Invalid email format").into_response();
+        }
     };
 
     match insert_bpm_data(&client, bpm, &email_without_domain, &payload.tag, &payload.timestamp).await {
