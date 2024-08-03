@@ -25,9 +25,10 @@ async fn get_recent_bpm_data(client: Arc<Client>) -> impl IntoResponse {
         bpm: row.get("BPM"),
         email: row.get("EMAIL"),
         tag: row.get("TAG"),
-        time: row.get("TIME"),
+        time: row.get::<_, chrono::NaiveDateTime>("TIME").to_string(), // 시간 형식 변환
     }).collect();
 
+    println!("Fetched recent BPM data: {:?}", bpm_data); // 로그 추가
     Json(bpm_data)
 }
 
