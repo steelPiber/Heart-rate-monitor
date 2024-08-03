@@ -7,7 +7,7 @@ use axum::{
 use std::sync::Arc;
 use tokio_postgres::Client;
 
-#[derive(serde::Serialize)]
+#[derive(serde::Serialize, Debug)] // Debug 어노테이션 추가
 struct BpmData {
     idx: i32,
     bpm: String,
