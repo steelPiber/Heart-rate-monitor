@@ -14,6 +14,7 @@ struct Data {
     bpm: String,
     email: String,
     tag: String,
+    timestamp: String,
 }
 
 async fn handle_post(Json(payload): Json<Data>, client: Arc<Client>) -> impl IntoResponse {
@@ -31,7 +32,7 @@ async fn handle_post(Json(payload): Json<Data>, client: Arc<Client>) -> impl Int
         None => return (StatusCode::BAD_REQUEST, "Invalid email format").into_response(),
     };
 
-    match insert_bpm_data(&client, bpm, &email_without_domain, &payload.tag).await {
+    match insert_bpm_data(&client, bpm, &email_without_domain, &payload.tag, &payload.timestamp).await {
         Ok(_) => {
             println!("Successfully inserted BPM data into PostgreSQL");
             (StatusCode::OK, "Request received").into_response()
@@ -43,10 +44,13 @@ async fn handle_post(Json(payload): Json<Data>, client: Arc<Client>) -> impl Int
     }
 }
 
-async fn insert_bpm_data(client: &Client, bpm: i32, email: &str, tag: &str) -> Result<(), tokio_postgres::Error> {
+async fn insert_bpm_data(client: &Client, bpm: i32, email: &str, tag: &str, timestamp: &str) -> Result<(), tokio_postgres::Error> {
     let insert_sql = "INSERT INTO bpmdata (BPM, EMAIL, TAG, TIME) VALUES ($1, $2, $3, $4)";
-    let now = chrono::Utc::now().naive_utc(); // 시간 변환
-    client.execute(insert_sql, &[&bpm, &email, &tag, &now]).await?;
+    let time = match chrono::NaiveDateTime::parse_from_str(timestamp, "%Y-%m-%dT%H:%M:%S") {
+        Ok(t) => t,
+        Err(_) => chrono::Utc::now().naive_utc(), // 시간 변환 실패 시 현재 시간 사용
+    };
+    client.execute(insert_sql, &[&bpm, &email, &tag, &time]).await?;
     Ok(())
 }
 
