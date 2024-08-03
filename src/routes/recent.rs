@@ -17,16 +17,16 @@ struct BpmData {
 }
 
 async fn get_recent_bpm_data(client: Arc<Client>) -> impl IntoResponse {
-    let select_sql = "SELECT IDX, BPM, EMAIL, TAG, TIME FROM bpmdata ORDER BY TIME DESC LIMIT 1";
-    let row = client.query_one(select_sql, &[]).await.unwrap();
+    let select_sql = "SELECT IDX, BPM, EMAIL, TAG, TIME FROM bpmdata ORDER BY TIME DESC LIMIT 5"; // 최근 5개의 데이터 가져오기
+    let rows = client.query(select_sql, &[]).await.unwrap();
 
-    let bpm_data = BpmData {
+    let bpm_data: Vec<BpmData> = rows.iter().map(|row| BpmData {
         idx: row.get("IDX"),
         bpm: row.get("BPM"),
         email: row.get("EMAIL"),
         tag: row.get("TAG"),
         time: row.get("TIME"),
-    };
+    }).collect();
 
     Json(bpm_data)
 }
@@ -34,4 +34,3 @@ async fn get_recent_bpm_data(client: Arc<Client>) -> impl IntoResponse {
 pub fn create_routes(client: Arc<Client>) -> Router {
     Router::new().route("/", get(move || get_recent_bpm_data(client.clone())))
 }
-
