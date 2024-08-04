@@ -100,3 +100,5 @@ pub fn create_routes(client: Arc<Client>) -> Router {
 - `handle_post` 함수는 JSON 데이터를 파싱하고, 유효성을 검사하며, 데이터베이스에 삽입함
 - `insert_bpm_data` 함수는 데이터베이스에 BPM 데이터를 삽입하는 로직을 구현함
 - `create_routes` 함수는 라우터를 생성하여 POST 요청을 처리하는 엔드포인트를 정의함
+
+---
