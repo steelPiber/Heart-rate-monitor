@@ -12,7 +12,7 @@
 ├── README.md
 ├── src
 │   ├── client.rs
-│   ├── main.rs
+│   ├── main.rs #설명추가
 │   ├── routes
 │   │   ├── data.rs
 │   │   ├── min_hrt.rs
