@@ -53,7 +53,7 @@ app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
 
-app.get('/beat-track', (req, res) => {
+/*app.get('/beat-track', (req, res) => {
   const token = req.cookies.accessToken;
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'beat-track.html'));
 });
@@ -67,7 +67,7 @@ app.get('/sitemap', (req, res) => {
   const token = req.cookies.accessToken;
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'sitemap.html'));
 });
-
+*/ //google map 재정 문제로 인한 일시 정지
 app.get('/min1', (req, res) => {
   res.sendFile(__dirname + '/min1.html');
 });
