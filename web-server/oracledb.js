@@ -6,11 +6,13 @@ console.log(`0.1 : oracledb.js 모듈 분리`);
 const oracledb = require('oracledb');
 //const nodemailer = require('./mail_auth.js');
 //const pandas = require('pandas-js');
+require('dotenv').config();
+
 // Oracle DB 연결 구성
 const dbConfig = {
-  user: 'piber',
-  password: 'wjsansrk',
-  connectString: '202.31.246.30:1521/ORA21APEX'
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  connectString: process.env.DB_CONNECT_STRING
 };
 
 //Oracle DB 연결확인
