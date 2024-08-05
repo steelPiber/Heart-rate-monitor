@@ -49,24 +49,16 @@ git clone <repository_url>
 cd <repository_directory>
 ```
 
-#### 2. 환경 변수 설정
-`.env` 파일을 만들어 필요한 환경 변수를 설정함
-
-```sh
-cp .env.example .env
-# .env 파일을 열어 DATABASE_URL 등을 설정함
-```
-
-#### 3. Docker를 사용하여 애플리케이션 실행
-프로젝트는 Docker를 사용하여 실행할 수 있음
+#### 2. Docker를 사용하여 애플리케이션 실행
+내부 프로젝트에서 Docker를 사용하여 실행할 수 있음
 
 ```sh
 docker-compose up --build
 ```
 
-위 명령어는 Docker 이미지를 빌드하고 컨테이너를 시작함
+위 명령어를 통해 Docker 이미지를 빌드하고 컨테이너를 시작함
 
-#### 4. 애플리케이션 접근
+#### 3. 애플리케이션 접근
 애플리케이션이 성공적으로 시작되면, 다음과 같이 서버에 접근할 수 있음
 
 - 데이터 관련 라우트: `http://<server_ip>:13389/data`
@@ -74,7 +66,7 @@ docker-compose up --build
 - 현재 시간 라우트: `http://<server_ip>:13389/current-time`
 - 실시간 데이터 라우트: `http://<server_ip>:13389/realtime`
 - 최소 심박수 라우트: `http://<server_ip>:13389/min-bpm`
-
+- 또한 로그상에서 데이터 수신 상태 확인 가능
 ### 주의사항
 
 - 프로젝트를 실행하기 전에 Docker와 Docker Compose가 시스템에 설치되어 있어야 함
