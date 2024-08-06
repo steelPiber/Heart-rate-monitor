@@ -5,22 +5,9 @@ const url = require("url");
 const static = require('serve-static');
 const path = require('path');
 const oracleDB = require('./oracledb.js');
-const session = require('express-session');
 
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
-
-router.use(session({
-  secret: 'your_secret_key',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { 
-    secure: true,
-    maxAge: 1000 * 60 * 60,
-    httpOnly: true
-  }
-}));
-
 
 require("dotenv").config();
 
