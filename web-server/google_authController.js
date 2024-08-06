@@ -61,7 +61,7 @@ router.get("/login", async (req, res) => {
       const userEmail = userInfo.email;
       const userEmailWithoutDomain = userEmail.split('@')[0];
       const userProfileUrl = userInfo.picture; // 구글 프로필 URL
-
+      console.log('userEmail : ', userEmail);
       // 세션에 사용자 정보를 저장
       req.session.user = {
         email: userEmail,
