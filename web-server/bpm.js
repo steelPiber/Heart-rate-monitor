@@ -22,7 +22,7 @@ router.post('/data', async (req, res) => {
 // Realtime query handler
 router.get('/realtime-bpm', async (req, res) => {
   try {
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = req.session.user.email;
     const query = oracleDB.realtimeQuery();
     const result = await executeQuery(query, { Email: userEmail });
 
@@ -36,7 +36,7 @@ router.get('/realtime-bpm', async (req, res) => {
 // Min query handler
 router.get('/average-bpm', async (req, res) => {
   try {
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = req.session.user.email;
     const query = oracleDB.minQuery();
     const result = await executeQuery(query, { Email: userEmail });
 
@@ -50,7 +50,7 @@ router.get('/average-bpm', async (req, res) => {
 // Hour query handler
 router.get('/hour-bpm', async (req, res) => {
   try {
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = req.session.user.email;
     const query = oracleDB.hourQuery();
     const result = await executeQuery(query, { Email: userEmail });
 
@@ -64,7 +64,7 @@ router.get('/hour-bpm', async (req, res) => {
 // Day query handler
 router.get('/day-bpm', async (req, res) => {
   try {
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = req.session.user.email;
     const query = oracleDB.dayQuery();
     const result = await executeQuery(query, { Email: userEmail });
 
@@ -78,7 +78,7 @@ router.get('/day-bpm', async (req, res) => {
 // Week query handler
 router.get('/week-bpm', async (req, res) => {
   try {
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = req.session.user.email;
     const query = oracleDB.weekQuery();
     const result = await executeQuery(query, { Email: userEmail });
 
@@ -92,7 +92,7 @@ router.get('/week-bpm', async (req, res) => {
 // Month query handler
 router.get('/month-bpm', async (req, res) => {
   try {
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = req.session.user.email;
     const query = oracleDB.monthQuery();
     const result = await executeQuery(query, { Email: userEmail });
 
@@ -106,7 +106,7 @@ router.get('/month-bpm', async (req, res) => {
 // Year query handler
 router.get('/year-bpm', async (req, res) => {
   try {
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = req.session.user.email;
     const query = oracleDB.yearQuery();
     const result = await executeQuery(query, { Email: userEmail });
 
@@ -120,7 +120,7 @@ router.get('/year-bpm', async (req, res) => {
 // Realtime query handler
 router.get('/status', async (req, res) => {
   try {
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = req.session.user.email;
     const query = oracleDB.realtimeTagQuery();
     const result = await executeQuery(query, { Email: userEmail });
 
