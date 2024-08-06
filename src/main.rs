@@ -2,7 +2,8 @@ mod db; // 데이터베이스 모듈
 mod routes; // 라우트 모듈
 
 use axum::Router; // 라우터 생성 모듈
-use db::client::init_db; // 데이터베이스 초기화 함수
+use db::client::post_init_db; // 데이터베이스 초기화 함수
+use db::client::oracle_init_db; //오라클데이터베이 초기화 함수
 use db::schema::create_table_if_not_exists; // 테이블 생성 함수
 use dotenv::dotenv; // .env 파일을 로드하는 모듈
 use std::env; // 환경 변수 모듈
@@ -21,7 +22,7 @@ async fn main() {
         .unwrap_or("postgres://piber:wjsansrk@postgres/dbsafebpm".to_string()); //데이터베이스 초기화
 
     let client = Arc::new(
-        init_db(&database_url)
+        post_init_db(&database_url)
             .await
             .expect("Failed to initialize database"),
     ); // 데이터베이스 초기화
