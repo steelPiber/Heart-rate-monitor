@@ -70,7 +70,7 @@ router.get("/login", async (req, res) => {
 
       // 세션 저장 후 로그 기록을 위한 함수 호출
       await oracleDB.selectUserlog(userEmailWithoutDomain);
-      
+      console.log('req.session.user ', req.session.user);
       // 리디렉션
       res.redirect(`${REDIRECT_URL}`);
     } catch (error) {
