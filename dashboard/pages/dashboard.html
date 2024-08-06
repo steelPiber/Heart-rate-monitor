@@ -252,47 +252,55 @@
 <script src="../assets/js/menubar.js"></script>
 
 
-    <script> //태그값 변경시 아이콘 변경 스크립트
-        function fetchDynamicIconData() {
-            fetch('/status')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+    <script>
+    function fetchDynamicIconData() {
+        fetch('/status')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // 세션 만료 확인
+                if (data.session === 'none') {
+                    alert('세션이 만료되었습니다. 로그인 페이지로 이동합니다.');
+                    window.location.href = '/';
+                    return;
+                }
+
+                var serverTag = data[0]; // 서버에서 받은 태그 값
+
+                // 이미지 요소 선택
+                var imgElements = document.querySelectorAll(".dynamicImage");
+
+                // 태그 값에 따라 이미지 src 변경
+                imgElements.forEach(imgElement => {
+                    if (serverTag === "exercise") {
+                        imgElement.src = "../assets/img/workout.png";
+                    } else if (serverTag === "rest") {
+                        imgElement.src = "../assets/img/rest.png";
+                    } else if (serverTag === "sleep") {
+                        imgElement.src = "../assets/img/sleep.png";
+                    } else if (serverTag === "active") {
+                        imgElement.src = "../assets/img/active.png";
                     }
-                    return response.json();
-                })
-                .then(data => {
-                    var serverTag = data[0]; // 서버에서 받은 태그 값
-        
-                    // 이미지 요소 선택
-                    var imgElements = document.querySelectorAll(".dynamicImage");
-        
-                    // 태그 값에 따라 이미지 src 변경
-                    imgElements.forEach(imgElement => {
-                        if (serverTag === "exercise") {
-                            imgElement.src = "../assets/img/workout.png";
-                        } else if (serverTag === "rest") {
-                            imgElement.src = "../assets/img/rest.png";
-                        } else if (serverTag === "sleep") {
-                            imgElement.src = "../assets/img/sleep.png";
-                        } else if (serverTag === "active") {
-                            imgElement.src = "../assets/img/active.png";
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching status data:', error);
-                    // 에러 발생 시 로딩 이미지로 대체
-                    var imgElements = document.querySelectorAll(".dynamicImage");
-                    imgElements.forEach(imgElement => {
-                        imgElement.src = "../assets/img/loading.gif";
-                    });
                 });
-        }
-        
-        setInterval(fetchDynamicIconData, 1000);
-        document.addEventListener('DOMContentLoaded', fetchDynamicIconData);        
-    </script>
+            })
+            .catch(error => {
+                console.error('Error fetching status data:', error);
+                // 에러 발생 시 로딩 이미지로 대체
+                var imgElements = document.querySelectorAll(".dynamicImage");
+                imgElements.forEach(imgElement => {
+                    imgElement.src = "../assets/img/loading.gif";
+                });
+            });
+    }
+
+    setInterval(fetchDynamicIconData, 1000);
+    document.addEventListener('DOMContentLoaded', fetchDynamicIconData);
+</script>
+
 
     <script>//태그값 변경시 텍스트 변경 스크립트
         function fetchDynamicText() {
