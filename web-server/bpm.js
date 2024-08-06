@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const oracleDB = require('./oracledb.js');
-const { getUserEmailFromToken, executeQuery } = require('./utility.js'); // 유틸리티 함수들 사용
+const { executeQuery } = require('./utility.js'); // 유틸리티 함수들 사용
 
 // POST handler for /data
 router.post('/data', async (req, res) => {
