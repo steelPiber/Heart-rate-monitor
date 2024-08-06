@@ -9,13 +9,15 @@ const session = require('express-session');
 
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
+
 router.use(session({
   secret: 'your_secret_key',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   cookie: { 
-    secure: false,
-    maxAge: 1000 * 60 * 60 // 
+    secure: true,
+    maxAge: 1000 * 60 * 60,
+    httpOnly: true
   }
 }));
 
@@ -71,15 +73,19 @@ router.get("/login", async (req, res) => {
       const userInfo = await getUserInfo(accessToken);
       const userEmail = userInfo.email;
       const userEmailWithoutDomain = userEmail.split('@')[0];
-      
+      const userProfileUrl = userInfo.picture; // 구글 프로필 URL
+
       // 세션에 사용자 정보를 저장
       req.session.user = {
         email: userEmail,
-        accessToken: accessToken
+        profile: userProfileUrl
       };
 
-      res.redirect(`${REDIRECT_URL}/${userEmailWithoutDomain}?access_token=${accessToken}`);
+      // 세션 저장 후 로그 기록을 위한 함수 호출
       await oracleDB.selectUserlog(userEmailWithoutDomain);
+      
+      // 리디렉션
+      res.redirect(`${REDIRECT_URL}/${userEmailWithoutDomain}`);
     } catch (error) {
       console.error("Error retrieving user info:", error);
       res.status(500).send("Error retrieving user info");
@@ -96,7 +102,6 @@ router.get("/logout", (req, res) => {
       console.error("Error destroying session:", err);
       return res.status(500).send("Error logging out");
     } else {
-      res.clearCookie('connect.sid'); // express-session의 기본 쿠키 이름
       res.redirect('https://heartrate.ddns.net');
     }
   });
@@ -104,10 +109,7 @@ router.get("/logout", (req, res) => {
 
 router.get('/profile', async (req, res) => {
   try {
-    const token = req.cookies.accessToken; // 클라이언트에서 보내는 accessToken
-    const userInfo = await getUserInfo(token);
-    const userProfileUrl = userInfo.picture; // 구글 프로필 URL
-
+    userProfileUrl = req.session.user.profile;
     res.json({ userProfileUrl });
   } catch (error) {
     console.error("Error retrieving user profile:", error);
