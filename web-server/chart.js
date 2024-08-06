@@ -6,7 +6,7 @@ const { getUserEmailFromToken, executeQuery } = require('./utility.js'); // ìœ í
 // Hourly chart handler
 router.get('/hourly-chart', async (req, res) => {
   try {
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = req.session.user.email;
     const query = oracleDB.everyHourDuringTheDayQuery();
     const result = await executeQuery(query, { Email: userEmail });
 
@@ -35,7 +35,7 @@ router.get('/hourly-chart', async (req, res) => {
 // Weekly chart handler
 router.get('/weekly-chart', async (req, res) => {
   try {
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = req.session.user.email;
     const query = oracleDB.everySevenHourDuringTheWeekQuery();
     const result = await executeQuery(query, { Email: userEmail });
 
@@ -64,7 +64,7 @@ router.get('/weekly-chart', async (req, res) => {
 // Monthly chart handler
 router.get('/monthly-chart', async (req, res) => {
   try {
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = req.session.user.email;
     const query = oracleDB.everyDayDuringTheMonthQuery();
     const result = await executeQuery(query, { Email: userEmail });
 
@@ -87,7 +87,7 @@ router.get('/monthly-chart', async (req, res) => {
 // Daily tag chart handler
 router.get('/daily-tag-chart', async (req, res) => {
   try {
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = req.session.user.email;
     const query = oracleDB.daily_donut_chart();
     const result = await executeQuery(query, { Email: userEmail });
 
@@ -120,7 +120,7 @@ router.get('/daily-tag-chart', async (req, res) => {
 // Bar chart handler
 router.get('/bar-chart', async (req, res) => {
   try {
-    const userEmail = await getUserEmailFromToken(req);
+    const userEmail = req.session.user.email;
     const query = oracleDB.daily_bar_chart();
     const result = await executeQuery(query, { Email: userEmail });
 
