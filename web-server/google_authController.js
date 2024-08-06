@@ -14,7 +14,7 @@ require("dotenv").config();
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const AUTHORIZE_URI = "https://accounts.google.com/o/oauth2/v2/auth";
-const REDIRECT_URL = "https://heartrate.ddns.net/login";
+const REDIRECT_URL = "https://heartrate.ddns.net/login"; 
 const RESPONSE_TYPE = "code";
 const SCOPE = "openid%20profile%20email";
 const ACCESS_TYPE = "offline";
@@ -61,7 +61,6 @@ router.get("/login", async (req, res) => {
       const userEmail = userInfo.email;
       const userEmailWithoutDomain = userEmail.split('@')[0];
       const userProfileUrl = userInfo.picture; // 구글 프로필 URL
-      console.log('userEmail : ', userEmail);
       // 세션에 사용자 정보를 저장
       req.session.user = {
         email: userEmail,
@@ -70,9 +69,7 @@ router.get("/login", async (req, res) => {
 
       // 세션 저장 후 로그 기록을 위한 함수 호출
       await oracleDB.selectUserlog(userEmailWithoutDomain);
-      console.log('req.session.user ', req.session.user);
-      // 리디렉션
-      res.redirect(`${REDIRECT_URL}`);
+      res.redirect(`${REDIRECT_URL}/${userEmailWithoutDomain}`);
     } catch (error) {
       console.error("Error retrieving user info:", error);
       res.status(500).send("Error retrieving user info");
@@ -80,6 +77,10 @@ router.get("/login", async (req, res) => {
   } else {
     res.status(400).send("Code parameter missing");
   }
+});
+router.get('/login/:userEmailWithoutDomain', (req, res) => {
+   const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
+   res.redirect('/dashboard');
 });
 
 // 로그아웃 라우터 수정
