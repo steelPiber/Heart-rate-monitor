@@ -48,6 +48,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/dashboard', (req, res) => {
+    console.log('session.user: ', session.user.email);
     if (!req.session.user) {
         // 세션이 없는 경우 대시보드 페이지를 요청하지 않도록 리디렉션
         res.redirect('https://heartrate.ddns.net');
