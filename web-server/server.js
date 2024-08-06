@@ -1,6 +1,7 @@
 const http = require('http');
 const express = require('express');
 const path = require('path');
+const session = require('express-session');
 const oracleDB = require('./oracledb.js');
 const { router: googleAuthRouter } = require("./google_authController.js");
 const bpmRouter = require('./bpm.js'); // bpm 라우터 모듈 불러오기
@@ -8,6 +9,18 @@ const { executeQuery } = require('./utility.js'); // 유틸리티 함수들 사�
 const hrvRouter = require('./hrv.js');
 const chartRouter = require('./chart.js');
 const app = express();
+
+
+app.use(session({
+  secret: 'your_secret_key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { 
+    secure: true,
+    maxAge: 1000 * 60 * 60,
+    httpOnly: true
+  }
+}));
 
 app.use(express.json());
 app.use(googleAuthRouter);
