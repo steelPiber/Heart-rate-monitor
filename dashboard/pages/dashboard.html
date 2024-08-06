@@ -297,8 +297,10 @@
             });
     }
 
-    setInterval(fetchDynamicIconData, 1000);
-    document.addEventListener('DOMContentLoaded', fetchDynamicIconData);
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchDynamicIconData(); // 페이지 로드 시 한 번만 호출
+        setInterval(fetchDynamicIconData, 1000); // 주기적으로 호출
+    });
 </script>
 
 
