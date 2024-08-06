@@ -1,26 +1,25 @@
-# Rust 이미지 사용
+# 베이스 이미지 설정
 FROM rust:latest
 
-# 작업 디렉터리 설정
-WORKDIR /usr/src/app
+# 필요한 패키지 설치
+RUN apt-get update && apt-get install -y libaio1 unzip wget
 
-# 종속성 파일 복사
-COPY Cargo.toml Cargo.lock ./
+# Oracle Instant Client 설치
+RUN mkdir -p /opt/oracle
+RUN wget https://download.oracle.com/otn_software/linux/instantclient/2115000/instantclient-basic-linux.x64-21.15.0.0.0dbru.zip -O /tmp/instantclient-basic-linux.x64-21.15.0.0.0dbru.zip
+RUN unzip /tmp/instantclient-basic-linux.x64-21.15.0.0.0dbru.zip -d /opt/oracle
+RUN rm /tmp/instantclient-basic-linux.x64-21.15.0.0.0dbru.zip
+ENV LD_LIBRARY_PATH=/opt/oracle/instantclient_21_15
 
-# 소스 파일 복사 전 종속성만 먼저 빌드 (캐싱을 활용하여 빌드 속도 향상)
-RUN mkdir src
-RUN echo "fn main() {}" > src/main.rs
+# 프로젝트 디렉토리로 이동
+WORKDIR /app
+
+# 소스 파일 복사
+COPY . .
+
+# Rust 빌드
 RUN cargo build --release
 
-# 실제 소스 파일 복사
-COPY src ./src
-
-# 애플리케이션 빌드
-RUN cargo build --release
-
-# 포트 설정
-EXPOSE 13389
-
-# 컨테이너 시작 시 실행할 명령
-CMD ["./target/release/rs-hr"]
+# 실행 명령어 설정
+CMD ["./target/release/test"]
 

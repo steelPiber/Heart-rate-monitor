@@ -43,15 +43,16 @@ pub async fn post_init_db(database_url: &str) -> Result<Client, io::Error> {
 
 /* 
  오라클 데이터베이스 초기화 함수
-*/
+
 pub fn oracle_init_db(ora_user:&str,ora_pass:&str, ora_server:&str) -> Result<Connection,Error>{
-    let ora_id = "piber";
-    let ora_pass = "wjsansrk";
-    let server_ip_port =  "202.31.246.30:1521";
+    let ora_id = "";
+    let ora_pass =""; 
+    let server_ip_port =  "";
     Connection::connect(ora_id,ora_pass,server_ip_port) 
 }
 
 pub fn ora_get_col_count(conn:&Connection, ) -> Result<usize,Error> {
     let count_query = format!("SELECT COUNT(*) FROM BPM WHERE BPM_DATA=UPPER(:1)"); 
-    let row = con.query_row_as::<usize>(&count_query, &[&bpm_data.to_uppercase()])?;
-} 
+    let row = conn.query_row_as::<usize>(&count_query, &[&bpm_data.to_uppercase()])?;
+}
+*/ 

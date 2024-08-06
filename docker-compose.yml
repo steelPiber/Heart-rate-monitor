@@ -1,31 +1,23 @@
 version: '3.8'
 
 services:
-  postgres:
-    build:
-      context: .
-      dockerfile: Dockerfile.postgres
-    environment:
-      POSTGRES_USER: piber
-      POSTGRES_PASSWORD: wjsansrk
-      POSTGRES_DB: dbsafebpm
-      TZ: "Asia/Seoul"
-      PGTZ: "Asia/Seoul"
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
   rust-app:
     build: .
+    container_name: rust-app
     environment:
-      DATABASE_URL: postgres://piber:wjsansrk@postgres/dbsafebpm
-      TZ: "Asia/Seoul"
-    ports:
-      - "13389:13389"
-    depends_on:
-      - postgres
+      - LD_LIBRARY_PATH=/opt/oracle/instantclient_21_15
+    stdin_open: true
+    tty: true
 
-volumes:
-  postgres_data:
+  oracle-db:
+    image: oracle/database:21.3.0-ee
+    container_name: oracle-db
+    ports:
+      - "1521:1521"
+    environment:
+      - ORACLE_PWD=your_password
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'SELECT 1 FROM DUAL;' | sqlplus system/your_password@localhost:1521/xe"]
+      interval: 10s
+      retries: 10
 
