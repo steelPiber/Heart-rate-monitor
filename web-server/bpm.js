@@ -22,10 +22,6 @@ router.post('/data', async (req, res) => {
 // Realtime query handler
 router.get('/realtime-bpm', async (req, res) => {
   try {
-    // 세션이 있는지 확인
-    if (!req.session || !req.session.user || !req.session.user.email) {
-      return res.json({ session: 'none' });
-    }
     const userEmail = req.session.user.email;
     const query = oracleDB.realtimeQuery();
     const result = await executeQuery(query, { Email: userEmail });
@@ -124,6 +120,10 @@ router.get('/year-bpm', async (req, res) => {
 // Realtime query handler
 router.get('/status', async (req, res) => {
   try {
+    // 세션이 있는지 확인
+    if (!req.session || !req.session.user || !req.session.user.email) {
+      return res.json({ session: 'none' });
+    }
     const userEmail = req.session.user.email;
     const query = oracleDB.realtimeTagQuery();
     const result = await executeQuery(query, { Email: userEmail });
