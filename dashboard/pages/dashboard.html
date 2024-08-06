@@ -382,7 +382,22 @@
         });   
     </script>
 
-
+    <script>
+       document.addEventListener('DOMContentLoaded', function() {
+        // 로그인 상태를 확인하는 요청
+        fetch('/dashboard-check')
+            .then(response => {
+                if (response.redirected) {
+                    // 리디렉션이 발생하면 클라이언트에서 알림을 표시
+                    alert('세션이 없습니다. 로그인 페이지로 리디렉션됩니다.');
+                    window.location.href = response.url; // 서버에서 리디렉션 URL로 이동
+                }
+            })
+            .catch(error => {
+                console.error('Error checking login status:', error);
+            });
+        });
+    </script>
     <!--구현한 스크립트들-->
     <script src="../assets/js/HR-update.js"></script>
     <script src="../assets/js/charts.js"></script>
