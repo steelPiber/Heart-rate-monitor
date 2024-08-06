@@ -6,6 +6,11 @@ const { executeQuery } = require('./utility.js'); // 유틸리티 함수들 사�
 // Hourly chart handler
 router.get('/hourly-chart', async (req, res) => {
   try {
+    // 세션이 있는지 확인
+    if (!req.session || !req.session.user || !req.session.user.email) {
+      return res.json({ session: 'none' });
+    }
+
     const userEmail = req.session.user.email;
     const query = oracleDB.everyHourDuringTheDayQuery();
     const result = await executeQuery(query, { Email: userEmail });
