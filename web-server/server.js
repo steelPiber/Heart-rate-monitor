@@ -44,17 +44,6 @@ app.get('/dashboard', (req, res) => {
     }
 });
 
-// 세션 상태를 확인하는 엔드포인트
-app.get('/dashboard-check', (req, res) => {
-    if (!req.session.user) {
-        // 세션이 없는 경우 리디렉션 응답
-        res.redirect('https://heartrate.ddns.net');
-    } else {
-        // 세션이 있는 경우 응답
-        res.status(200).send('Logged In');
-    }
-});
-
 /*app.get('/beat-track', (req, res) => {
   const token = req.cookies.accessToken;
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'beat-track.html'));
