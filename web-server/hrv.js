@@ -2,7 +2,7 @@ const express = require('express');
 const oracleDB = require('./oracledb.js');
 const router = express.Router();
 const moment = require('moment');
-const { getUserEmailFromToken, executeQuery } = require('./utility.js');
+const { executeQuery } = require('./utility.js');
 
 // HRV 분석 함수들
 function calculateRRIntervals(data) {
