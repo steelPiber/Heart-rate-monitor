@@ -1,7 +1,6 @@
 const http = require('http');
 const express = require('express');
 const path = require('path');
-const cookieParser = require('cookie-parser');
 const oracleDB = require('./oracledb.js');
 const { router: googleAuthRouter } = require("./google_authController.js");
 const bpmRouter = require('./bpm.js'); // bpm 라우터 모듈 불러오기
@@ -11,7 +10,6 @@ const chartRouter = require('./chart.js');
 const app = express();
 
 app.use(express.json());
-app.use(cookieParser());
 app.use(googleAuthRouter);
 app.use(bpmRouter); // bpm 라우터 사용
 app.use(hrvRouter);
@@ -21,7 +19,6 @@ app.use(chartRouter);
 app.use(express.static(path.join(__dirname, '/dashboard')));
 const server = http.createServer(app);
 const PORT_HTTP = 8081;
-const PORT = 13389;
 
 // Oracle DB 연결 확인
 oracleDB.connectToOracleDB()
@@ -36,22 +33,15 @@ oracleDB.connectToOracleDB()
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
-
-app.get('/login/:userEmailWithoutDomain', (req, res) => {
-  const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
-  const accessToken = req.query.access_token;
-  console.log('로그인 토큰', accessToken);
-  if (!accessToken) {
-    res.status(400).send('Access token is missing');
-    return;
-  }
-  res.cookie('accessToken', accessToken);
-  res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
-});
 app.get('/dashboard', (req, res) => {
-  const token = req.cookies.accessToken;
+  if (!req.session.user) {
+    // 세션이 없는 경우, 지정된 URL로 리디렉션
+    return res.redirect('https://heartrate.ddns.net');
+  }
+  // 세션이 있는 경우, 대시보드 페이지를 반환
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
+
 
 /*app.get('/beat-track', (req, res) => {
   const token = req.cookies.accessToken;
@@ -79,7 +69,4 @@ app.get('/hourly', (req, res) => {
 // Start the HTTP server on port 8081
 app.listen(PORT_HTTP, () => {
   console.log(`HTTP server is running on port ${PORT_HTTP}`);
-});
-app.listen(PORT, () => {
-  console.log(`server is running on port ${PORT}`);
 });
