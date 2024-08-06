@@ -373,13 +373,18 @@
         fetch('/hourly-chart')
         .then(response => response.json())
         .then(responseData => {
-            const { userEmail, data } = responseData;
-            console.log('User Email:', userEmail); // 추가된 userEmail을 로그에 출력
-            updateChart(data, 'graph'); // 'graph' 클래스를 가진 모든 캔버스에 차트를 생성
+            if (responseData.session === 'none') {
+                alert('세션이 만료되었습니다');
+                window.location.href = 'https://heartrate.ddns.net';
+            } else {
+                const { userEmail, data } = responseData;
+                console.log('User Email:', userEmail); // 추가된 userEmail을 로그에 출력
+                updateChart(data, 'graph'); // 'graph' 클래스를 가진 모든 캔버스에 차트를 생성
+            }
         })
         .catch(error => {
-            console.error('Error fetching initial chart data:', error);
-        });   
+        console.error('Error fetching hourly chart:', error);
+    });   
     </script>
 
     <!--구현한 스크립트들-->
