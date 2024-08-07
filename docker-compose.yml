@@ -1,23 +1,49 @@
 version: '3.8'
 
 services:
-  rust-app:
-    build: .
-    container_name: rust-app
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
     environment:
-      - LD_LIBRARY_PATH=/opt/oracle/instantclient_21_15
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB:dbname
+      TZ: "world/time"
+      PGTZ: "world/time"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  rust-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.rust
+    environment:
+      DATABASE_URL: postgres://user:password@postgres/dbname
+      TZ: "world/time"
+    ports:
+      - "13389:13389"
+    depends_on:
+      - postgres
+
+  oracledb-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.oracle
+    container_name: oracledb-test
+    environment:
+      - LD_LIBRARY_PATH=/opt/oracle/instantclient_21_14
     stdin_open: true
     tty: true
+    networks:
+      - app-network
 
-  oracle-db:
-    image: oracle/database:21.3.0-ee
-    container_name: oracle-db
-    ports:
-      - "1521:1521"
-    environment:
-      - ORACLE_PWD=your_password
-    healthcheck:
-      test: ["CMD-SHELL", "echo 'SELECT 1 FROM DUAL;' | sqlplus system/your_password@localhost:1521/xe"]
-      interval: 10s
-      retries: 10
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
 
