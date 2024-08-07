@@ -55,12 +55,19 @@ cd <repository_directory>
 내부 프로젝트에서 Docker를 사용하여 실행할 수 있음
 
 ```sh
-docker-compose up --build
+docker-compose up --build postgres rust-app
 ```
+#### 3. Docker를 모듈단위로 애플리케이션 테스트 실행
+내부 프로젝트에서 모듈 컨테이너 단위로 프로그램 테스트 실행
+
+```sh
+docker-compose run --rm oracledb-test
+```
+
 
 위 명령어를 통해 Docker 이미지를 빌드하고 컨테이너를 시작함
 
-#### 3. 애플리케이션 접근
+#### 4. 애플리케이션 접근
 애플리케이션이 성공적으로 시작되면, 다음과 같이 서버에 접근할 수 있음
 
 - 데이터 관련 라우트: `http://<server_ip>:13389/data`
