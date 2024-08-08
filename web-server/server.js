@@ -10,19 +10,20 @@ const hrvRouter = require('./hrv.js');
 const chartRouter = require('./chart.js');
 const app = express();
 
-
 app.use(session({
   secret: 'your_secret_key',
   resave: false,
   saveUninitialized: true,
   cookie: { 
     secure: false,
-    maxAge: 1000 * 60 * 60,
+    maxAge: 1000 * 60 * 60, // 1 hour
     httpOnly: true
   }
 }));
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Form 데이터 처리 추가
+
 app.use(googleAuthRouter);
 app.use(bpmRouter); // bpm 라우터 사용
 app.use(hrvRouter);
@@ -30,17 +31,6 @@ app.use(chartRouter);
 
 // 정적 파일 미들웨어를 사용하여 CSS, 이미지, JS 등의 정적 파일 제공
 app.use(express.static(path.join(__dirname, '/dashboard')));
-const server = http.createServer(app);
-const PORT_HTTP = 8081;
-
-// Oracle DB 연결 확인
-oracleDB.connectToOracleDB()
-  .then(connection => {
-    console.log('Oracle DB 연결 성공');
-  })
-  .catch(error => {
-    console.error('Oracle DB 연결 실패:', error);
-  });
 
 // Serve HTML page at port 8081
 app.get('/', (req, res) => {
@@ -67,16 +57,22 @@ app.get('/session-time', (req, res) => {
     // 남은 세션 시간 계산
     const sessionExpiry = req.session.cookie.expires;
     const now = new Date();
-    const remainingTime = Math.max(0, Math.floor((sessionExpiry - now) / 1000)); // 초 단위로 계산
 
-    res.json({ remainingTime });
+    if (sessionExpiry instanceof Date) {
+      const remainingTime = Math.max(0, Math.floor((sessionExpiry - now) / 1000)); // 초 단위로 계산
+      res.json({ remainingTime });
+    } else {
+      res.status(500).send('세션 만료 시간 오류'); // 만료 시간이 Date 객체가 아닌 경우 처리
+    }
   } catch (err) {
+    console.error('세션 시간 조회 중 오류 발생:', err); // 오류 로그
     res.status(500).send('세션 시간 조회 중 오류 발생'); // 오류 처리
   }
 });
 
-
-/*app.get('/beat-track', (req, res) => {
+// 주석 처리된 라우팅 복구 예시
+/*
+app.get('/beat-track', (req, res) => {
   const token = req.cookies.accessToken;
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'beat-track.html'));
 });
@@ -90,16 +86,27 @@ app.get('/sitemap', (req, res) => {
   const token = req.cookies.accessToken;
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'sitemap.html'));
 });
-*/ //google map 재정 문제로 인한 일시 정지
+*/
+
 app.get('/min1', (req, res) => {
-  res.sendFile(__dirname + '/min1.html');
-});
-app.get('/hourly', (req, res) => {
-  res.sendFile(__dirname + '/hourlychart.html');
+  res.sendFile(path.join(__dirname, 'min1.html'));
 });
 
+app.get('/hourly', (req, res) => {
+  res.sendFile(path.join(__dirname, 'hourlychart.html'));
+});
 
 // Start the HTTP server on port 8081
+const PORT_HTTP = 8081;
 app.listen(PORT_HTTP, () => {
   console.log(`HTTP server is running on port ${PORT_HTTP}`);
 });
+
+// Oracle DB 연결 확인
+oracleDB.connectToOracleDB()
+  .then(connection => {
+    console.log('Oracle DB 연결 성공');
+  })
+  .catch(error => {
+    console.error('Oracle DB 연결 실패:', error);
+  });
