@@ -57,7 +57,7 @@ app.get('/dashboard', (req, res) => {
     }
 });
 
-// Assuming you have a route to get the session time
+// 세션 시간 측정 및 만료시 만료 표시 전송
 app.get('/session-time', (req, res) => {
   try {
     if (!req.session || !req.session.user || !req.session.user.email) {
