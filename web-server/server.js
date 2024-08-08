@@ -57,23 +57,24 @@ app.get('/dashboard', (req, res) => {
     }
 });
 
-// 세션 시간 측정 및 만료시 만료 표시 전송
+// 세션 만료 시간 조회 API
 app.get('/session-time', (req, res) => {
   try {
     if (!req.session || !req.session.user || !req.session.user.email) {
-      return res.json({ session: 'none' });
+      return res.json({ session: 'none' }); // 세션이 없거나 사용자 정보가 없는 경우
     }
 
-    // Calculate remaining session time (example)
+    // 남은 세션 시간 계산
     const sessionExpiry = req.session.cookie.expires;
     const now = new Date();
-    const remainingTime = Math.max(0, Math.floor((sessionExpiry - now) / 1000)); // in seconds
+    const remainingTime = Math.max(0, Math.floor((sessionExpiry - now) / 1000)); // 초 단위로 계산
 
     res.json({ remainingTime });
   } catch (err) {
-    res.status(500).send('Error retrieving session time');
+    res.status(500).send('세션 시간 조회 중 오류 발생'); // 오류 처리
   }
 });
+
 
 /*app.get('/beat-track', (req, res) => {
   const token = req.cookies.accessToken;
