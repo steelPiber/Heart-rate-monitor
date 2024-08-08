@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link id="pagestyle" href="../assets/css/Layout.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.css" />
@@ -7,23 +8,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Heart Dashboard</title>
 </head>
+
 <body>
-   <!--PC 네비바-->
-   <nav class="nav-pc">
+    <!--PC 네비바-->
+    <nav class="nav-pc">
         <div class="hamburger-pc" id="hamburger-pc">☰</div>
         <ul class="nav-links" id="nav-links">
             <li><a href="/dashboard"><img src="../assets/img/bottom_icon03-w.png"><span>메인보드</span></a></li>
             <li><a href="/beat-track"><img src="../assets/img/bottom_icon02-w.png"><span>트레이닝</span></a></li>
-            <li><a href="/training-record"><img src="../assets/img/bottom_icon04-w.png"><span>트레이닝 기록</span></a></li>        
+            <li><a href="/training-record"><img src="../assets/img/bottom_icon04-w.png"><span>트레이닝 기록</span></a></li>
             <!-- <li><a href="/health-checkup"><img src="../assets/img/bottom_icon04-w.png"><span>건강 진단</span></a></li>         -->
         </ul>
         <div class="user-profile-img"><img id="profile-img-pc" src="" alt="프로필 이미지"></div>
-        <div class="nav-logout logout"><a href="/logout"></a><img src="../assets/img/logout-w.png"><span>로그아웃</span></div>    
+        <div class="nav-logout logout"><a href="/logout"></a><img src="../assets/img/logout-w.png"><span>로그아웃</span></div>
     </nav>
     <div class="overlay" id="overlay"></div>
     <!-- 모바일 네비바 -->
     <div class="bar">Heart Rate Monitor</div>
-    <div class="hamburger-mob" id="hamburger-mob">☰</div> 
+    <div class="hamburger-mob" id="hamburger-mob">☰</div>
     <nav class="nav-mob" id="nav-mob">
         <a href="/dashboard">메인 보드</a>
         <a href="/beat-track">트레이닝</a>
@@ -32,28 +34,30 @@
     </nav>
     <!--pc 전용 레이아웃-->
     <<div class="wrap-cont-pc">
-    <div class="flex-container">
-        <a href="/dashboard"><img src="../assets/img/logo.png" alt="Logo"></a>
-        <!-- 세션 만료 시간 표시 -->
-        <div class="session-time" id="session-time"></div>
-    </div>
+        <div class="flex-container">
+            <a href="/dashboard"><img src="../assets/img/logo.png" alt="Logo"></a>
+            <!-- 세션 만료 시간 표시 -->
+            <div class="session-time" id="session-time"></div>
+        </div>
         <div class="first-row">
             <div class="rt-heart-board">
                 <div class="container-title" style="color: #fff;"> 실시간 </div>
                 <ul>
                     <li><img src="../assets/img/heart-shape.png" alt=""></li>
-                    <li><div class="heart-rate-container-big">
-                        <div class="heart-rate">Real Time</div>
-                        <div class="heart-rate"><span class="real-time">
-                            <div class="bpmValue">0</div></span></div>
+                    <li>
+                        <div class="heart-rate-container-big">
+                            <div class="heart-rate">Real Time</div>
+                            <div class="heart-rate"><span class="real-time">
+                                    <div class="bpmValue">0</div>
+                                </span></div>
                     </li>
                 </ul>
-            </div>        
+            </div>
             <div class="status-container">
                 <div class="outer-circle"></div>
                 <div class="inner-circle"></div>
                 <div class="status-icon">
-                    <img src="../assets/img/sleep.png"  class="dynamicImage">
+                    <img src="../assets/img/sleep.png" class="dynamicImage">
                     <span class="status-text">sleep</span>
                 </div>
             </div>
@@ -110,9 +114,9 @@
                     <canvas class="donut-graph" width="300" height="300"></canvas>
                 </div>
             </div>
-            <div class="bar-chart-container"  data-simplebar style="overflow-x: auto; overflow-y:hidden; white-space:nowrap;">
+            <div class="bar-chart-container" data-simplebar style="overflow-x: auto; overflow-y:hidden; white-space:nowrap;">
                 <div class="container-title">시간별 활동 통계</div>
-                <div class="bar-chart-wrap" >
+                <div class="bar-chart-wrap">
                     <canvas class="bar-graph" width="1000" height="300" style="padding-bottom: 20px;"></canvas>
                 </div>
             </div>
@@ -126,134 +130,149 @@
                     <li class="button"><a href="#" data-url="monthly-chart">Monthly</a></li>
                 </ul>
                 <div class="pc-chart-wrap" style="height: 90%;">
-                    <canvas class="graph" ></canvas>
+                    <canvas class="graph"></canvas>
                 </div>
             </div>
         </div>
-    </div>
+        </div>
 
-    <!--모바일 전용 레이아웃-->
-    <div class="wrap-cont">
-        <h1>(로그인사용자) <div class="status" style="margin-bottom: 16px; margin-top:16px;">
-            <img src="../assets/img/normal.png" class="dynamicImage">
-            <span class="status-text"></span>
-        </div></h1>        
-        <div class="dash-board">
-            <div class="heart-board">         
-                <ul>
-                    <li><img src="../assets/img/heart-shape.png" alt=""></li>
-                    <li><div class="heart-rate-container-big">
-                        <div class="heart-rate">Real Time</div>
-                        <div class="heart-rate"><span class="real-time">
-                            <div class="bpmValue">0</div></span></div>
-                    </li>
+        <!--모바일 전용 레이아웃-->
+        <div class="wrap-cont">
+            <h1>(로그인사용자) <div class="status" style="margin-bottom: 16px; margin-top:16px;">
+                    <img src="../assets/img/normal.png" class="dynamicImage">
+                    <span class="status-text"></span>
+                </div>
+            </h1>
+            <div class="dash-board">
+                <div class="heart-board">
+                    <ul>
+                        <li><img src="../assets/img/heart-shape.png" alt=""></li>
+                        <li>
+                            <div class="heart-rate-container-big">
+                                <div class="heart-rate">Real Time</div>
+                                <div class="heart-rate"><span class="real-time">
+                                        <div class="bpmValue">0</div>
+                                    </span></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="scroll-board" data-simplebar>
+
+                    <div class="heart-rate-container">
+                        <div class="heart-rate">분 평균</div>
+                        <div class="heart-rate">
+                            <div class="minbpmContainer">0</div>
+                        </div>
+                    </div>
+
+                    <div class="heart-rate-container">
+                        <div class="heart-rate">시간 평균</div>
+                        <div class="heart-rate">
+                            <div class="hourbpmContainer">0</div>
+                        </div>
+                    </div>
+
+                    <div class="heart-rate-container">
+                        <div class="heart-rate">일 평균</div>
+                        <div class="heart-rate">
+                            <div class="daybpmContainer">0</div>
+                        </div>
+                    </div>
+
+                    <div class="heart-rate-container">
+                        <div class="heart-rate">주 평균</div>
+                        <div class="heart-rate">
+                            <div class="weekbpmContainer">0</div>
+                        </div>
+                    </div>
+
+                    <div class="heart-rate-container">
+                        <div class="heart-rate">월 평균</div>
+                        <div class="heart-rate">
+                            <div class="monthbpmContainer">0</div>
+                        </div>
+                    </div>
+
+                    <div class="heart-rate-container">
+                        <div class="heart-rate">연 평균</div>
+                        <div class="heart-rate">
+                            <div class="yearbpmContainer">0</div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="chart-container-main">
+                <div class="container-title-main">심박수 평균</div>
+
+                <ul class="button-container">
+                    <li class="button active"><a href="#" data-url="hourly-chart">Daily</a></li>
+                    <li class="button"><a href="#" data-url="weekly-chart">Weekly</a></li>
+                    <li class="button"><a href="#" data-url="monthly-chart">Monthly</a></li>
                 </ul>
+
+                <canvas class="graph"></canvas>
+
             </div>
-            <div class="scroll-board" data-simplebar>
-    
-                <div class="heart-rate-container">
-                <div class="heart-rate">분 평균</div>
-                <div class="heart-rate">
-                    <div class="minbpmContainer">0</div></div></div>
-            
-                <div class="heart-rate-container">
-                <div class="heart-rate">시간 평균</div>
-                <div class="heart-rate">
-                    <div class="hourbpmContainer">0</div></div></div>
-        
-                <div class="heart-rate-container">
-                <div class="heart-rate">일 평균</div>
-                <div class="heart-rate">
-                    <div class="daybpmContainer">0</div></div></div>
-
-                <div class="heart-rate-container">
-                <div class="heart-rate">주 평균</div>
-                <div class="heart-rate">
-                    <div class="weekbpmContainer">0</div></div></div>
-
-                <div class="heart-rate-container">
-                <div class="heart-rate">월 평균</div>
-                <div class="heart-rate">
-                    <div class="monthbpmContainer">0</div></div></div>
-
-                <div class="heart-rate-container">
-                <div class="heart-rate">연 평균</div>
-                <div class="heart-rate">
-                    <div class="yearbpmContainer">0</div></div></div>
-                 
-    
+            <div class="chart-container" data-simplebar style="overflow-x: auto; overflow-y:hidden; white-space:nowrap;">
+                <div class="container-title" style="padding-top: 0;">하루 활동 통계</div>
+                <canvas class="bar-graph" width="1000" height="350" style="padding-bottom: 20px;"></canvas>
             </div>
-                   
-        </div>
-    
-        <div class="chart-container-main">
-            <div class="container-title-main">심박수 평균</div>
-
-            <ul class="button-container">
-                <li class="button active"><a href="#" data-url="hourly-chart">Daily</a></li>
-                <li class="button"><a href="#" data-url="weekly-chart">Weekly</a></li>
-                <li class="button"><a href="#" data-url="monthly-chart">Monthly</a></li>
-            </ul>
-                
-            <canvas class="graph"></canvas>
-
-        </div>
-        <div class="chart-container" data-simplebar style="overflow-x: auto; overflow-y:hidden; white-space:nowrap;" >
-            <div class="container-title" style="padding-top: 0;">하루 활동 통계</div>
-            <canvas class="bar-graph" width="1000" height="350" style="padding-bottom: 20px;"></canvas>
-        </div>
-        <div class="chart-container">
-            <div class="container-title">시간별 활동 통계 </div>
-            <div class="mob-donut-wrap">
-                <canvas class="donut-graph"></canvas>
+            <div class="chart-container">
+                <div class="container-title">시간별 활동 통계 </div>
+                <div class="mob-donut-wrap">
+                    <canvas class="donut-graph"></canvas>
+                </div>
+                <img id="centerIcon" src="" alt="Icon" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
             </div>
-            <img id="centerIcon" src="" alt="Icon" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-        </div>
 
-        <!-- 모바일 바닥글 (로그아웃버튼) -->
-        <div class="footer">
-            <div class="footer-nav">
-                <ul class="d-flex justify-content-around">
-                    <li class="footer-logout"><a href="/logout"> 로그아웃 </a></li>
-                </ul>
+            <!-- 모바일 바닥글 (로그아웃버튼) -->
+            <div class="footer">
+                <div class="footer-nav">
+                    <ul class="d-flex justify-content-around">
+                        <li class="footer-logout"><a href="/logout"> 로그아웃 </a></li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
 
         <!-- 모바일 바닥 아이콘 리스트 -->
-    <div class="bottom_icon">
-        <ul>
-            <li>
-                <div class="user-profile-img-mob"><img id="profile-img-mob" src="" alt=""></div>
-            </li>
-            <li>
-                <a href="../index.html"><img src="../assets/img/bottom_icon01.png"></a></li>
-            <li>
-                <a href="/beat-track"><img src="../assets/img/bottom_icon02.png"></a></li>            
-            <li>
-                <a href="/dashboard"><img src="../assets/img/bottom_icon03.png"></a></li>
-            <li>
-                <a href="/training-record"><img src="../assets/img/bottom_icon04.png"></a></li>
-            <li>
-                <a href="/sitemap"><img src="../assets/img/bottom_icon05.png"></a></li>
-        </ul>
-    </div>
-    
+        <div class="bottom_icon">
+            <ul>
+                <li>
+                    <div class="user-profile-img-mob"><img id="profile-img-mob" src="" alt=""></div>
+                </li>
+                <li>
+                    <a href="../index.html"><img src="../assets/img/bottom_icon01.png"></a></li>
+                <li>
+                    <a href="/beat-track"><img src="../assets/img/bottom_icon02.png"></a></li>
+                <li>
+                    <a href="/dashboard"><img src="../assets/img/bottom_icon03.png"></a></li>
+                <li>
+                    <a href="/training-record"><img src="../assets/img/bottom_icon04.png"></a></li>
+                <li>
+                    <a href="/sitemap"><img src="../assets/img/bottom_icon05.png"></a></li>
+            </ul>
+        </div>
+
 </body>
 <!--플러그인 스크립트들-->
 <script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
-    <script src="../assets/js/core/popper.min.js"></script>
-    <script src="../assets/js/core/bootstrap.min.js"></script>
-    <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
-    <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
-    <script src="../assets/js/plugins/chartjs.min.js"></script>
-    
+<script src="../assets/js/core/popper.min.js"></script>
+<script src="../assets/js/core/bootstrap.min.js"></script>
+<script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+<script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+<script src="../assets/js/plugins/chartjs.min.js"></script>
+
 
 <!-- 메뉴바 스크립트 -->
 <script src="../assets/js/menubar.js"></script>
 
 
-    <script>
+<script>
     function fetchDynamicIconData() {
         fetch('/status')
             .then(response => {
@@ -262,32 +281,32 @@
                 }
                 return response.json();
             })
-                var serverTag = data[0]; // 서버에서 받은 태그 값
+        var serverTag = data[0]; // 서버에서 받은 태그 값
 
-                // 이미지 요소 선택
-                var imgElements = document.querySelectorAll(".dynamicImage");
+        // 이미지 요소 선택
+        var imgElements = document.querySelectorAll(".dynamicImage");
 
-                // 태그 값에 따라 이미지 src 변경
-                imgElements.forEach(imgElement => {
-                    if (serverTag === "exercise") {
-                        imgElement.src = "../assets/img/workout.png";
-                    } else if (serverTag === "rest") {
-                        imgElement.src = "../assets/img/rest.png";
-                    } else if (serverTag === "sleep") {
-                        imgElement.src = "../assets/img/sleep.png";
-                    } else if (serverTag === "active") {
-                        imgElement.src = "../assets/img/active.png";
-                    }
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching status data:', error);
-                // 에러 발생 시 로딩 이미지로 대체
-                var imgElements = document.querySelectorAll(".dynamicImage");
-                imgElements.forEach(imgElement => {
-                    imgElement.src = "../assets/img/loading.gif";
-                });
-            });
+        // 태그 값에 따라 이미지 src 변경
+        imgElements.forEach(imgElement => {
+            if (serverTag === "exercise") {
+                imgElement.src = "../assets/img/workout.png";
+            } else if (serverTag === "rest") {
+                imgElement.src = "../assets/img/rest.png";
+            } else if (serverTag === "sleep") {
+                imgElement.src = "../assets/img/sleep.png";
+            } else if (serverTag === "active") {
+                imgElement.src = "../assets/img/active.png";
+            }
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching status data:', error);
+        // 에러 발생 시 로딩 이미지로 대체
+        var imgElements = document.querySelectorAll(".dynamicImage");
+        imgElements.forEach(imgElement => {
+            imgElement.src = "../assets/img/loading.gif";
+        });
+    });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -295,133 +314,137 @@
         setInterval(fetchDynamicIconData, 1000); // 주기적으로 호출
     });
 </script>
-    <script>
-// 세션 만료 시간 업데이트 함수
-function updateSessionTime() {
-    fetch('/session-time')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok'); // 네트워크 응답 오류 처리
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.session === 'none') {
-                // 세션이 만료된 경우 처리
-                document.getElementById('session-time').textContent = 'Session expired';
-                return;
-            }
+<script>
+    // 세션 만료 시간 업데이트 함수
+    function updateSessionTime() {
+        fetch('/session-time')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok'); // 네트워크 응답 오류 처리
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.session === 'none') {
+                    // 세션이 만료된 경우 처리
+                    document.getElementById('session-time').textContent = 'Session expired';
+                    return;
+                }
 
-            // 남은 시간 계산 (분과 초)
-            const remainingTime = data.remainingTime;
-            const minutes = Math.floor(remainingTime / 60);
-            const seconds = remainingTime % 60;
+                // 남은 시간 계산 (분과 초)
+                const remainingTime = data.remainingTime;
+                const minutes = Math.floor(remainingTime / 60);
+                const seconds = remainingTime % 60;
 
-            document.getElementById('session-time').textContent = `${minutes}m ${seconds}s`;
-        })
-        .catch(error => {
-            console.error('세션 시간 조회 중 오류 발생:', error); // 오류 처리
-            document.getElementById('session-time').textContent = 'Error';
-        });
-}
+                document.getElementById('session-time').textContent = `${minutes}m ${seconds}s`;
+            })
+            .catch(error => {
+                console.error('세션 시간 조회 중 오류 발생:', error); // 오류 처리
+                document.getElementById('session-time').textContent = 'Error';
+            });
+    }
 
-// 30초마다 세션 시간 업데이트
-setInterval(updateSessionTime, 1000);
+    // 1초마다 세션 시간 업데이트
+    setInterval(updateSessionTime, 1000);
 
-// 페이지 로드 시 초기 세션 시간 업데이트
-document.addEventListener('DOMContentLoaded', updateSessionTime);
-    </script>
+    // 페이지 로드 시 초기 세션 시간 업데이트
+    document.addEventListener('DOMContentLoaded', updateSessionTime);
+</script>
 
-    <script>//태그값 변경시 텍스트 변경 스크립트
-        function fetchDynamicText() {
-            fetch('/status')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+<script>
+    //태그값 변경시 텍스트 변경 스크립트
+    function fetchDynamicText() {
+        fetch('/status')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                var serverTag = data[0]; // 서버에서 받은 태그 값
+
+                // 상태 텍스트 요소 선택
+                var statusTextElements = document.querySelectorAll(".status-text");
+
+                // 태그 값에 따라 상태 텍스트 변경
+                statusTextElements.forEach(textElement => {
+                    if (serverTag === "exercise") {
+                        textElement.textContent = "Exercise";
+                    } else if (serverTag === "rest") {
+                        textElement.textContent = "Rest";
+                    } else if (serverTag === "sleep") {
+                        textElement.textContent = "Sleep";
+                    } else if (serverTag === "active") {
+                        textElement.textContent = "Active";
                     }
-                    return response.json();
-                })
-                .then(data => {
-                    var serverTag = data[0]; // 서버에서 받은 태그 값
-        
-                    // 상태 텍스트 요소 선택
-                    var statusTextElements = document.querySelectorAll(".status-text");
-        
-                    // 태그 값에 따라 상태 텍스트 변경
-                    statusTextElements.forEach(textElement => {
-                        if (serverTag === "exercise") {
-                            textElement.textContent = "Exercise";
-                        } else if (serverTag === "rest") {
-                            textElement.textContent = "Rest";
-                        } else if (serverTag === "sleep") {
-                            textElement.textContent = "Sleep";
-                        } else if (serverTag === "active") {
-                            textElement.textContent = "Active";
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching status data:', error);
-                    var statusTextElements = document.querySelectorAll(".status-text");
-                    statusTextElements.forEach(textElement => {
-                        textElement.textContent = "Loading...";
-                    });
                 });
-        }
-        
-        // 페이지 로드 시 및 매초 데이터 갱신
-        document.addEventListener('DOMContentLoaded', fetchDynamicText);
-        setInterval(fetchDynamicText, 1000);
-    </script>
-
-    <script>
-        document.querySelectorAll('.button-container').forEach(container => {
-            container.querySelectorAll('.button a').forEach(button => {
-                button.addEventListener('click', function(event) {
-                    event.preventDefault(); // 기본 동작 방지
-
-                    // 모든 버튼을 비활성화 상태로 초기화
-                    container.querySelectorAll('.button').forEach(function(btn) {
-                        btn.classList.remove('active');
-                    });
-
-                    // 클릭한 버튼을 활성화 상태로 변경
-                    event.target.parentElement.classList.add('active');
-
-                    const dataKey = event.target.getAttribute('data-url');
-
-                    // 서버에서 데이터 요청 및 차트 업데이트
-                    fetch(`/${dataKey}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            const chartData = data.data;
-                            updateChart(chartData, 'graph');
-                        })
-                        .catch(error => {
-                            console.error('Error fetching chart data:', error);
-                        });
+            })
+            .catch(error => {
+                console.error('Error fetching status data:', error);
+                var statusTextElements = document.querySelectorAll(".status-text");
+                statusTextElements.forEach(textElement => {
+                    textElement.textContent = "Loading...";
                 });
             });
+    }
 
-            // 페이지 로드 시 초기 버튼 활성화 상태 설정 및 초기 차트 데이터 로드
-            container.querySelector('.button:first-child a').click();
+    // 페이지 로드 시 및 매초 데이터 갱신
+    document.addEventListener('DOMContentLoaded', fetchDynamicText);
+    setInterval(fetchDynamicText, 1000);
+</script>
+
+<script>
+    document.querySelectorAll('.button-container').forEach(container => {
+        container.querySelectorAll('.button a').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault(); // 기본 동작 방지
+
+                // 모든 버튼을 비활성화 상태로 초기화
+                container.querySelectorAll('.button').forEach(function(btn) {
+                    btn.classList.remove('active');
+                });
+
+                // 클릭한 버튼을 활성화 상태로 변경
+                event.target.parentElement.classList.add('active');
+
+                const dataKey = event.target.getAttribute('data-url');
+
+                // 서버에서 데이터 요청 및 차트 업데이트
+                fetch(`/${dataKey}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const chartData = data.data;
+                        updateChart(chartData, 'graph');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching chart data:', error);
+                    });
+            });
         });
 
-        // 페이지 로드 시 초기 차트 데이터를 로드
-        fetch('/hourly-chart')
+        // 페이지 로드 시 초기 버튼 활성화 상태 설정 및 초기 차트 데이터 로드
+        container.querySelector('.button:first-child a').click();
+    });
+
+    // 페이지 로드 시 초기 차트 데이터를 로드
+    fetch('/hourly-chart')
         .then(response => response.json())
         .then(responseData => {
-            const { userEmail, data } = responseData;
+            const {
+                userEmail,
+                data
+            } = responseData;
             console.log('User Email:', userEmail); // 추가된 userEmail을 로그에 출력
             updateChart(data, 'graph'); // 'graph' 클래스를 가진 모든 캔버스에 차트를 생성
         })
         .catch(error => {
             console.error('Error fetching initial chart data:', error);
-        }); 
-    </script>
+        });
+</script>
 
-    <!--구현한 스크립트들-->
-    <script src="../assets/js/HR-update.js"></script>
-    <script src="../assets/js/charts.js"></script>
+<!--구현한 스크립트들-->
+<script src="../assets/js/HR-update.js"></script>
+<script src="../assets/js/charts.js"></script>
 
 </html>
