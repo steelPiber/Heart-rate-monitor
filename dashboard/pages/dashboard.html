@@ -339,7 +339,8 @@
                 const seconds = remainingTime % 60;
 
                 // 남은 시간 표시
-                document.getElementById('session-time').textContent = `${minutes}m ${seconds}s`;
+                document.getElementById('session-time').textContent = `남은 사용 시간: ${minutes}분 ${seconds}초`;
+                document.getElementById('session-time-mob').textContent = `남은 사용 시간: ${minutes}분 ${seconds}초`;
             })
             .catch(error => {
                 console.error('세션 시간 조회 중 오류 발생:', error); // 오류 처리
