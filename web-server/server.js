@@ -57,12 +57,14 @@ app.get('/session-time', (req, res) => {
     const now = new Date();
     const sessionExpiry = req.session.cookie.expires;
 
-    if (sessionExpiry instanceof Date) {
-      const remainingTime = Math.max(0, Math.floor((sessionExpiry.getTime() - now.getTime()) / 1000)); // 초 단위로 계산
-      res.json({ remainingTime });
-    } else {
-      res.status(500).send('세션 만료 시간 오류'); // 만료 시간이 Date 객체가 아닌 경우 처리
+    // 만약 sessionExpiry가 Date 객체가 아니라면 적절한 오류 처리
+    if (!(sessionExpiry instanceof Date)) {
+      console.error('세션 만료 시간이 Date 객체가 아닙니다:', sessionExpiry);
+      return res.status(500).send('세션 만료 시간 오류');
     }
+
+    const remainingTime = Math.max(0, Math.floor((sessionExpiry.getTime() - now.getTime()) / 1000)); // 초 단위로 계산
+    res.json({ remainingTime });
   } catch (err) {
     console.error('세션 시간 조회 중 오류 발생:', err); // 오류 로그
     res.status(500).send('세션 시간 조회 중 오류 발생'); // 오류 처리
