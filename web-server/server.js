@@ -54,12 +54,11 @@ app.get('/session-time', (req, res) => {
       return res.json({ session: 'none' }); // 세션이 없거나 사용자 정보가 없는 경우
     }
 
-    // 남은 세션 시간 계산
-    const sessionExpiry = req.session.cookie.expires;
     const now = new Date();
+    const sessionExpiry = req.session.cookie.expires;
 
     if (sessionExpiry instanceof Date) {
-      const remainingTime = Math.max(0, Math.floor((sessionExpiry - now) / 1000)); // 초 단위로 계산
+      const remainingTime = Math.max(0, Math.floor((sessionExpiry.getTime() - now.getTime()) / 1000)); // 초 단위로 계산
       res.json({ remainingTime });
     } else {
       res.status(500).send('세션 만료 시간 오류'); // 만료 시간이 Date 객체가 아닌 경우 처리
