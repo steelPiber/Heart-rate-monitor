@@ -57,11 +57,22 @@ app.get('/dashboard', (req, res) => {
     }
 });
 
-app.get('/session', (req, res) => {
-      // 세션이 만료되었는지 확인
+// Assuming you have a route to get the session time
+router.get('/session-time', (req, res) => {
+  try {
     if (!req.session || !req.session.user || !req.session.user.email) {
-      return res.json({ session: "none" });
+      return res.json({ session: 'none' });
     }
+
+    // Calculate remaining session time (example)
+    const sessionExpiry = req.session.cookie.expires;
+    const now = new Date();
+    const remainingTime = Math.max(0, Math.floor((sessionExpiry - now) / 1000)); // in seconds
+
+    res.json({ remainingTime });
+  } catch (err) {
+    res.status(500).send('Error retrieving session time');
+  }
 });
 
 /*app.get('/beat-track', (req, res) => {
