@@ -58,7 +58,7 @@ app.get('/dashboard', (req, res) => {
 });
 
 // Assuming you have a route to get the session time
-router.get('/session-time', (req, res) => {
+app.get('/session-time', (req, res) => {
   try {
     if (!req.session || !req.session.user || !req.session.user.email) {
       return res.json({ session: 'none' });
