@@ -18,6 +18,7 @@ a{
     text-decoration: none;
     color: inherit;
 }
+
 .container-title{
         
     font-size: 1.2rem;
@@ -111,24 +112,6 @@ a{
     gap: 20px;
     padding: 20px;
     margin-left: 70px;
-}
-
-.header {
-    display: flex;
-    justify-content: space-between; /* 자식 요소를 양 끝으로 배치 */
-    align-items: center;
-}
-
-.header a img {
-    /* 로고 이미지의 크기를 조정 */
-    height: 40px; /* 원하는 높이로 조정 */
-    width: auto; /* 비율 유지 */
-}
-
-.session-time {
-    color: white;
-    width: 200px; /* 로고 이미지와 같은 너비로 조정 */
-    text-align: right; /* 오른쪽 정렬 */
 }
 
 .first-row, .second-row, .third-row {
@@ -687,12 +670,6 @@ a{
 .dash-board{
     position: absolute;
     left: 300px;
-}
-.session-time {
-    color: white;
-    position: absolute;
-    top: 10px;
-    right: 30px; /* 원하는 위치로 조정 */
 }
 .heart-board{
     display: inline-block;
