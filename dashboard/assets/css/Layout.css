@@ -116,12 +116,12 @@ a{
 
 .flex-container {
     display: flex;
-    justify-content: space-between; /* 자식 요소들을 양쪽 끝으로 배치 */
+    justify-content: space-between; /* 왼쪽 로고, 오른쪽 세션 시간을 양 끝에 배치 */
     align-items: center; /* 세로 중앙 정렬 */
 }
 
 .flex-container a img {
-    height: 100px; /* 로고 이미지의 크기를 조정 */
+    height: 70px; 
     width: auto; /* 비율 유지 */
 }
 
@@ -130,8 +130,6 @@ a{
     font-family: 'Inter', sans-serif;
     font-weight: 600;
     font-size: 16px;
-    text-align: left;
-    width: 200px; /* 로고 이미지의 크기에 맞춘 너비 설정 */
 }
 
 
