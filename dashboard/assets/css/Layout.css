@@ -630,12 +630,6 @@ a{
     margin-left: 10px;
     color: white;
 }
-.session-time {
-    color: white;
-    position: absolute;
-    top: 10px;
-    right: 30px; /* 원하는 위치로 조정 */
-}
 .user-profile-img {
     position: absolute;
     margin-left: 14px;
@@ -675,6 +669,12 @@ a{
 .dash-board{
     position: absolute;
     left: 300px;
+}
+.session-time {
+    color: white;
+    position: absolute;
+    top: 10px;
+    right: 30px; /* 원하는 위치로 조정 */
 }
 .heart-board{
     display: inline-block;
