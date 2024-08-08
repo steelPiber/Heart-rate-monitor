@@ -328,8 +328,8 @@
             })
             .then(data => {
                 if (data.session === 'none') {
-                    // 세션이 만료된 경우 처리
-                    document.getElementById('session-time').textContent = 'Session expired';
+                    alert('세션이 만료되었습니다. 로그인 페이지로 이동합니다.');
+                    window.location.href = '/logout';
                     return;
                 }
 
