@@ -336,6 +336,7 @@
                 const minutes = Math.floor(remainingTime / 60);
                 const seconds = remainingTime % 60;
 
+                // 남은 시간 표시
                 document.getElementById('session-time').textContent = `${minutes}m ${seconds}s`;
             })
             .catch(error => {
@@ -344,11 +345,13 @@
             });
     }
 
-    // 1초마다 세션 시간 업데이트
-    setInterval(updateSessionTime, 1000);
-
     // 페이지 로드 시 초기 세션 시간 업데이트
-    document.addEventListener('DOMContentLoaded', updateSessionTime);
+    document.addEventListener('DOMContentLoaded', () => {
+        updateSessionTime(); // 초기 업데이트
+
+        // 1초마다 세션 시간 업데이트
+        setInterval(updateSessionTime, 1000);
+    });
 </script>
 
 <script>
