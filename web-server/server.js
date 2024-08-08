@@ -47,6 +47,14 @@ app.get('/dashboard', (req, res) => {
     }
 });
 
+// 세션 생성 시 세션 시작 시간을 저장
+app.use((req, res, next) => {
+  if (!req.session.startTime) {
+    req.session.startTime = new Date().getTime(); // 현재 시간 저장
+  }
+  next();
+});
+
 // 세션 만료 시간 조회 API
 app.get('/session-time', (req, res) => {
   try {
@@ -54,23 +62,19 @@ app.get('/session-time', (req, res) => {
       return res.json({ session: 'none' }); // 세션이 없거나 사용자 정보가 없는 경우
     }
 
-    const now = new Date();
-    const sessionExpiry = req.session.cookie.expires;
+    const now = new Date().getTime();
+    const sessionStartTime = req.session.startTime;
+    const maxAge = req.session.cookie.maxAge;
 
-    // 만약 sessionExpiry가 Date 객체가 아니라면 적절한 오류 처리
-    if (!(sessionExpiry instanceof Date)) {
-      console.error('세션 만료 시간이 Date 객체가 아닙니다:', sessionExpiry);
-      return res.status(500).send('세션 만료 시간 오류');
-    }
+    // 남은 세션 시간 계산
+    const remainingTime = Math.max(0, Math.floor((sessionStartTime + maxAge - now) / 1000)); // 초 단위로 계산
 
-    const remainingTime = Math.max(0, Math.floor((sessionExpiry.getTime() - now.getTime()) / 1000)); // 초 단위로 계산
     res.json({ remainingTime });
   } catch (err) {
     console.error('세션 시간 조회 중 오류 발생:', err); // 오류 로그
     res.status(500).send('세션 시간 조회 중 오류 발생'); // 오류 처리
   }
 });
-
 // 주석 처리된 라우팅 복구 예시
 /*
 app.get('/beat-track', (req, res) => {
