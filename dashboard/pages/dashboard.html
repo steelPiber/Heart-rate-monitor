@@ -19,6 +19,8 @@
         </ul>
         <div class="user-profile-img"><img id="profile-img-pc" src="" alt="프로필 이미지"></div>
         <div class="nav-logout logout"><a href="/logout"></a><img src="../assets/img/logout-w.png"><span>로그아웃</span></div>    
+        <!-- 세션 만료 시간 표시 -->
+        <div id="session-time" style="color: white; position: absolute; top: 10px; right: 10px;"></div>
     </nav>
     <div class="overlay" id="overlay"></div>
     <!-- 모바일 네비바 -->
@@ -302,7 +304,42 @@
         setInterval(fetchDynamicIconData, 1000); // 주기적으로 호출
     });
 </script>
+    <script>
+// 세션 만료 시간 업데이트 함수
+function updateSessionTime() {
+    fetch('/session-time')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok'); // 네트워크 응답 오류 처리
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.session === 'none') {
+                // 세션이 만료된 경우 처리
+                document.getElementById('session-time').textContent = 'Session expired';
+                return;
+            }
 
+            // 남은 시간 계산 (분과 초)
+            const remainingTime = data.remainingTime;
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+
+            document.getElementById('session-time').textContent = `${minutes}m ${seconds}s`;
+        })
+        .catch(error => {
+            console.error('세션 시간 조회 중 오류 발생:', error); // 오류 처리
+            document.getElementById('session-time').textContent = 'Error';
+        });
+}
+
+// 30초마다 세션 시간 업데이트
+setInterval(updateSessionTime, 30000);
+
+// 페이지 로드 시 초기 세션 시간 업데이트
+document.addEventListener('DOMContentLoaded', updateSessionTime);
+    </script>
 
     <script>//태그값 변경시 텍스트 변경 스크립트
         function fetchDynamicText() {
