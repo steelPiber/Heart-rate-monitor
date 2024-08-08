@@ -112,6 +112,19 @@ a{
     padding: 20px;
     margin-left: 70px;
 }
+.wrap-cont-pc > div {
+    display: flex;
+    justify-content: space-between; /* 자식 요소들을 양 끝으로 배치 */
+    align-items: center;
+}
+
+.session-time {
+    /* 세션 시간 스타일 */
+    color: white;
+    position: relative; /* 부모 div의 오른쪽 끝에 위치하기 위함 */
+    width: 200px; /* 원하는 너비로 조정 */
+    text-align: right; /* 오른쪽 정렬 */
+}
 
 .first-row, .second-row, .third-row {
     display: flex;
