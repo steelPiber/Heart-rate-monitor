@@ -57,6 +57,13 @@ app.get('/dashboard', (req, res) => {
     }
 });
 
+app.get('/session', (req, res) => {
+      // 세션이 만료되었는지 확인
+    if (!req.session || !req.session.user || !req.session.user.email) {
+      return res.json({ session: "none" });
+    }
+});
+
 /*app.get('/beat-track', (req, res) => {
   const token = req.cookies.accessToken;
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'beat-track.html'));
