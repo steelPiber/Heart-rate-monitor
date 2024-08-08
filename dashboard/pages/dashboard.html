@@ -262,14 +262,6 @@
                 }
                 return response.json();
             })
-            .then(data => {
-                // 세션 만료 확인
-                if (data.session === 'none') {
-                    alert('세션이 만료되었습니다. 로그인 페이지로 이동합니다.');
-                    window.location.href = '/logout';
-                    return;
-                }
-
                 var serverTag = data[0]; // 서버에서 받은 태그 값
 
                 // 이미지 요소 선택
@@ -334,7 +326,7 @@ function updateSessionTime() {
 }
 
 // 30초마다 세션 시간 업데이트
-setInterval(updateSessionTime, 30000);
+setInterval(updateSessionTime, 1000);
 
 // 페이지 로드 시 초기 세션 시간 업데이트
 document.addEventListener('DOMContentLoaded', updateSessionTime);
