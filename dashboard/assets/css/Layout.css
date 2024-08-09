@@ -124,7 +124,7 @@ a{
     height: 70px; 
     width: auto; /* 비율 유지 */
 }
-
+/*session 만료시간 표시*/
 .session-time {
     color: black; /* 글씨를 검은색으로 변경 */
     font-family: 'Inter', sans-serif;
@@ -689,6 +689,16 @@ a{
 .dash-board{
     position: absolute;
     left: 300px;
+}
+
+.session-time-mob {
+    position: absolute;
+    top: 80px; /* 상단에서 80px 아래 */
+    left: 0; /* 왼쪽 정렬 */
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 20px; /* 여백 추가 (선택 사항) */
 }
 .heart-board{
     display: inline-block;
