@@ -117,14 +117,22 @@ async function fetchHeartRateData() {
         }
     }
 }
-// OTP정보 계정별로 삽입
-async function insertOTPSecret(email, secret) {
+// OTP정보 계정별로 삽입 만약 같은 계정이라면 update
+async function upsertOTPSecret(email, secret) {
   const connection = await connectToOracleDB();
 
   try {
-    const insertSQL = `
-      INSERT INTO OTP_SECRETS (USER_EMAIL, OTP_SECRET, CREATED_AT) 
-      VALUES (:email, :secret, SYSTIMESTAMP)
+    const mergeSQL = `
+      MERGE INTO OTP_SECRETS dest
+      USING (
+        SELECT :email AS USER_EMAIL, :secret AS OTP_SECRET FROM dual
+      ) src
+      ON (dest.USER_EMAIL = src.USER_EMAIL)
+      WHEN MATCHED THEN
+        UPDATE SET dest.OTP_SECRET = src.OTP_SECRET, dest.CREATED_AT = SYSTIMESTAMP
+      WHEN NOT MATCHED THEN
+        INSERT (USER_EMAIL, OTP_SECRET, CREATED_AT)
+        VALUES (src.USER_EMAIL, src.OTP_SECRET, SYSTIMESTAMP)
     `;
     const bindParams = {
       email: email,
@@ -134,10 +142,10 @@ async function insertOTPSecret(email, secret) {
       autoCommit: true,
     };
 
-    const result = await connection.execute(insertSQL, bindParams, options);
-    console.log('OTP 시크릿 삽입:', result);
+    const result = await connection.execute(mergeSQL, bindParams, options);
+    console.log('OTP 시크릿 삽입 또는 업데이트:', result);
   } catch (error) {
-    console.error('OTP 시크릿 삽입 오류:', error);
+    console.error('OTP 시크릿 삽입 또는 업데이트 오류:', error);
   } finally {
     await connection.close();
   }
@@ -344,6 +352,6 @@ module.exports = {
   daily_donut_chart,
   realtimeTagQuery,
   daily_bar_chart,
-  insertOTPSecret,
+  upsertOTPSecret,
   getOTPSecret,
 };
