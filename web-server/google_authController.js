@@ -1,18 +1,11 @@
 const express = require("express");
-const router = express.Router();
-const axios = require("axios");
-const url = require("url");
 const path = require('path');
-const speakeasy = require('speakeasy'); // speakeasy 추가
-const qrcode = require('qrcode'); // qrcode 추가
+const axios = require("axios");
+const speakeasy = require('speakeasy');
+const qrcode = require('qrcode');
 const oracleDB = require('./oracledb.js');
-const app = express();
 
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'dashboard/pages'));
-
-router.use(express.urlencoded({ extended: true }));
-router.use(express.json());
+const router = express.Router();
 
 require("dotenv").config();
 
@@ -34,11 +27,10 @@ const getToken = async (code) => {
     const tokenApi = await axios.post(
       `https://oauth2.googleapis.com/token?code=${code}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&redirect_uri=${REDIRECT_URL}&grant_type=authorization_code`
     );
-    const accessToken = tokenApi.data.access_token;
-
-    return accessToken;
+    return tokenApi.data.access_token;
   } catch (err) {
-    return err;
+    console.error("Error fetching token:", err);
+    throw err;
   }
 };
 
@@ -47,14 +39,13 @@ const getUserInfo = async (accessToken) => {
   try {
     const userInfoApi = await axios.get(
       `https://www.googleapis.com/oauth2/v2/userinfo`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
+        headers: { Authorization: `Bearer ${accessToken}` }
       }
     );
     return userInfoApi.data;
   } catch (err) {
-    return err;
+    console.error("Error fetching user info:", err);
+    throw err;
   }
 };
 
@@ -113,10 +104,7 @@ router.post("/verify-otp", async (req, res) => {
 
   if (verified) {
     // 세션에 사용자 정보 저장
-    req.session.user = {
-      email: email,
-      profile: userProfileUrl
-    };
+    req.session.user = { email: email };
 
     const userEmailWithoutDomain = email.split('@')[0];
     await oracleDB.selectUserlog(userEmailWithoutDomain);
@@ -145,12 +133,7 @@ router.get("/logout", (req, res) => {
 
 router.get('/profile', async (req, res) => {
   try {
-    userProfileUrl = req.session.user.profile;
+    const userProfileUrl = req.session.user.profile;
     res.json({ userProfileUrl });
   } catch (error) {
-    console.error("Error retrieving user profile:", error);
-    res.status(500).json({ error: "Failed to retrieve user profile" });
-  }
-});
-
-module.exports = { router, getUserInfo };
+    console.error("Error retrieving user profile:", error
