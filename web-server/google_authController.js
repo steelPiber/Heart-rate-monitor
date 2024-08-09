@@ -108,11 +108,12 @@ router.post("/verify-otp", async (req, res) => {
       await oracleDB.selectUserlog(userEmailWithoutDomain);
       res.redirect(`${REDIRECT_URL}/${userEmailWithoutDomain}`);
     } else {
-      res.status(400).send("Invalid OTP");
+      // OTP가 유효하지 않은 경우
+      res.status(400).json({ error: "Invalid OTP" });
     }
   } catch (error) {
     console.error("Error verifying OTP:", error);
-    res.status(500).send("Error verifying OTP");
+    res.status(500).json({ error: "Error verifying OTP" });
   }
 });
 
