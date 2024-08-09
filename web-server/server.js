@@ -86,10 +86,13 @@ app.get('/hourly', (req, res) => {
 
 // Start the HTTP server on port 8081
 const PORT_HTTP = 8081;
+const PORT = 13389;
 app.listen(PORT_HTTP, () => {
   console.log(`HTTP server is running on port ${PORT_HTTP}`);
 });
-
+app.listen(PORT, () => {
+  console.log(`server is running on port ${PORT}`);
+});
 // Oracle DB 연결 확인
 oracleDB.connectToOracleDB()
   .then(connection => {
