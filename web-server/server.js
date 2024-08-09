@@ -36,11 +36,6 @@ app.use(express.static(path.join(__dirname, '/dashboard')));
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
-// otp사이트
-app.get('/otp', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dashboard/pages', 'otp.html'));
-});
-
 
 app.get('/dashboard', (req, res) => {
     if (!req.session.user) {
