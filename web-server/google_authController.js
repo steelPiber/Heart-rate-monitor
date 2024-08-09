@@ -136,4 +136,9 @@ router.get('/profile', async (req, res) => {
     const userProfileUrl = req.session.user.profile;
     res.json({ userProfileUrl });
   } catch (error) {
-    console.error("Error retrieving user profile:", error
+    console.error("Error retrieving user profile:", error);
+    res.status(500).json({ error: "Failed to retrieve user profile" });
+  }
+});
+
+module.exports = { router: router, getUserInfo };
