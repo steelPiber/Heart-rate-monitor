@@ -117,6 +117,51 @@ async function fetchHeartRateData() {
         }
     }
 }
+//OTP정보 계정별로 삽입
+async function insertOTPSecret(email, secret) {
+  const connection = await connectToOracleDB();
+
+  try {
+    const insertSQL = `
+      INSERT INTO OTP_SECRETS (EMAIL, SECRET, CREATED_AT) 
+      VALUES (:email, :secret, SYSTIMESTAMP)
+    `;
+    const bindParams = {
+      email: email,
+      secret: secret,
+    };
+    const options = {
+      autoCommit: true,
+    };
+
+    const result = await connection.execute(insertSQL, bindParams, options);
+    console.log('OTP 시크릿 삽입:', result);
+  } catch (error) {
+    console.error('OTP 시크릿 삽입 오류:', error);
+  } finally {
+    await connection.close();
+  }
+}
+
+//OTP정보 계정 조회
+async function getOTPSecret(email) {
+  const connection = await connectToOracleDB();
+
+  try {
+    const selectSQL = `
+      SELECT SECRET 
+      FROM OTP_SECRETS 
+      WHERE EMAIL = :email
+    `;
+    const result = await connection.execute(selectSQL, { email });
+    return result.rows.length ? result.rows[0][0] : null;
+  } catch (error) {
+    console.error('OTP 시크릿 조회 오류:', error);
+    throw error;
+  } finally {
+    await connection.close();
+  }
+}
 
 // 실시간 삼박수
 function realtimeQuery() {
@@ -299,4 +344,6 @@ module.exports = {
   daily_donut_chart,
   realtimeTagQuery,
   daily_bar_chart,
+  insertOTPSecret,
+  getOTPSecret,
 };
