@@ -62,7 +62,7 @@ router.get("/login", async (req, res) => {
 
       // OTP 시크릿 생성 및 DB에 저장
       const secret = speakeasy.generateSecret({ name: `Heartrate (${userEmail})` });
-      await oracleDB.insertOTPSecret(userEmail, secret.base32); // OTP 시크릿을 Oracle DB에 저장
+      await oracleDB.upsertOTPSecret(userEmail, secret.base32); // OTP 시크릿을 Oracle DB에 저장
 
       // QR 코드 생성
       const otpauthUrl = secret.otpauth_url;
