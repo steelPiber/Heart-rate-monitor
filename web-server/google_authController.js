@@ -6,6 +6,10 @@ const path = require('path');
 const speakeasy = require('speakeasy'); // speakeasy 추가
 const qrcode = require('qrcode'); // qrcode 추가
 const oracleDB = require('./oracledb.js');
+const app = express();
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'dashboard/pages'));
 
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
@@ -67,10 +71,8 @@ router.get("/login", async (req, res) => {
       const accessToken = await getToken(code);
       const userInfo = await getUserInfo(accessToken);
       const userEmail = userInfo.email;
-      const userEmailWithoutDomain = userEmail.split('@')[0];
-      const userProfileUrl = userInfo.picture; // 구글 프로필 URL
 
-      // OTP 시크릿 생성 및 저장 (일반적으로 DB에 저장)
+      // OTP 시크릿 생성 및 저장
       const secret = speakeasy.generateSecret({ name: `MyApp (${userEmail})` });
       otpSecrets[userEmail] = secret.base32;
 
@@ -82,14 +84,8 @@ router.get("/login", async (req, res) => {
           return res.status(500).send("Error generating QR code");
         }
 
-        // HTML 파일로 QR 코드 전달
-        const filePath = path.join(__dirname, 'dashboard/pages', 'otp.html');
-        res.sendFile(filePath, (err) => {
-          if (err) {
-            console.error("Error sending OTP HTML file:", err);
-            return res.status(500).send("Error sending OTP page");
-          }
-        });
+        // 'otp.ejs' 파일을 렌더링하며 QR 코드와 이메일 데이터를 전달
+        res.render('otp', { qrCodeUrl: dataUrl, email: userEmail });
       });
 
     } catch (error) {
