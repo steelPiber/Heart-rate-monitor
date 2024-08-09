@@ -82,8 +82,14 @@ router.get("/login", async (req, res) => {
           return res.status(500).send("Error generating QR code");
         }
 
-        // QR 코드 페이지로 리디렉션
-        res.render('otp', { qrCodeUrl: dataUrl, email: userEmail });
+        // HTML 파일로 QR 코드 전달
+        const filePath = path.join(__dirname, 'dashboard/pages', 'otp.html');
+        res.sendFile(filePath, (err) => {
+          if (err) {
+            console.error("Error sending OTP HTML file:", err);
+            return res.status(500).send("Error sending OTP page");
+          }
+        });
       });
 
     } catch (error) {
