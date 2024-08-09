@@ -117,13 +117,13 @@ async function fetchHeartRateData() {
         }
     }
 }
-//OTP정보 계정별로 삽입
+// OTP정보 계정별로 삽입
 async function insertOTPSecret(email, secret) {
   const connection = await connectToOracleDB();
 
   try {
     const insertSQL = `
-      INSERT INTO OTP_SECRETS (EMAIL, SECRET, CREATED_AT) 
+      INSERT INTO OTP_SECRETS (USER_EMAIL, OTP_SECRET, CREATED_AT) 
       VALUES (:email, :secret, SYSTIMESTAMP)
     `;
     const bindParams = {
@@ -143,15 +143,15 @@ async function insertOTPSecret(email, secret) {
   }
 }
 
-//OTP정보 계정 조회
+// OTP정보 계정 조회
 async function getOTPSecret(email) {
   const connection = await connectToOracleDB();
 
   try {
     const selectSQL = `
-      SELECT SECRET 
+      SELECT OTP_SECRET 
       FROM OTP_SECRETS 
-      WHERE EMAIL = :email
+      WHERE USER_EMAIL = :email
     `;
     const result = await connection.execute(selectSQL, { email });
     return result.rows.length ? result.rows[0][0] : null;
