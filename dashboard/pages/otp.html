@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+</head>
+<body>
+    <h1>OTP Verification</h1>
+    <p>Scan the QR code below with Google Authenticator and enter the OTP to verify:</p>
+    <img src="<%= qrCodeUrl %>" alt="QR Code">
+    <form action="/verify-otp" method="POST">
+        <input type="hidden" name="email" value="<%= email %>">
+        <label for="otp">OTP:</label>
+        <input type="text" name="token" id="otp" required>
+        <button type="submit">Verify</button>
+    </form>
+</body>
+</html>
