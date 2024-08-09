@@ -1,14 +1,15 @@
-const http = require('http');
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
-const oracleDB = require('./oracledb.js');
 const { router: googleAuthRouter } = require("./google_authController.js");
 const bpmRouter = require('./bpm.js'); // bpm 라우터 모듈 불러오기
-const { executeQuery } = require('./utility.js'); // 유틸리티 함수들 사용
 const hrvRouter = require('./hrv.js');
 const chartRouter = require('./chart.js');
+const oracleDB = require('./oracledb.js');
 const app = express();
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'dashboard/pages'));
 
 app.use(session({
   secret: 'your_secret_key',
@@ -32,19 +33,18 @@ app.use(chartRouter);
 // 정적 파일 미들웨어를 사용하여 CSS, 이미지, JS 등의 정적 파일 제공
 app.use(express.static(path.join(__dirname, '/dashboard')));
 
-// Serve HTML page at port 8081
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
 });
 
 app.get('/dashboard', (req, res) => {
-    if (!req.session.user) {
-        // 세션이 없는 경우 대시보드 페이지를 요청하지 않도록 리디렉션
-        res.redirect('https://heartrate.ddns.net');
-    } else {
-        // 세션이 있는 경우 대시보드 페이지를 반환
-        res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
-    }
+  if (!req.session.user) {
+    // 세션이 없는 경우 대시보드 페이지를 요청하지 않도록 리디렉션
+    res.redirect('https://heartrate.ddns.net');
+  } else {
+    // 세션이 있는 경우 대시보드 페이지를 반환
+    res.sendFile(path.join(__dirname, 'dashboard/pages', 'dashboard.html'));
+  }
 });
 
 // 세션 생성 시 세션 시작 시간을 저장
@@ -75,23 +75,6 @@ app.get('/session-time', (req, res) => {
     res.status(500).send('세션 시간 조회 중 오류 발생'); // 오류 처리
   }
 });
-// 주석 처리된 라우팅 복구 예시
-/*
-app.get('/beat-track', (req, res) => {
-  const token = req.cookies.accessToken;
-  res.sendFile(path.join(__dirname, 'dashboard/pages', 'beat-track.html'));
-});
-
-app.get('/training-record', (req, res) => {
-  const token = req.cookies.accessToken;
-  res.sendFile(path.join(__dirname, 'dashboard/pages', 'training-record.html'));
-});
-
-app.get('/sitemap', (req, res) => {
-  const token = req.cookies.accessToken;
-  res.sendFile(path.join(__dirname, 'dashboard/pages', 'sitemap.html'));
-});
-*/
 
 app.get('/min1', (req, res) => {
   res.sendFile(path.join(__dirname, 'min1.html'));
