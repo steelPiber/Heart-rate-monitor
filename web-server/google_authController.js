@@ -3,24 +3,20 @@ const path = require('path');
 const axios = require("axios");
 const speakeasy = require('speakeasy');
 const qrcode = require('qrcode');
-const oracleDB = require('./oracledb.js');
+const oracleDB = require('./oracledb.js'); // Oracle DB 모듈
 
 const router = express.Router();
 
-require("dotenv").config(); 
+require("dotenv").config();
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const AUTHORIZE_URI = "https://accounts.google.com/o/oauth2/v2/auth";
-const REDIRECT_URL = "https://heartrate.ddns.net/login"; 
+const REDIRECT_URL = "https://heartrate.ddns.net/login";
 const RESPONSE_TYPE = "code";
 const SCOPE = "openid%20profile%20email";
 const ACCESS_TYPE = "offline";
 const OAUTH_URL = `${AUTHORIZE_URI}?client_id=${CLIENT_ID}&response_type=${RESPONSE_TYPE}&redirect_uri=${REDIRECT_URL}&scope=${SCOPE}&access_type=${ACCESS_TYPE}&prompt=consent`;
-
-
-// OTP 생성 시크릿 저장소 (일반적으로 DB에 저장해야 함)
-const otpSecrets = {};
 
 // 액세스 토큰을 가져오는 함수
 const getToken = async (code) => {
@@ -64,9 +60,9 @@ router.get("/login", async (req, res) => {
       const userInfo = await getUserInfo(accessToken);
       const userEmail = userInfo.email;
 
-      // OTP 시크릿 생성 및 저장
+      // OTP 시크릿 생성 및 DB에 저장
       const secret = speakeasy.generateSecret({ name: `MyApp (${userEmail})` });
-      otpSecrets[userEmail] = secret.base32;
+      await oracleDB.insertOTPSecret(userEmail, secret.base32); // OTP 시크릿을 Oracle DB에 저장
 
       // QR 코드 생성
       const otpauthUrl = secret.otpauth_url;
@@ -93,25 +89,30 @@ router.get("/login", async (req, res) => {
 router.post("/verify-otp", async (req, res) => {
   const { email, token } = req.body;
 
-  // 저장된 시크릿 가져오기
-  const secret = otpSecrets[email];
+  try {
+    // 저장된 시크릿 가져오기 (Oracle DB에서)
+    const secret = await oracleDB.getOTPSecret(email);
 
-  // OTP 검증
-  const verified = speakeasy.totp.verify({
-    secret: secret,
-    encoding: 'base32',
-    token: token
-  });
+    // OTP 검증
+    const verified = speakeasy.totp.verify({
+      secret: secret,
+      encoding: 'base32',
+      token: token
+    });
 
-  if (verified) {
-    // 세션에 사용자 정보 저장
-    req.session.user = { email: email };
+    if (verified) {
+      // 세션에 사용자 정보 저장
+      req.session.user = { email: email };
 
-    const userEmailWithoutDomain = email.split('@')[0];
-    await oracleDB.selectUserlog(userEmailWithoutDomain);
-    res.redirect(`${REDIRECT_URL}/${userEmailWithoutDomain}`);
-  } else {
-    res.status(400).send("Invalid OTP");
+      const userEmailWithoutDomain = email.split('@')[0];
+      await oracleDB.selectUserlog(userEmailWithoutDomain);
+      res.redirect(`${REDIRECT_URL}/${userEmailWithoutDomain}`);
+    } else {
+      res.status(400).send("Invalid OTP");
+    }
+  } catch (error) {
+    console.error("Error verifying OTP:", error);
+    res.status(500).send("Error verifying OTP");
   }
 });
 
