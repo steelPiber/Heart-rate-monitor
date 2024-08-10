@@ -60,22 +60,33 @@ router.get("/login", async (req, res) => {
       const userInfo = await getUserInfo(accessToken);
       const userEmail = userInfo.email;
 
-      // OTP 시크릿 생성 및 DB에 저장
-      const secret = speakeasy.generateSecret({ name: `MyApp (${userEmail})` });
-      console.log('Generated secret:', secret.base32); // 디버깅: 생성된 시크릿 확인
-      await oracleDB.insertOTPSecret(userEmail, secret.base32); // OTP 시크릿을 Oracle DB에 저장
+      // OTP 시크릿이 존재하는지 확인
+      const existingSecret = await oracleDB.getOTPSecret(userEmail);
 
-      // QR 코드 생성
-      const otpauthUrl = secret.otpauth_url;
-      qrcode.toDataURL(otpauthUrl, (err, dataUrl) => {
-        if (err) {
-          console.error("Error generating QR code:", err);
-          return res.status(500).send("Error generating QR code");
-        }
+      // 시크릿이 존재하지 않는 경우에만 새로 생성
+      if (!existingSecret) {
+        // OTP 시크릿 생성 및 DB에 저장
+        const secret = speakeasy.generateSecret({ name: `MyApp (${userEmail})` });
+        // Oracle DB에 OTP 시크릿 저장
+        await oracleDB.insertOTPSecret(userEmail, secret.base32);
 
-        // 'otp.ejs' 파일을 렌더링하며 QR 코드와 이메일 데이터를 전달
-        res.render('otp', { qrCodeUrl: dataUrl, email: userEmail });
-      });
+        // QR 코드 생성
+        const otpauthUrl = secret.otpauth_url;
+        qrcode.toDataURL(otpauthUrl, (err, dataUrl) => {
+          if (err) {
+            console.error("Error generating QR code:", err);
+            return res.status(500).send("Error generating QR code");
+          }
+
+          // 'otp.ejs' 파일을 렌더링하며 QR 코드와 이메일 데이터를 전달
+          res.render('otp', { qrCodeUrl: dataUrl, email: userEmail });
+        });
+
+      } else {
+        // 기존 시크릿이 있는 경우, QR 코드를 다시 생성할 수도 있지만,
+        // 이 경우 QR 코드 생성을 생략하거나 알림을 띄울 수 있습니다.
+        res.render('otp', { qrCodeUrl: null, email: userEmail });
+      }
 
     } catch (error) {
       console.error("Error retrieving user info:", error);
@@ -93,7 +104,6 @@ router.post("/verify-otp", async (req, res) => {
   try {
     // 저장된 시크릿 가져오기 (Oracle DB에서)
     const secret = await oracleDB.getOTPSecret(email);
-    console.log('Stored secret:', secret); // 디버깅: 저장된 시크릿 확인
 
     // OTP 검증
     const verified = speakeasy.totp.verify({
@@ -102,8 +112,6 @@ router.post("/verify-otp", async (req, res) => {
       token: token,
       window: 1 // 시간 오차를 고려한 윈도우 설정
     });
-    console.log('OTP:', token); // 디버깅: 사용자가 입력한 OTP 확인
-    console.log('Verification result:', verified); // 디버깅: 검증 결과 확인
 
     if (verified) {
       // 세션에 사용자 정보 저장
@@ -118,6 +126,38 @@ router.post("/verify-otp", async (req, res) => {
   } catch (error) {
     console.error("Error verifying OTP:", error);
     res.status(500).json({ error: "Error verifying OTP" });
+  }
+});
+//OTP QR코드 재생성
+router.post('/regenerate-otp', async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    // OTP 시크릿 삭제
+    await oracleDB.deleteOTPSecret(email);
+
+    // 새로운 OTP 시크릿 생성
+    const secret = speakeasy.generateSecret({ name: `MyApp (${email})` });
+    console.log('Generated secret:', secret.base32); // 디버깅: 생성된 시크릿 확인
+
+    // Oracle DB에 새로운 OTP 시크릿 저장
+    await oracleDB.insertOTPSecret(email, secret.base32);
+
+    // 새로운 QR 코드 생성
+    const otpauthUrl = secret.otpauth_url;
+    qrcode.toDataURL(otpauthUrl, (err, dataUrl) => {
+      if (err) {
+        console.error("Error generating QR code:", err);
+        return res.status(500).json({ error: "Error generating QR code" });
+      }
+
+      // 새로운 QR 코드 URL을 클라이언트에 반환
+      res.json({ success: true, qrCodeUrl: dataUrl });
+    });
+
+  } catch (error) {
+    console.error("Error regenerating OTP:", error);
+    res.status(500).json({ error: "Error regenerating OTP" });
   }
 });
 
