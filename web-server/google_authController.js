@@ -3,20 +3,23 @@ const path = require('path');
 const axios = require("axios");
 const speakeasy = require('speakeasy');
 const qrcode = require('qrcode');
-const oracleDB = require('./oracledb.js'); // Oracle DB 모듈
+const oracleDB = require('./oracledb.js');
 
 const router = express.Router();
 
-require("dotenv").config(); 
+require("dotenv").config();
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const AUTHORIZE_URI = "https://accounts.google.com/o/oauth2/v2/auth";
-const REDIRECT_URL = "https://heartrate.ddns.net/login";
+const REDIRECT_URL = "https://heartrate.ddns.net/login"; 
 const RESPONSE_TYPE = "code";
 const SCOPE = "openid%20profile%20email";
 const ACCESS_TYPE = "offline";
 const OAUTH_URL = `${AUTHORIZE_URI}?client_id=${CLIENT_ID}&response_type=${RESPONSE_TYPE}&redirect_uri=${REDIRECT_URL}&scope=${SCOPE}&access_type=${ACCESS_TYPE}&prompt=consent`;
+
+// OTP 생성 시크릿 저장소 (일반적으로 DB에 저장해야 함)
+const otpSecrets = {};
 
 // 액세스 토큰을 가져오는 함수
 const getToken = async (code) => {
@@ -60,29 +63,21 @@ router.get("/login", async (req, res) => {
       const userInfo = await getUserInfo(accessToken);
       const userEmail = userInfo.email;
 
-      // DB에서 기존 OTP 시크릿 조회
-      let secret = await oracleDB.getOTPSecret(userEmail);
+      // OTP 시크릿 생성 및 저장
+      const secret = speakeasy.generateSecret({ name: `MyApp (${userEmail})` });
+      otpSecrets[userEmail] = secret.base32;
 
-      if (!secret) {
-        // 기존 OTP 시크릿이 없을 경우 새 시크릿 생성 및 저장
-        secret = speakeasy.generateSecret({ name: `Heartrate (${userEmail})` });
-        await oracleDB.insertOTPSecret(userEmail, secret.base32); // OTP 시크릿을 Oracle DB에 저장
+      // QR 코드 생성
+      const otpauthUrl = secret.otpauth_url;
+      qrcode.toDataURL(otpauthUrl, (err, dataUrl) => {
+        if (err) {
+          console.error("Error generating QR code:", err);
+          return res.status(500).send("Error generating QR code");
+        }
 
-        // 새로 생성된 시크릿의 QR 코드 생성
-        const otpauthUrl = secret.otpauth_url;
-        qrcode.toDataURL(otpauthUrl, (err, dataUrl) => {
-          if (err) {
-            console.error("Error generating QR code:", err);
-            return res.status(500).send("Error generating QR code");
-          }
-
-          // 'otp.ejs' 파일을 렌더링하며 QR 코드와 이메일 데이터를 전달
-          res.render('otp', { qrCodeUrl: dataUrl, email: userEmail });
-        });
-      } else {
-        // 이미 OTP 시크릿이 있는 경우 QR 코드 생성 없이 바로 OTP 입력 페이지로 이동
-        res.render('otp', { qrCodeUrl: null, email: userEmail });
-      }
+        // 'otp.ejs' 파일을 렌더링하며 QR 코드와 이메일 데이터를 전달
+        res.render('otp', { qrCodeUrl: dataUrl, email: userEmail });
+      });
 
     } catch (error) {
       console.error("Error retrieving user info:", error);
@@ -97,35 +92,27 @@ router.get("/login", async (req, res) => {
 router.post("/verify-otp", async (req, res) => {
   const { email, token } = req.body;
 
-  try {
-    // 저장된 시크릿 가져오기 (Oracle DB에서)
-    const secret = await oracleDB.getOTPSecret(email);
+  // 저장된 시크릿 가져오기
+  const secret = otpSecrets[email];
 
-    // OTP 검증
-    const verified = speakeasy.totp.verify({
-      secret: secret,
-      encoding: 'base32',
-      token: token,
-      window: 1 // 현재 시간에서 앞뒤로 1개씩의 토큰까지 허용 (약 30초)
-    });
+  // OTP 검증
+  const verified = speakeasy.totp.verify({
+    secret: secret,
+    encoding: 'base32',
+    token: token
+  });
 
-    if (verified) {
-      // 세션에 사용자 정보 저장
-      req.session.user = { email: email };
+  if (verified) {
+    // 세션에 사용자 정보 저장
+    req.session.user = { email: email };
 
-      const userEmailWithoutDomain = email.split('@')[0];
-      await oracleDB.selectUserlog(userEmailWithoutDomain);
-      res.redirect(`${REDIRECT_URL}/${userEmailWithoutDomain}`);
-    } else {
-      // OTP가 틀린 경우
-      res.status(400).send("Invalid OTP");
-    }
-  } catch (error) {
-    console.error("Error verifying OTP:", error);
-    res.status(500).send("Error verifying OTP");
+    const userEmailWithoutDomain = email.split('@')[0];
+    await oracleDB.selectUserlog(userEmailWithoutDomain);
+    res.redirect(`${REDIRECT_URL}/${userEmailWithoutDomain}`);
+  } else {
+    res.status(400).send("Invalid OTP");
   }
 });
-
 
 router.get('/login/:userEmailWithoutDomain', (req, res) => {
   const userEmailWithoutDomain = req.params.userEmailWithoutDomain;
@@ -149,9 +136,4 @@ router.get('/profile', async (req, res) => {
     const userProfileUrl = req.session.user.profile;
     res.json({ userProfileUrl });
   } catch (error) {
-    console.error("Error retrieving user profile:", error);
-    res.status(500).json({ error: "Failed to retrieve user profile" });
-  }
-});
-
-module.exports = { router: router, getUserInfo };
+    console.error("Error retrieving user profile:", error
