@@ -21,6 +21,7 @@
             .then(data => {
                 if (data.error) {
                     alert(data.error);
+                    window.location.href = 'https://heartrate.ddns.net';
                 } else if (data.success) {
                     window.location.href = data.redirectUrl;
                 }
@@ -28,7 +29,6 @@
             .catch(error => {
                 console.error('Error:', error);
                 alert("OTP 인증을 실패하였습니다.");
-                window.location.href = 'https://heartrate.ddns.net';
             });
         }
 
