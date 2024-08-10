@@ -49,6 +49,7 @@ async function insertBPMData(bpm, email, tag) {
     await connection.close();
   }
 }
+
 async function selectUserlog(paramEmail){
      const connection = await connectToOracleDB();
      try {
@@ -64,6 +65,7 @@ async function selectUserlog(paramEmail){
      	await connection.close();
      }
 }
+
 async function selectUserErrlog(paramEmail){
      const connection = await connectToOracleDB();
      try {
@@ -117,22 +119,14 @@ async function fetchHeartRateData() {
         }
     }
 }
-// OTP정보 계정별로 삽입 만약 같은 계정이라면 update
-async function upsertOTPSecret(email, secret) {
+// OTP정보 계정별로 삽입
+async function insertOTPSecret(email, secret) {
   const connection = await connectToOracleDB();
 
   try {
-    const mergeSQL = `
-      MERGE INTO OTP_SECRETS dest
-      USING (
-        SELECT :email AS USER_EMAIL, :secret AS OTP_SECRET FROM dual
-      ) src
-      ON (dest.USER_EMAIL = src.USER_EMAIL)
-      WHEN MATCHED THEN
-        UPDATE SET dest.OTP_SECRET = src.OTP_SECRET, dest.CREATED_AT = SYSTIMESTAMP
-      WHEN NOT MATCHED THEN
-        INSERT (USER_EMAIL, OTP_SECRET, CREATED_AT)
-        VALUES (src.USER_EMAIL, src.OTP_SECRET, SYSTIMESTAMP)
+    const insertSQL = `
+      INSERT INTO OTP_SECRETS (USER_EMAIL, OTP_SECRET, CREATED_AT) 
+      VALUES (:email, :secret, SYSTIMESTAMP)
     `;
     const bindParams = {
       email: email,
@@ -142,15 +136,14 @@ async function upsertOTPSecret(email, secret) {
       autoCommit: true,
     };
 
-    const result = await connection.execute(mergeSQL, bindParams, options);
-    console.log('OTP 시크릿 삽입 또는 업데이트:', result);
+    const result = await connection.execute(insertSQL, bindParams, options);
+    console.log('OTP 시크릿 삽입:', result);
   } catch (error) {
-    console.error('OTP 시크릿 삽입 또는 업데이트 오류:', error);
+    console.error('OTP 시크릿 삽입 오류:', error);
   } finally {
     await connection.close();
   }
 }
-
 // OTP정보 계정 조회
 async function getOTPSecret(email) {
   const connection = await connectToOracleDB();
@@ -166,6 +159,30 @@ async function getOTPSecret(email) {
   } catch (error) {
     console.error('OTP 시크릿 조회 오류:', error);
     throw error;
+  } finally {
+    await connection.close();
+  }
+}
+// OTP정보 삭제
+async function deleteOTPSecret(email) {
+  const connection = await connectToOracleDB();
+
+  try {
+    const deleteSQL = `
+      DELETE FROM OTP_SECRETS 
+      WHERE USER_EMAIL = :email
+    `;
+    const bindParams = {
+      email: email
+    };
+    const options = {
+      autoCommit: true,
+    };
+
+    const result = await connection.execute(deleteSQL, bindParams, options);
+    console.log('OTP 시크릿 삭제:', result);
+  } catch (error) {
+    console.error('OTP 시크릿 삭제 오류:', error);
   } finally {
     await connection.close();
   }
@@ -352,6 +369,7 @@ module.exports = {
   daily_donut_chart,
   realtimeTagQuery,
   daily_bar_chart,
-  upsertOTPSecret,
+  insertOTPSecret,
   getOTPSecret,
+  deleteOTPSecret,
 };
