@@ -5,36 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OTP Verification</title>
     <script>
-      // 폼 제출 이벤트 처리
-      function handleFormSubmit(event) {
-        event.preventDefault(); // 기본 폼 제출 방지
+  // 폼 제출 이벤트 처리
+  function handleFormSubmit(event) {
+    event.preventDefault(); // 기본 폼 제출 방지
 
-        const form = event.target;
-        const formData = new FormData(form);
+    const form = event.target;
+    const formData = new FormData(form);
 
-        // AJAX 요청을 통한 OTP 확인
-        fetch('/verify-otp', {
-          method: 'POST',
-          body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.error) {
-            // 오류 메시지 표시 및 리디렉션
-            alert("OTP 인증을 실패하였습니다.");
-            window.location.href = 'https://heartrate.ddns.net';
-          } else {
-            // 성공적인 경우 (추가 작업 가능)
-            window.location.href = '/dashboard'; // 적절한 페이지로 리디렉션
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          alert("OTP 인증을 실패하였습니다.");
-          window.location.href = 'https://heartrate.ddns.net';
-        });
+    // AJAX 요청을 통한 OTP 확인
+    fetch('/verify-otp', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.error) {
+        // 오류 메시지 표시 및 리디렉션
+        alert(data.error);
+        window.location.href = 'https://heartrate.ddns.net';
+      } else if (data.success) {
+        // 성공적인 경우 (추가 작업 가능)
+        window.location.href = data.redirectUrl;
       }
-    </script>
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert("OTP 인증을 실패하였습니다.");
+      window.location.href = 'https://heartrate.ddns.net';
+    });
+  }
+</script>
 </head>
 <body>
     <h1>OTP Verification</h1>
