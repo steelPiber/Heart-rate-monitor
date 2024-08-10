@@ -21,7 +21,6 @@
             .then(data => {
                 if (data.error) {
                     alert(data.error);
-                    window.location.href = 'https://heartrate.ddns.net';
                 } else if (data.success) {
                     window.location.href = data.redirectUrl;
                 }
@@ -31,7 +30,7 @@
                 alert("OTP 인증을 실패하였습니다.");
             });
         }
-
+I
         // QR 코드 재생성 버튼 클릭 시 처리
         function regenerateQRCode() {
             const email = document.querySelector('input[name="email"]').value;
