@@ -114,11 +114,11 @@ router.post("/verify-otp", async (req, res) => {
     });
 
     if (verified) {
-      // 세션에 사용자 정보 저장
-      req.session.user = { email: email };
-
       const userEmailWithoutDomain = email.split('@')[0];
       await oracleDB.selectUserlog(userEmailWithoutDomain);
+      // 세션에 사용자 정보 저장
+      req.session.user = { email: userEmailWithoutDomain };
+
       res.json({ success: true, redirectUrl: `${REDIRECT_URL}/${userEmailWithoutDomain}` });
     } else {
       res.status(400).send();
