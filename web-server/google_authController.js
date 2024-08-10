@@ -18,6 +18,7 @@ const SCOPE = "openid%20profile%20email";
 const ACCESS_TYPE = "offline";
 const OAUTH_URL = `${AUTHORIZE_URI}?client_id=${CLIENT_ID}&response_type=${RESPONSE_TYPE}&redirect_uri=${REDIRECT_URL}&scope=${SCOPE}&access_type=${ACCESS_TYPE}&prompt=consent`;
 
+
 // OTP 생성 시크릿 저장소 (일반적으로 DB에 저장해야 함)
 const otpSecrets = {};
 
