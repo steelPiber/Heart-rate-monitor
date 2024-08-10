@@ -144,6 +144,7 @@ async function insertOTPSecret(email, secret) {
     await connection.close();
   }
 }
+
 // OTP정보 계정 조회
 async function getOTPSecret(email) {
   const connection = await connectToOracleDB();
