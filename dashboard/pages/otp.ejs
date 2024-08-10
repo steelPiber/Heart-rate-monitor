@@ -21,7 +21,6 @@
             .then(data => {
                 if (data.error) {
                     alert(data.error);
-                    window.location.href = 'https://heartrate.ddns.net';
                 } else if (data.success) {
                     window.location.href = data.redirectUrl;
                 }
