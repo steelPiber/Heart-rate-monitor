@@ -121,7 +121,7 @@ router.post("/verify-otp", async (req, res) => {
       await oracleDB.selectUserlog(userEmailWithoutDomain);
       res.json({ success: true, redirectUrl: `${REDIRECT_URL}/${userEmailWithoutDomain}` });
     } else {
-      res.status(400).json({ error: "Invalid OTP" });
+      res.status(400).send();
     }
   } catch (error) {
     console.error("Error verifying OTP:", error);
