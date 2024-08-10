@@ -62,6 +62,7 @@ router.get("/login", async (req, res) => {
 
       // OTP 시크릿 생성 및 DB에 저장
       const secret = speakeasy.generateSecret({ name: `MyApp (${userEmail})` });
+      console.log('Generated secret:', secret.base32); // 디버깅: 생성된 시크릿 확인
       await oracleDB.insertOTPSecret(userEmail, secret.base32); // OTP 시크릿을 Oracle DB에 저장
 
       // QR 코드 생성
@@ -92,13 +93,17 @@ router.post("/verify-otp", async (req, res) => {
   try {
     // 저장된 시크릿 가져오기 (Oracle DB에서)
     const secret = await oracleDB.getOTPSecret(email);
+    console.log('Stored secret:', secret); // 디버깅: 저장된 시크릿 확인
 
     // OTP 검증
     const verified = speakeasy.totp.verify({
       secret: secret,
       encoding: 'base32',
-      token: token
+      token: token,
+      window: 1 // 시간 오차를 고려한 윈도우 설정
     });
+    console.log('OTP:', token); // 디버깅: 사용자가 입력한 OTP 확인
+    console.log('Verification result:', verified); // 디버깅: 검증 결과 확인
 
     if (verified) {
       // 세션에 사용자 정보 저장
