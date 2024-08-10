@@ -105,7 +105,8 @@ router.post("/verify-otp", async (req, res) => {
     const verified = speakeasy.totp.verify({
       secret: secret,
       encoding: 'base32',
-      token: token
+      token: token,
+      window: 1 // 현재 시간에서 앞뒤로 1개씩의 토큰까지 허용 (약 30초)
     });
 
     if (verified) {
