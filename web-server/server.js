@@ -75,6 +75,12 @@ app.get('/session-time', (req, res) => {
     res.status(500).send('세션 시간 조회 중 오류 발생'); // 오류 처리
   }
 });
+app.get('/session-email', (req, res) => {
+
+  const email = req.session.user.email;
+  res.json({ email });
+  
+});
 
 app.get('/min1', (req, res) => {
   res.sendFile(path.join(__dirname, 'min1.html'));
