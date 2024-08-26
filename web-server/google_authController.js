@@ -60,7 +60,7 @@ router.get("/login", async (req, res) => {
       const userInfo = await getUserInfo(accessToken);
       const userEmail = userInfo.email;
       const userProfile = userInfo.picture;
-
+      console.log('/login : ', userProfile);
       // OTP 시크릿이 존재하는지 확인
       const existingSecret = await oracleDB.getOTPSecret(userEmail);
 
@@ -101,7 +101,7 @@ router.get("/login", async (req, res) => {
 // OTP 확인 라우터
 router.post("/verify-otp", async (req, res) => {
   const { email, token, profile } = req.body;
-
+  console.log('/login : ', req.profile);
   try {
     // 저장된 시크릿 가져오기 (Oracle DB에서)
     const secret = await oracleDB.getOTPSecret(email);
