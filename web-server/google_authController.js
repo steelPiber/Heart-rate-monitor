@@ -59,7 +59,7 @@ router.get("/login", async (req, res) => {
       const accessToken = await getToken(code);
       const userInfo = await getUserInfo(accessToken);
       const userEmail = userInfo.email;
-      const userProfile = userInfo.profile;
+      const userProfile = userInfo.picture;
 
       // OTP 시크릿이 존재하는지 확인
       const existingSecret = await oracleDB.getOTPSecret(userEmail);
@@ -80,13 +80,13 @@ router.get("/login", async (req, res) => {
           }
 
           // 'otp.ejs' 파일을 렌더링하며 QR 코드와 이메일 데이터를 전달
-          res.render('otp', { qrCodeUrl: dataUrl, email: userEmail });
+          res.render('otp', { qrCodeUrl: dataUrl, email: userEmail, profile: userProfile });
         });
 
       } else {
         // 기존 시크릿이 있는 경우, QR 코드를 다시 생성할 수도 있지만,
         // 이 경우 QR 코드 생성을 생략하거나 알림을 띄울 수 있습니다.
-        res.render('otp', { qrCodeUrl: null, email: userEmail });
+        res.render('otp', { qrCodeUrl: null, email: userEmail, profile: userProfile });
       }
 
     } catch (error) {
@@ -100,7 +100,7 @@ router.get("/login", async (req, res) => {
 
 // OTP 확인 라우터
 router.post("/verify-otp", async (req, res) => {
-  const { email, token } = req.body;
+  const { email, token, profile } = req.body;
 
   try {
     // 저장된 시크릿 가져오기 (Oracle DB에서)
@@ -116,11 +116,12 @@ router.post("/verify-otp", async (req, res) => {
 
     if (verified) {
       const userEmailWithoutDomain = email.split('@')[0];
+      const userProfile = profile;
       await oracleDB.selectUserlog(userEmailWithoutDomain);
       // 세션에 사용자 정보 저장
       req.session.user = { 
         email: userEmailWithoutDomain,
-        profile: 
+        profile: profile
       };
 
       res.json({ success: true, redirectUrl: `${REDIRECT_URL}/${userEmailWithoutDomain}` });
