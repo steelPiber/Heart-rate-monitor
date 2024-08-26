@@ -21,10 +21,16 @@ const OAUTH_URL = `${AUTHORIZE_URI}?client_id=${CLIENT_ID}&response_type=${RESPO
 // 액세스 토큰을 가져오는 함수
 const getToken = async (code) => {
   try {
-    const tokenApi = await axios.post(
-      `https://oauth2.googleapis.com/token?code=${code}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&redirect_uri=${REDIRECT_URL}&grant_type=authorization_code`
-    );
-    return tokenApi.data.access_token;
+    const response = await axios.post('https://oauth2.googleapis.com/token', null, {
+      params: {
+        code,
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        redirect_uri: REDIRECT_URL,
+        grant_type: 'authorization_code',
+      }
+    });
+    return response.data.access_token;
   } catch (err) {
     console.error("Error fetching token:", err);
     throw err;
@@ -34,12 +40,10 @@ const getToken = async (code) => {
 // 사용자 정보를 가져오는 함수
 const getUserInfo = async (accessToken) => {
   try {
-    const userInfoApi = await axios.get(
-      `https://www.googleapis.com/oauth2/v2/userinfo`, {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      }
-    );
-    return userInfoApi.data;
+    const response = await axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    return response.data;
   } catch (err) {
     console.error("Error fetching user info:", err);
     throw err;
@@ -59,16 +63,15 @@ router.get("/login", async (req, res) => {
       const accessToken = await getToken(code);
       const userInfo = await getUserInfo(accessToken);
       const userEmail = userInfo.email;
-      const userProfile = userInfo.picture;
+      const userProfile = userInfo.picture; // 프로필 이미지 URL
       console.log('/login : ', userProfile);
+
       // OTP 시크릿이 존재하는지 확인
       const existingSecret = await oracleDB.getOTPSecret(userEmail);
 
-      // 시크릿이 존재하지 않는 경우에만 새로 생성
       if (!existingSecret) {
         // OTP 시크릿 생성 및 DB에 저장
-        const secret = speakeasy.generateSecret({ name: `Heartrate (${userEmail})` });
-        // Oracle DB에 OTP 시크릿 저장
+        const secret = speakeasy.generateSecret({ name: `Heartrate (${userEmail})` });
         await oracleDB.insertOTPSecret(userEmail, secret.base32);
 
         // QR 코드 생성
@@ -101,7 +104,7 @@ router.get("/login", async (req, res) => {
 // OTP 확인 라우터
 router.post("/verify-otp", async (req, res) => {
   const { email, token, profile } = req.body;
-  console.log('/login : ', req.profile);
+  console.log('11Received profile:', profile); // profile 값을 확인
   try {
     // 저장된 시크릿 가져오기 (Oracle DB에서)
     const secret = await oracleDB.getOTPSecret(email);
@@ -116,7 +119,6 @@ router.post("/verify-otp", async (req, res) => {
 
     if (verified) {
       const userEmailWithoutDomain = email.split('@')[0];
-      const userProfile = profile;
       await oracleDB.selectUserlog(userEmailWithoutDomain);
       // 세션에 사용자 정보 저장
       req.session.user = { 
@@ -133,7 +135,8 @@ router.post("/verify-otp", async (req, res) => {
     res.status(500).json({ error: "Error verifying OTP" });
   }
 });
-//OTP QR코드 재생성
+
+// OTP QR코드 재생성
 router.post('/regenerate-otp', async (req, res) => {
   const { email } = req.body;
 
@@ -142,7 +145,7 @@ router.post('/regenerate-otp', async (req, res) => {
     await oracleDB.deleteOTPSecret(email);
 
     // 새로운 OTP 시크릿 생성
-    const secret = speakeasy.generateSecret({ name: `Heartrate (${email})` });
+    const secret = speakeasy.generateSecret({ name: `Heartrate (${email})` });
     console.log('Generated secret:', secret.base32); // 디버깅: 생성된 시크릿 확인
 
     // Oracle DB에 새로운 OTP 시크릿 저장
@@ -185,7 +188,7 @@ router.get("/logout", (req, res) => {
 
 router.get('/profile', async (req, res) => {
   try {
-    const userProfileUrl = req.session.user.profile;
+    const userProfileUrl = req.session.user ? req.session.user.profile : null;
     res.json({ userProfileUrl });
   } catch (error) {
     console.error("Error retrieving user profile:", error);
