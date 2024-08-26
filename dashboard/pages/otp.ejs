@@ -12,10 +12,13 @@
             const form = event.target;
             const formData = new FormData(form);
 
+            // profile 값이 중복으로 추가되지 않도록 확인
+            // 이미 hidden input으로 추가되었으므로 여기서 다시 추가하지 않음
+
             // AJAX 요청을 통한 OTP 확인
             fetch('/verify-otp', {
                 method: 'POST',
-                body: new URLSearchParams(new FormData(form)) // FormData를 URLSearchParams로 변환
+                body: new URLSearchParams(formData) // FormData를 URLSearchParams로 변환
             })
             .then(response => response.json())
             .then(data => {
@@ -30,7 +33,7 @@
                 alert("OTP 인증을 실패하였습니다.");
             });
         }
-I
+
         // QR 코드 재생성 버튼 클릭 시 처리
         function regenerateQRCode() {
             const email = document.querySelector('input[name="email"]').value;
@@ -61,6 +64,7 @@ I
     <img id="qr-code" src="<%= qrCodeUrl %>" alt="QR Code">
     <form onsubmit="handleFormSubmit(event)">
         <input type="hidden" name="email" value="<%= email %>">
+        <input type="hidden" name="profile" value="<%= profile %>"> <!-- profile 값을 hidden input으로 추가 -->
         <label for="otp">OTP:</label>
         <input type="text" name="token" id="otp" required>
         <button type="submit">Verify</button>
