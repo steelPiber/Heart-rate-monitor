@@ -82,12 +82,53 @@ app.get('/session-email', (req, res) => {
   
 });
 
-app.get('/min1', (req, res) => {
-  res.sendFile(path.join(__dirname, 'min1.html'));
+app.get('/beat-track', (req, res) => {
+  const token = req.session.user.email;
+  res.sendFile(path.join(__dirname, 'dashboard/pages', 'beat-track.html'));
 });
 
-app.get('/hourly', (req, res) => {
-  res.sendFile(path.join(__dirname, 'hourlychart.html'));
+app.get('/training-record', (req, res) => {
+  if (!req.session.user.email) {
+    res.status(400).send('User not logged in');
+    return;
+  }
+  res.sendFile(path.join(__dirname, 'dashboard/pages', 'training-record.html'));
+});
+
+app.get('/sitemap', (req, res) => {
+  const token = req.session.user.email;
+  res.sendFile(path.join(__dirname, 'dashboard/pages', 'sitemap.html'));
+});
+
+app.get('/training-record/records', async (req, res) => {
+  if (!req.session.user) {
+    res.status(400).send('User not logged in');
+    return;
+  }
+  const userEmailWithoutDomain = req.session.user.email;
+  try {
+    const response = await axios.get(`http://localhost:10021/api/records/${userEmailWithoutDomain}`);
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching training records:', error);
+    res.status(500).send('Error fetching training records');
+  }
+});
+
+app.get('/training-record/:recordId/segments', async (req, res) => {
+  if (!req.session.user) {
+    res.status(400).send('User not logged in');
+    return;
+  }
+  const recordId = req.params.recordId;
+  const userEmailWithoutDomain = req.session.user.email;
+  try {
+    const response = await axios.get(`http://localhost:10021/api/records/${userEmailWithoutDomain}/${recordId}/segments`);
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching segments:', error);
+    res.status(500).send('Error fetching segments');
+  }
 });
 
 // Start the HTTP server on port 8081
