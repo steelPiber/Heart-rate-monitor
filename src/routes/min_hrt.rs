@@ -43,8 +43,5 @@ async fn get_min_bpm(Query(params): Query<MinQuery>, client: Arc<Client>) -> imp
 
 //라우터 생성 함수
 pub fn create_routes(client: Arc<Client>) -> Router {
-    Router::new().route(
-        "/min-bpm",
-        get(move |query| get_min_bpm(query, client.clone())),
-    )
+    Router::new().route("/", get(move |query| get_min_bpm(query, client.clone())))
 }

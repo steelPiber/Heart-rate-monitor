@@ -19,10 +19,24 @@ fn main() {
                     Ok(column_count) => {
                         // 열 수 출력
                         println!("테이블 'BPMDATA'에는 {}개의 열이 있습니다.", column_count);
-                        
+
+                        //BPMDATA 테이블 데이터 삽입
+                        match insert_bpmdata(&conn) {
+                            Ok(_) => {
+                                println!("테이블 'BPMDATA'에 값이 삽입 되었습니다.");
+                                // 커밋
+                                match conn.commit() {
+                                    Ok(_) => println!("데이터가 커밋되었습니다."),
+                                    Err(err) => println!("커밋 중 오류 발생: {}", err),
+                                }
+                            }
+                            Err(err) => println!("테이블 'BPMDATA'에 값 삽입 중 에러발생: {}", err),
+                        }
                         // BPMDATA 테이블의 행 수 출력
                         match get_row_count(&conn, "BPMDATA") {
-                            Ok(row_count) => println!("테이블 'BPMDATA'에는 {}개의 행이 있습니다.", row_count),
+                            Ok(row_count) => {
+                                println!("테이블 'BPMDATA'에는 {}개의 행이 있습니다.", row_count)
+                            }
                             Err(err) => println!("Error getting row count: {}", err), // 행 수 조회 중 오류 발생 시 메시지 출력
                         }
                     }
@@ -31,7 +45,7 @@ fn main() {
 
                 // 프로그램 종료
                 break;
-            },
+            }
             Err(err) => {
                 // DB 연결 실패 메시지
                 println!("Error connecting to Oracle DB: {}", err);
@@ -55,7 +69,11 @@ fn read_input(prompt: &str) -> String {
 }
 
 // DB 연결 함수
-fn connect_to_db(username: &str, password: &str, connect_string: &str) -> Result<Connection, Error> {
+fn connect_to_db(
+    username: &str,
+    password: &str,
+    connect_string: &str,
+) -> Result<Connection, Error> {
     Connection::connect(username, password, connect_string) // 사용자명, 비밀번호, 연결 문자열을 사용하여 DB에 연결
 }
 
@@ -73,3 +91,19 @@ fn get_row_count(conn: &Connection, table_name: &str) -> Result<usize, Error> {
     Ok(row) // 행 수 반환
 }
 
+//BPM 데이터 삽입 함수
+fn insert_bpmdata(conn: &Connection) -> Result<(), Error> {
+    //사용자로부터 BPM 데이터 입력 받기
+    let bpm: i32 = read_input("BPM: ").parse().unwrap();
+    let email = read_input("Email: ");
+    let tag = read_input("Tag: ");
+
+    //시퀀스를 사용하여 IDX값 생성
+    let idx_query = "SELECT BPM_SEQ.NEXTVAL FROM DUAL";
+    let idx: i32 = conn.query_row_as(idx_query, &[])?;
+
+    //데이터 삽입 쿼리
+    let insert_query = "INSERT INTO BPMDATA (IDX, BPM, EMAIL, TAG) VALUES (:1, :2, :3, :4)";
+    conn.execute(insert_query, &[&idx, &bpm, &email, &tag])?;
+    Ok(())
+}
