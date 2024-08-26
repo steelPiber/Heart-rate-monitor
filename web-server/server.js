@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const { router: googleAuthRouter } = require("./google_authController.js");
-const bpmRouter = require('./bpm.js'); // bpm 라우터 모듈 불러오기
 const hrvRouter = require('./hrv.js');
 const chartRouter = require('./chart.js');
 const oracleDB = require('./oracledb.js');
@@ -26,7 +25,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Form 데이터 처리 추가
 
 app.use(googleAuthRouter);
-app.use(bpmRouter); // bpm 라우터 사용
 app.use(hrvRouter);
 app.use(chartRouter);
 
