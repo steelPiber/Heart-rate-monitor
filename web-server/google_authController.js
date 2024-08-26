@@ -59,6 +59,7 @@ router.get("/login", async (req, res) => {
       const accessToken = await getToken(code);
       const userInfo = await getUserInfo(accessToken);
       const userEmail = userInfo.email;
+      const userProfile = userInfo.profile;
 
       // OTP 시크릿이 존재하는지 확인
       const existingSecret = await oracleDB.getOTPSecret(userEmail);
@@ -117,7 +118,10 @@ router.post("/verify-otp", async (req, res) => {
       const userEmailWithoutDomain = email.split('@')[0];
       await oracleDB.selectUserlog(userEmailWithoutDomain);
       // 세션에 사용자 정보 저장
-      req.session.user = { email: userEmailWithoutDomain };
+      req.session.user = { 
+        email: userEmailWithoutDomain,
+        profile: 
+      };
 
       res.json({ success: true, redirectUrl: `${REDIRECT_URL}/${userEmailWithoutDomain}` });
     } else {
