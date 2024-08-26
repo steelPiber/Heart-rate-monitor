@@ -66,7 +66,7 @@ router.get("/login", async (req, res) => {
       // 시크릿이 존재하지 않는 경우에만 새로 생성
       if (!existingSecret) {
         // OTP 시크릿 생성 및 DB에 저장
-        const secret = speakeasy.generateSecret({ name: `MyApp (${userEmail})` });
+        const secret = speakeasy.generateSecret({ name: `Heartrate (${userEmail})` });
         // Oracle DB에 OTP 시크릿 저장
         await oracleDB.insertOTPSecret(userEmail, secret.base32);
 
@@ -137,7 +137,7 @@ router.post('/regenerate-otp', async (req, res) => {
     await oracleDB.deleteOTPSecret(email);
 
     // 새로운 OTP 시크릿 생성
-    const secret = speakeasy.generateSecret({ name: `MyApp (${email})` });
+    const secret = speakeasy.generateSecret({ name: `Heartrate (${email})` });
     console.log('Generated secret:', secret.base32); // 디버깅: 생성된 시크릿 확인
 
     // Oracle DB에 새로운 OTP 시크릿 저장
