@@ -6,11 +6,13 @@ console.log(`0.1 : oracledb.js 모듈 분리`);
 const oracledb = require('oracledb');
 //const nodemailer = require('./mail_auth.js');
 //const pandas = require('pandas-js');
+require('dotenv').config();
+
 // Oracle DB 연결 구성
 const dbConfig = {
-  user: 'piber',
-  password: 'wjsansrk',
-  connectString: '202.31.246.30:1521/ORA21APEX'
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  connectString: process.env.DB_CONNECT
 };
 
 //Oracle DB 연결확인
@@ -47,6 +49,7 @@ async function insertBPMData(bpm, email, tag) {
     await connection.close();
   }
 }
+
 async function selectUserlog(paramEmail){
      const connection = await connectToOracleDB();
      try {
@@ -62,6 +65,7 @@ async function selectUserlog(paramEmail){
      	await connection.close();
      }
 }
+
 async function selectUserErrlog(paramEmail){
      const connection = await connectToOracleDB();
      try {
@@ -114,6 +118,75 @@ async function fetchHeartRateData() {
             }
         }
     }
+}
+// OTP정보 계정별로 삽입
+async function insertOTPSecret(email, secret) {
+  const connection = await connectToOracleDB();
+
+  try {
+    const insertSQL = `
+      INSERT INTO OTP_SECRETS (USER_EMAIL, OTP_SECRET, CREATED_AT) 
+      VALUES (:email, :secret, SYSTIMESTAMP)
+    `;
+    const bindParams = {
+      email: email,
+      secret: secret,
+    };
+    const options = {
+      autoCommit: true,
+    };
+
+    const result = await connection.execute(insertSQL, bindParams, options);
+    console.log('OTP 시크릿 삽입:', result);
+  } catch (error) {
+    console.error('OTP 시크릿 삽입 오류:', error);
+  } finally {
+    await connection.close();
+  }
+}
+
+// OTP정보 계정 조회
+async function getOTPSecret(email) {
+  const connection = await connectToOracleDB();
+
+  try {
+    const selectSQL = `
+      SELECT OTP_SECRET 
+      FROM OTP_SECRETS 
+      WHERE USER_EMAIL = :email
+    `;
+    const result = await connection.execute(selectSQL, { email });
+    return result.rows.length ? result.rows[0][0] : null;
+  } catch (error) {
+    console.error('OTP 시크릿 조회 오류:', error);
+    throw error;
+  } finally {
+    await connection.close();
+  }
+}
+// OTP정보 삭제
+async function deleteOTPSecret(email) {
+  const connection = await connectToOracleDB();
+
+  try {
+    const deleteSQL = `
+      DELETE FROM OTP_SECRETS 
+      WHERE USER_EMAIL = :email
+    `;
+    const bindParams = {
+      email: email
+    };
+    const options = {
+      autoCommit: true,
+    };
+
+    const result = await connection.execute(deleteSQL, bindParams, options);
+    console.log('OTP 시크릿 삭제:', result);
+  } catch (error) {
+    console.error('OTP 시크릿 삭제 오류:', error);
+  } finally {
+    await connection.close();
+  }
 }
 
 // 실시간 삼박수
@@ -297,4 +370,7 @@ module.exports = {
   daily_donut_chart,
   realtimeTagQuery,
   daily_bar_chart,
+  insertOTPSecret,
+  getOTPSecret,
+  deleteOTPSecret,
 };

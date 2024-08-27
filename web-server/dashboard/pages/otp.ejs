@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <script>
+        // 폼 제출 이벤트 처리
+        function handleFormSubmit(event) {
+            event.preventDefault(); // 기본 폼 제출 방지
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            // profile 값이 중복으로 추가되지 않도록 확인
+            // 이미 hidden input으로 추가되었으므로 여기서 다시 추가하지 않음
+
+            // AJAX 요청을 통한 OTP 확인
+            fetch('/verify-otp', {
+                method: 'POST',
+                body: new URLSearchParams(formData) // FormData를 URLSearchParams로 변환
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else if (data.success) {
+                    window.location.href = data.redirectUrl;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("OTP 인증을 실패하였습니다.");
+            });
+        }
+
+        // QR 코드 재생성 버튼 클릭 시 처리
+        function regenerateQRCode() {
+            const email = document.querySelector('input[name="email"]').value;
+
+            fetch('/regenerate-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('qr-code').src = data.qrCodeUrl;
+                } else {
+                    alert(data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("QR 코드 재생성에 실패하였습니다.");
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>OTP Verification</h1>
+    <p>Scan the QR code below with Google Authenticator and enter the OTP to verify:</p>
+    <img id="qr-code" src="<%= qrCodeUrl %>" alt="QR Code">
+    <form onsubmit="handleFormSubmit(event)">
+        <input type="hidden" name="email" value="<%= email %>">
+        <input type="hidden" name="profile" value="<%= profile %>"> <!-- profile 값을 hidden input으로 추가 -->
+        <label for="otp">OTP:</label>
+        <input type="text" name="token" id="otp" required>
+        <button type="submit">Verify</button>
+    </form>
+    <button type="button" onclick="regenerateQRCode()">Regenerate QR Code</button>
+</body>
+</html>
+

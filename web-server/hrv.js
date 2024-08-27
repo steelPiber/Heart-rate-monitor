@@ -2,7 +2,7 @@ const express = require('express');
 const oracleDB = require('./oracledb.js');
 const router = express.Router();
 const moment = require('moment');
-const { getUserEmailFromToken, executeQuery } = require('./utility.js');
+const { executeQuery } = require('./utility.js');
 
 // HRV 분석 함수들
 function calculateRRIntervals(data) {
@@ -66,7 +66,7 @@ function evaluateAbnormalPatterns(abnormalPeriods) {
 // 기존 엔드포인트 (DetectionOfArrhythmia)
 router.get('/DetectionOfArrhythmia', async (req, res) => {
     try {
-        const userEmail = await getUserEmailFromToken(req);
+        const userEmail = req.session.user.email;
         const heartRateData = await oracleDB.fetchHeartRateData();
         if (heartRateData.length < 5000) {
             res.json({ message: "Your heart rate is not high enough to detect an arrhythmia." });
@@ -113,7 +113,7 @@ router.get('/DetectionOfArrhythmia', async (req, res) => {
 router.get('/DetectionOfBradycardiaAndTachycardia', async (req, res) => {
     try {
         const heartRateData = await oracleDB.fetchHeartRateData();
-        const userEmail = await getUserEmailFromToken(req);
+        const userEmail = req.session.user.email;
         let hasBradycardiaPeriods = false;
         let hasTachycardiaPeriods = false;
         let currentPeriod = null;
