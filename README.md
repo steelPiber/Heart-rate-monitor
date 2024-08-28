@@ -43,7 +43,7 @@ Heart-rate-monitor/
 ```
 
 ### 파일 설명
-//heart-server-rust
+heart-server-rust
 - `Cargo.lock` 및 `Cargo.toml`: Rust 프로젝트의 의존성 관리 파일임
 - `Dockerfile`: Docker 이미지를 빌드하기 위한 설정 파일임
 - `README.md`: 프로젝트 설명서임
@@ -58,7 +58,7 @@ Heart-rate-monitor/
 - `src/schema.rs`: 데이터베이스 스키마를 정의함
 - `docker-compose.yml`: Docker 컴포즈 파일로 여러 컨테이너를 정의하고 관리함
 
-//web-server
+web-server
 - `server.js` : node.js 서버를 구동하는 파일
 - `chart.js` : 각종 그래프의 엔드 포인트를 정의한 파일
 - `google_authController.js` : 구글 로그인을 정의한 파일
