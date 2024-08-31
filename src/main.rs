@@ -66,11 +66,37 @@ async fn main() {
             "/data",
             routes::data::create_routes(client.clone(), oracle_conn.clone()),
         )
-        .nest("/hour-bpm", routes::recent::create_routes(client.clone()))
         .nest("/recent", routes::recent::create_routes(client.clone()))
         .nest("/current-time", routes::time::create_routes())
-        .nest("/realbpm", routes::realhrt::create_routes(client.clone()))
-        .nest("/min-bpm", routes::min_hrt::create_routes(client.clone()));
+        .nest(
+            "/realbpm",
+            routes::hrt::realhrt::create_routes(client.clone()),
+        )
+        .nest(
+            "/min-bpm",
+            routes::hrt::min_hrt::create_routes(client.clone()),
+        )
+        .nest(
+            "/hour-bpm",
+            routes::hrt::hour_hrt::create_routes(client.clone()),
+        )
+        .nest(
+            "/day-bpm",
+            routes::hrt::day_hrt::create_routes(client.clone()),
+        )
+        .nest(
+            "/week-bpm",
+            routes::hrt::week_hrt::create_routes(client.clone()),
+        )
+        .nest(
+            "/month-bpm",
+            routes::hrt::month_hrt::create_routes(client.clone()),
+        )
+        .nest(
+            "/year-bpm",
+            routes::hrt::year_hrt::create_routes(client.clone()),
+        );
+
     //서버가 바인딩할 소켓 주소를 설정
     let addr = SocketAddr::from(([0, 0, 0, 0], 13389));
     //서버를 시작하고 클라이언트 요청을 수신
