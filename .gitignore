@@ -1,1 +1,3 @@
 /web-server/.env
+/heart-server-rust/target
+/heart-server-rust/.env
