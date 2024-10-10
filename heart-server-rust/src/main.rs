@@ -3,16 +3,20 @@ mod routes; // 라우트 모듈
 
 use axum::Router; // 라우터 생성 모듈
 use db::client::post_init_db; // 데이터베이스 초기화 함수
-                              //use db::client::oracle_init_db; //오라클데이터베이 초기화 함수
 use db::schema::create_table_if_not_exists; // 테이블 생성 함수
 use dotenv::dotenv; // .env 파일을 로드하는 모듈
 use std::env; // 환경 변수 모듈
 use std::net::SocketAddr; // 소켓 주소 모듈
 use std::sync::Arc;
-use tracing_subscriber; // 로그 서브스크라이버 모듈 // 원자적 참조 카운터 모듈
+use tracing_subscriber; // 로그 서브스크라이버 모듈
 
 use routes::data::oracle_connect_db; // OracleDB 연결 함수
 use tokio::sync::Mutex; // 비동기 뮤텍스 모듈
+
+use routes::heartinfo::create_routes as heartinfo_routes;
+use routes::userinfo::create_routes as userinfo_routes;
+use routes::userupdate::create_update_route as userupdate_routes;
+use routes::mapinfo::create_polygon_routes as polygon_routes;
 
 /*Tokio 런타임에서 실행되는 비동기 메인 함수*/
 #[tokio::main]
@@ -66,6 +70,11 @@ async fn main() {
             "/data",
             routes::data::create_routes(client.clone(), oracle_conn.clone()),
         )
+        // 중복 제거: "/userinfo"는 userinfo_routes에서 처리하도록 함
+        .nest("/userinfo", userinfo_routes(client.clone()))
+        .nest("/userupdate", userupdate_routes(client.clone()))
+        .nest("/heartinfo", heartinfo_routes(client.clone()))
+        .nest("/mapinfo",polygon_routes(client.clone()))
         .nest("/recent", routes::recent::create_routes(client.clone()))
         .nest("/current-time", routes::time::create_routes())
         .nest(
