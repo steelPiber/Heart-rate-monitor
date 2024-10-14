@@ -7,3 +7,4 @@ pub mod time;
 pub mod userinfo;
 pub mod userupdate;
 pub mod mapinfo;
+pub mod server_status;

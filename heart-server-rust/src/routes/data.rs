@@ -103,7 +103,6 @@ async fn handle_post(
     println!("Successfully inserted BPM data into both PostgreSQL and Oracle");
     (StatusCode::OK, "Request received").into_response()
 }
-
 // PostgreSQL에 location_bpm 데이터를 삽입하는 비동기 함수
 async fn insert_location_bpm_data_pg(
     client: &PgClient,
@@ -114,19 +113,26 @@ async fn insert_location_bpm_data_pg(
     latitude: &str,
     longitude: &str,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    // 위도와 경도를 f64 타입으로 파싱
+    let latitude_f64: f64 = latitude.parse::<f64>()?;
+    let longitude_f64: f64 = longitude.parse::<f64>()?;
+
     let insert_sql = "INSERT INTO location_bpm (BPM, EMAIL, TAG, BPM_TIME, LATITUDE, LONGITUDE) VALUES ($1, $2, $3, $4, $5, $6)";
     let time = match chrono::NaiveDateTime::parse_from_str(timestamp, "%Y-%m-%dT%H:%M:%S") {
         Ok(t) => t,
         Err(_) => chrono::Utc::now().naive_utc(),
     };
+    
     client
         .execute(
             insert_sql,
-            &[&bpm, &email, &tag, &time, &latitude, &longitude],
+            &[&bpm, &email, &tag, &time, &latitude_f64, &longitude_f64],
         )
         .await?;
+    
     Ok(())
 }
+
 
 // PostgreSQL에 bpmdata 데이터를 삽입하는 비동기 함수
 async fn insert_bpm_data_pg(

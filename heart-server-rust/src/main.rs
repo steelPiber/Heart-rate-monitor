@@ -17,6 +17,7 @@ use routes::heartinfo::create_routes as heartinfo_routes;
 use routes::userinfo::create_routes as userinfo_routes;
 use routes::userupdate::create_update_route as userupdate_routes;
 use routes::mapinfo::create_polygon_routes as polygon_routes;
+use routes::server_status::create_routes as server_status;
 
 /*Tokio 런타임에서 실행되는 비동기 메인 함수*/
 #[tokio::main]
@@ -77,6 +78,7 @@ async fn main() {
         .nest("/mapinfo",polygon_routes(client.clone()))
         .nest("/recent", routes::recent::create_routes(client.clone()))
         .nest("/current-time", routes::time::create_routes())
+        .nest("/status",server_status(client.clone()))
         .nest(
             "/realbpm",
             routes::hrt::realhrt::create_routes(client.clone()),

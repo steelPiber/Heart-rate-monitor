@@ -195,3 +195,4 @@ async fn update_polygon_data(
     client.execute(query, &[new_title, coordinates, &email, &title]).await?;
     Ok(())
 }
+
